@@ -1,0 +1,19 @@
+spring:
+  application:
+    name: webgis
+
+
+springdoc:
+  swagger-ui:
+    show-extensions: true
+    show-common-extensions: true
+    path: /swagger-ui.html
+    disable-swagger-default-url: true
+    enabled: true
+  api-docs:
+    path: /v3/api-docs
+    enabled: true
+
+server:
+  address:
+  port: 8083
