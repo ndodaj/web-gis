@@ -1,0 +1,23 @@
+<wfs:Transaction service="WFS" version="1.0.0"
+                 xmlns:wfs="http://www.opengis.net/wfs"
+                 xmlns:gml="http://www.opengis.net/gml"
+                 xmlns:ogc="http://www.opengis.net/ogc"
+                 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                 xsi:schemaLocation="http://www.opengis.net/wfs
+    http://schemas.opengis.net/wfs/1.0.0/WFS-transaction.xsd">
+
+    <wfs:Update typeName="myWorkspace:myLayer">
+        <wfs:Property>
+            <wfs:Name>geometry</wfs:Name>
+            <wfs:Value>
+                <gml:Point srsName="EPSG:4326">
+                    <gml:coordinates>-0.12775,51.507222</gml:coordinates>
+                </gml:Point>
+            </wfs:Value>
+        </wfs:Property>
+        <ogc:Filter>
+            <ogc:FeatureId fid="feature.1"/>
+        </ogc:Filter>
+    </wfs:Update>
+
+</wfs:Transaction>

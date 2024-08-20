@@ -1,0 +1,20 @@
+<wfs:Transaction service="WFS" version="1.0.0"
+                 xmlns:wfs="http://www.opengis.net/wfs"
+                 xmlns:gml="http://www.opengis.net/gml"
+                 xmlns:ogc="http://www.opengis.net/ogc"
+                 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                 xsi:schemaLocation="http://www.opengis.net/wfs
+    http://schemas.opengis.net/wfs/1.0.0/WFS-transaction.xsd">
+
+    <wfs:Insert>
+        <feature:myLayer xmlns:feature="http://myWorkspace">
+            <feature:geometry>
+                <gml:Point srsName="EPSG:4326">
+                    <gml:coordinates>-0.12755,51.507222</gml:coordinates>
+                </gml:Point>
+            </feature:geometry>
+            <feature:name>New Point</feature:name>
+        </feature:myLayer>
+    </wfs:Insert>
+
+</wfs:Transaction>

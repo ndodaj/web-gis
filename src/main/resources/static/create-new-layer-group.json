@@ -1,0 +1,17 @@
+{
+  "layerGroup": {
+    "name": "myLayerGroup",
+    "layers": {
+      "layer": [
+        { "name": "layer1" },
+        { "name": "layer2" }
+      ]
+    },
+    "styles": {
+      "style": [
+        { "name": "style1" },
+        { "name": "style2" }
+      ]
+    }
+  }
+}
