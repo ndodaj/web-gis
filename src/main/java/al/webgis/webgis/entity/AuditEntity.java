@@ -1,4 +1,4 @@
-package al.utile.utile.entity;
+package al.webgis.webgis.entity;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.EntityListeners;

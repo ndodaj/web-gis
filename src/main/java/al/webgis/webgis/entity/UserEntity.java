@@ -29,8 +29,8 @@ import java.util.List;
 @Getter
 @Setter
 @Entity
-@Table(name = "users", schema = "utile")
-public class UserEntity extends al.utile.utile.entity.AuditEntity<String> {
+@Table(name = "users")
+public class UserEntity extends AuditEntity<String> {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -84,7 +84,6 @@ public class UserEntity extends al.utile.utile.entity.AuditEntity<String> {
 
     @ManyToMany
     @JoinTable(
-            schema = "utile",
             name = "user_roles",
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "role_id")
