@@ -1,4 +1,4 @@
-version: '3.8'
+#version: '3.8'
 
 services:
   postgres:
@@ -25,16 +25,17 @@ services:
     volumes:
       - geoserver_data:/opt/geoserver/data_dir
 
-  springboot-app:
+  webgis:
     build: .
     container_name: webgis
     environment:
-      SPRING_DATASOURCE_URL: jdbc:postgresql://localhost:5432/postgis-test
+
+      SPRING_DATASOURCE_URL: jdbc:postgresql://host.docker.internal:5432/postgis-test
       SPRING_DATASOURCE_USERNAME: postgres
       SPRING_DATASOURCE_PASSWORD: root
       SPRING_JPA_HIBERNATE_DDL_AUTO: update
     ports:
-      - "8081:8081"
+      - "8083:8083"
     depends_on:
       - geoserver
 

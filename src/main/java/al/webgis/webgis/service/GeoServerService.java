@@ -36,7 +36,7 @@ public class GeoServerService {
     }
 
     public String getGeoServerInfo() {
-        String url = geoServerUrl + "/rest/about/version";
+        String url = "http://geoserver:8080/geoserver" + "/rest/about/version";
 
         HttpHeaders headers = new HttpHeaders();
         String auth = "admin:geoserver";
