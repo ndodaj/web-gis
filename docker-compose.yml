@@ -1,0 +1,43 @@
+version: '3.8'
+
+services:
+  postgres:
+    image: postgis/postgis:14-3.3-alpine
+    container_name: postgres
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: root
+      POSTGRES_DB: postgis-test
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+  geoserver:
+    image: oscarfonts/geoserver:latest
+    container_name: geoserver
+    environment:
+      - GEOSERVER_ADMIN_PASSWORD=geoserver
+    ports:
+      - "8080:8080"
+    depends_on:
+      - postgres
+    volumes:
+      - geoserver_data:/opt/geoserver/data_dir
+
+  springboot-app:
+    build: .
+    container_name: webgis
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://localhost:5432/postgis-test
+      SPRING_DATASOURCE_USERNAME: postgres
+      SPRING_DATASOURCE_PASSWORD: root
+      SPRING_JPA_HIBERNATE_DDL_AUTO: update
+    ports:
+      - "8081:8081"
+    depends_on:
+      - geoserver
+
+volumes:
+  postgres_data:
+  geoserver_data:

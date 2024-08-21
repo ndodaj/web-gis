@@ -3,6 +3,7 @@ package al.webgis.webgis.controller;
 import al.webgis.webgis.model.InsertFeatureDto;
 import al.webgis.webgis.service.GeoServerService;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/geoserver")
 @Tag(name = "Geo Server APIs", description = "Geo Server APIs")
+@Slf4j
 public class GeoServerController {
 
     private final GeoServerService geoServerService;
@@ -25,6 +27,7 @@ public class GeoServerController {
 
     @GetMapping("/info")
     public String getGeoServerInfo() {
+        log.info("Test API: retrieve geoserver info");
         return geoServerService.getGeoServerInfo();
     }
 
