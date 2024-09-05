@@ -19,7 +19,7 @@ services:
     environment:
       - GEOSERVER_ADMIN_PASSWORD=geoserver
     ports:
-      - "8080:8080"
+      - "8088:8088"
     depends_on:
       - postgres
     volumes:
@@ -28,6 +28,7 @@ services:
   webgis:
     build: .
     container_name: webgis
+    tty: true
     environment:
 
       SPRING_DATASOURCE_URL: jdbc:postgresql://host.docker.internal:5432/postgis-test
