@@ -4,5 +4,4 @@ FROM openjdk:17-jdk
 WORKDIR /app
 ARG JAR_FILE=target/*.jar
 COPY ${JAR_FILE} webgis.jar
-EXPOSE 8083, 8080
 ENTRYPOINT ["java","-jar","/webgis.jar"]
