@@ -1,45 +1,58 @@
-#version: '3.8'
+version: '3.8'
 
 services:
-  postgres:
+  postgis-db:
     image: postgis/postgis:14-3.3-alpine
-    container_name: postgres
+    container_name: postgis-db
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: root
       POSTGRES_DB: postgis-test
     ports:
       - "5432:5432"
+    networks:
+      - backend
     volumes:
-      - postgres_data:/var/lib/postgresql/data
+#      - postgres_data:/var/lib/postgresql/data
+      - postgis_data:/var/lib/postgresql/data
 
   geoserver:
     image: oscarfonts/geoserver:latest
     container_name: geoserver
-    environment:
-      - GEOSERVER_ADMIN_PASSWORD=geoserver
+#    environment:
+#      - GEOSERVER_ADMIN_PASSWORD=geoserver
     ports:
-      - "8088:8088"
-    depends_on:
-      - postgres
+      - "8080:8080"
+    networks:
+      - backend
+    environment:
+      - GEOSERVER_DATA_DIR=/var/local/geoserver_data
     volumes:
-      - geoserver_data:/opt/geoserver/data_dir
+      - ./geoserver_data:/var/local/geoserver_data
+    depends_on:
+      - postgis-db
+
 
   webgis:
     build: .
-    container_name: webgis
+    container_name: webgis-be
     tty: true
     environment:
-
       SPRING_DATASOURCE_URL: jdbc:postgresql://host.docker.internal:5432/postgis-test
       SPRING_DATASOURCE_USERNAME: postgres
       SPRING_DATASOURCE_PASSWORD: root
       SPRING_JPA_HIBERNATE_DDL_AUTO: update
     ports:
       - "8083:8083"
+    networks:
+      - backend
     depends_on:
       - geoserver
 
+networks:
+  backend:
+    driver: bridge
+
 volumes:
-  postgres_data:
+  postgis_data:
   geoserver_data:
