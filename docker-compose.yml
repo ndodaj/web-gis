@@ -34,11 +34,12 @@ services:
 
 
   webgis:
-    build: .
+    image: 'docker-spring-boot-postgres:latest'
+    build:
+      context: .
     container_name: webgis-be
-    tty: true
     environment:
-      SPRING_DATASOURCE_URL: jdbc:postgresql://host.docker.internal:5432/postgis-test
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgis-db:5432/postgis-test
       SPRING_DATASOURCE_USERNAME: postgres
       SPRING_DATASOURCE_PASSWORD: root
       SPRING_JPA_HIBERNATE_DDL_AUTO: update
@@ -47,7 +48,7 @@ services:
     networks:
       - backend
     depends_on:
-      - geoserver
+      - postgis-db
 
 networks:
   backend:
