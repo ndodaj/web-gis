@@ -31,3 +31,4 @@ build/
 
 ### VS Code ###
 .vscode/
+.geoserver_data/
