@@ -11,7 +11,7 @@ services:
     ports:
       - "5432:5432"
     networks:
-      - backend
+      - webgis-network
     volumes:
 #      - postgres_data:/var/lib/postgresql/data
       - postgis_data:/var/lib/postgresql/data
@@ -24,7 +24,7 @@ services:
     ports:
       - "8080:8080"
     networks:
-      - backend
+      - webgis-network
     environment:
       - GEOSERVER_DATA_DIR=/var/local/geoserver_data
     volumes:
@@ -32,9 +32,22 @@ services:
     depends_on:
       - postgis-db
 
+  webgis-fe:
+    image: node:latest
+    container_name: webgis-fe
+    volumes:
+      - ./angular-app:/app
+    command: sh -c "npm install && npm run start"
+    ports:
+      - "4200:4200"
+    networks:
+      - webgis-network
+    depends_on:
+      - webgis
+
 
   webgis:
-    image: 'docker-spring-boot-postgres:latest'
+#    image: 'docker-spring-boot-postgres:latest'
     build:
       context: .
     container_name: webgis-be
@@ -46,12 +59,12 @@ services:
     ports:
       - "8083:8083"
     networks:
-      - backend
+      - webgis-network
     depends_on:
       - postgis-db
 
 networks:
-  backend:
+  webgis-network:
     driver: bridge
 
 volumes:
