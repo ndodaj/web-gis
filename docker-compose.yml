@@ -22,7 +22,7 @@ services:
 #    environment:
 #      - GEOSERVER_ADMIN_PASSWORD=geoserver
     ports:
-      - "8099:8080"
+      - "8080:8080"
     networks:
       - backend
     environment:
@@ -44,7 +44,7 @@ services:
       SPRING_DATASOURCE_PASSWORD: root
       SPRING_JPA_HIBERNATE_DDL_AUTO: update
     ports:
-      - "8098:8083"
+      - "9000:9000"
     networks:
       - backend
     depends_on:
