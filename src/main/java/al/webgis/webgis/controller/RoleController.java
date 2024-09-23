@@ -5,7 +5,6 @@ import al.webgis.webgis.model.RoleDto;
 import al.webgis.webgis.service.RoleService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
-import io.swagger.v3.oas.annotations.security.SecurityRequirements;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -32,8 +31,7 @@ public class RoleController {
 
 
     @GetMapping
-    @Operation(summary = "Get all roles", description = "Retrieve a list of all roles", security = { @SecurityRequirement(name = "bearer-key")} )
-    @SecurityRequirements
+    @Operation(summary = "Get all roles", description = "Retrieve a list of all roles", security = {@SecurityRequirement(name = "bearer-key")})
     public List<RoleDto> getAllRoles() {
         return roleService.getAllRoles();
     }
