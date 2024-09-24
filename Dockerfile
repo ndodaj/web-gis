@@ -2,6 +2,12 @@
 # the base image
 FROM amazoncorretto:17
 
+COPY pom.xml .
+
+COPY src ./src
+
+RUN mvn clean package -DskipTests
+
 # the JAR file path
 ARG JAR_FILE=target/*.jar
 
