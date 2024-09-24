@@ -70,7 +70,11 @@
               "buildTarget": "webgis-fe:build:development"
             }
           },
-          "defaultConfiguration": "development"
+          "defaultConfiguration": "development",
+          "options": {
+            "host": "20.67.236.132",
+            "port": 4200
+          }
         },
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n"
