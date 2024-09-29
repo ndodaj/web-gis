@@ -51,30 +51,25 @@ public class GeoServerController {
         return geoServerService.updateFeatureAttribute(workspace, layerName, featureId, attributeName, newValue);
     }
 
-    @PostMapping("/create-layer-group")
-    public String createLayerGroup(@RequestParam String workspace, @RequestParam String layerGroupName, @RequestBody String layers, @RequestBody String styles) {
-        return geoServerService.createLayerGroup(workspace, layerGroupName, layers, styles);
-    }
-
-    @PutMapping("/edit-layer-group")
-    public String editLayerGroup(@RequestParam String workspace, @RequestParam String layerGroupName, @RequestBody String updatedLayers, @RequestBody String updatedStyles) {
-        return geoServerService.editLayerGroup(workspace, layerGroupName, updatedLayers, updatedStyles);
-    }
-
-    @DeleteMapping("/delete-layer-group")
-    public String deleteLayerGroup(@RequestParam String workspace, @RequestParam String layerGroupName) {
-        return geoServerService.deleteLayerGroup(workspace, layerGroupName);
-    }
 
 
-    @GetMapping("/geoserver/get-layer-group")
-    public String getLayerGroup(@RequestParam String workspace, @RequestParam String layerGroupName) {
-        return geoServerService.getLayerGroup(workspace, layerGroupName);
-    }
+
 
     @PostMapping("/create-layer")
     public String createLayer(@RequestParam String workspace, @RequestParam String dataStore, @RequestParam String layerName, @RequestParam String nativeName, @RequestParam String srs) {
         return geoServerService.createLayer(workspace, dataStore, layerName, nativeName, srs);
+    }
+
+
+
+    @GetMapping("/geoserver/getAllLayers")
+    public String getLayers() {
+        return geoServerService.getAllLayers();
+    }
+
+    @GetMapping("/geoserver/getAllStyles")
+    public String getStyles() {
+        return geoServerService.getAllStyles();
     }
 
 
