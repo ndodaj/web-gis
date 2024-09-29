@@ -1,0 +1,8 @@
+{
+  "api": {
+    "baseUrl": "http://localhost:4200",
+    "version": "1"
+  },
+  "environmentName": "Development",
+  "geoserverUrl": "http://localhost:4200"
+}

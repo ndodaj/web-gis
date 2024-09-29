@@ -1,0 +1,44 @@
+<form (ngSubmit)="save()" [formGroup]="form">
+  <div class="flex items-center" mat-dialog-title>
+    <h2 class="headline m-0 flex-auto">Select Indicator</h2>
+    <button
+      class="text-secondary"
+      mat-dialog-close
+      mat-icon-button
+      type="button"
+    >
+      <mat-icon svgIcon="mat:close"></mat-icon>
+    </button>
+  </div>
+  <mat-divider class="text-border"></mat-divider>
+  <mat-dialog-content class="flex flex-col">
+    <mat-form-field class="flex-auto">
+      <mat-label>xAxisLabel</mat-label>
+      <mat-select formControlName="xAxisLabel">
+        <mat-option *ngFor="let prop of axisLabelProps" [value]="prop">
+          {{ prop }}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+    <mat-form-field class="flex-auto">
+      <mat-label>yAxisLabel</mat-label>
+      <mat-select formControlName="yAxisLabel">
+        <mat-option *ngFor="let prop of axisLabelProps" [value]="prop">
+          {{ prop }}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+    <mat-form-field class="flex-auto">
+      <mat-label>Chart Types</mat-label>
+      <mat-select formControlName="chartType">
+        <mat-option *ngFor="let type of chartTypes" [value]="type">
+          {{ type }}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+  </mat-dialog-content>
+  <mat-dialog-actions align="end">
+    <button mat-button mat-dialog-close type="button">Cancel</button>
+    <button color="primary" mat-flat-button type="submit">Save</button>
+  </mat-dialog-actions>
+</form>

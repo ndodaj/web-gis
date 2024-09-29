@@ -1,0 +1,109 @@
+<mat-tab-group>
+  <mat-tab label="Indicator Graphic">
+    <div class="card overflow-auto mt-8">
+      <div class="px-6 h-16 border-b sticky left-0 flex items-center">
+        <div class="flex flex-col sm:flex-row sm:gap-4 mt-6">
+          <form [formGroup]="form">
+            <mat-form-field class="flex-auto">
+              <mat-label>Indicator</mat-label>
+              <mat-select formControlName="indicator">
+                <mat-option
+                  *ngFor="let indicator of indicators"
+                  [value]="indicator.name"
+                >
+                  {{ indicator.name }}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+          </form>
+        </div>
+
+        <span class="flex-1"></span>
+        <button
+          mat-fab
+          extended
+          type="button"
+          class="ml-4 flex-none"
+          color="primary"
+          (click)="getProperties()"
+        >
+          <mat-icon class="icon-sm btn__icon" svgIcon="mat:add"></mat-icon>
+          Get Properties
+        </button>
+        <button
+          mat-fab
+          extended
+          type="button"
+          class="ml-4 flex-none"
+          color="primary"
+          (click)="printAsPDF()"
+        >
+          <mat-icon class="icon-sm btn__icon" svgIcon="mat:print"></mat-icon>
+          Print
+        </button>
+      </div>
+
+      <div class="mat-elevation-z8">
+        <canvas #myChart width="400" height="400"></canvas>
+      </div>
+    </div>
+  </mat-tab>
+  <mat-tab label="General Raport">
+    <div class="card overflow-auto mt-8">
+      <div class="px-6 h-16 border-b sticky left-0 flex items-center">
+        <div class="flex flex-col sm:flex-row sm:gap-4 mt-6">
+          <form [formGroup]="form2">
+            <mat-form-field>
+              <mat-label>Enter a date range</mat-label>
+              <mat-date-range-input [formGroup]="form2" [rangePicker]="picker">
+                <input
+                  matStartDate
+                  formControlName="start"
+                  placeholder="Start date"
+                />
+                <input
+                  matEndDate
+                  formControlName="end"
+                  placeholder="End date"
+                />
+              </mat-date-range-input>
+              <mat-datepicker-toggle
+                matIconSuffix
+                [for]="picker"
+              ></mat-datepicker-toggle>
+              <mat-date-range-picker #picker></mat-date-range-picker>
+            </mat-form-field>
+          </form>
+        </div>
+
+        <span class="flex-1"></span>
+        <button
+          mat-fab
+          extended
+          type="button"
+          class="ml-4 flex-none"
+          color="primary"
+          (click)="getAllProperties()"
+        >
+          <mat-icon class="icon-sm btn__icon" svgIcon="mat:add"></mat-icon>
+          Get Properties
+        </button>
+        <button
+          mat-fab
+          extended
+          type="button"
+          class="ml-4 flex-none"
+          color="primary"
+          (click)="generatePDFReport()"
+        >
+          <mat-icon class="icon-sm btn__icon" svgIcon="mat:print"></mat-icon>
+          Print General Raport
+        </button>
+      </div>
+
+      <div class="mat-elevation-z8">
+        <canvas #myChart width="400" height="400"></canvas>
+      </div>
+    </div>
+  </mat-tab>
+</mat-tab-group>

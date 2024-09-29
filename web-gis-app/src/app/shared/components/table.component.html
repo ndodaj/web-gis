@@ -1,0 +1,35 @@
+<div class="bg-app-bar px-6 h-16 border-b sticky left-0 flex items-center">
+  <span class="flex-1"></span>
+  <ng-container *ngTemplateOutlet="toolbarActions"></ng-container>
+</div>
+
+<table
+  mat-table
+  [dataSource]="dataSource"
+  matSort
+  matSortDisableClear
+  matSortDirection="desc"
+>
+  <!-- Header -->
+  <ng-container *ngFor="let column of displayedColumns" [matColumnDef]="column">
+    <th mat-header-cell *matHeaderCellDef mat-sort-header>
+      {{ column }}
+    </th>
+  </ng-container>
+
+  <!-- Rows -->
+  <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+  <tr
+    mat-row
+    *matRowDef="let row; columns: displayedColumns"
+    class="hover:bg-hover trans-ease-out"
+    @fadeInUp
+  ></tr>
+</table>
+
+<mat-paginator
+  class="paginator"
+  #paginator
+  [pageSize]="pageSize"
+  [pageSizeOptions]="pageSizeOptions"
+></mat-paginator>

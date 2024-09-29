@@ -23,7 +23,6 @@ export class ImageService extends BaseService {
     );
   }
   upload(payload: any, indicatorId: any, recordId: any): Observable<string> {
-    //const url = 'http://195.201.1.79:5000';
     return this.http.post<string>(
       this.entityUrl + `/api/v1/data/by_name/${indicatorId}/${recordId}/image`,
       payload

@@ -1,0 +1,46 @@
+// Custom Theming for Angular Material
+// For more information: https://material.angular.io/guide/theming
+@use "@angular/material" as mat;
+
+@import "@angular/material/theming";
+
+// SCSS Variables
+@import "var";
+
+// Mixins
+@import "partials/mixins";
+
+// Fonts
+@import "partials/fonts/inter";
+
+// Styles / CSS Variables
+@import "partials/styles/style-dark";
+@import "partials/styles/style-light";
+@import "partials/styles/style-default";
+
+// Include the common styles for Angular Material. We include this here so that you only
+// have to load a single css file for Angular Material in your app.
+// Be sure that you only ever include this mixin once!
+@include mat.core();
+
+// Include theme styles for core and each component used in your app.
+// Alternatively, you can import and @include the theme mixins for each component
+// that you are using.
+@include mat.all-component-themes($app-theme);
+
+// Partials
+@import "partials/horizontal";
+@import "partials/misc";
+@import "partials/vertical";
+@import "partials/print";
+@import "partials/matIcon";
+@import "partials/typography";
+@import "partials/plugins/@angular/material/index";
+
+// Layouts
+@import "partials/layouts/layout-apolex";
+@import "partials/layouts/layout-molareas";
+@import "partials/layouts/layout-patherme";
+@import "partials/layouts/layout-zenikar";
+@import "partials/layouts/layout-zigpose";
+@import "partials/layouts/app-layout-zeoak";

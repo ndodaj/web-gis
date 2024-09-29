@@ -1,0 +1,11 @@
+{
+  "userDetail": "Account details",
+  "fullName": "Full Name",
+  "userName": "User Name",
+  "phone": "Phone",
+  "roles": "Roles",
+  "changePassword": "Change Password",
+  "loginMsg": "Login To System",
+  "signUpMsg": "Sign Up To System",
+  "login": "Login"
+}

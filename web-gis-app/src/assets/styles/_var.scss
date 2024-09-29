@@ -1,0 +1,168 @@
+@use '@angular/material' as mat;
+@use 'sass:map';
+@import '@angular/material/theming';
+
+$sidenav-background: #1e3953 !default;
+
+$config: mat.define-typography-config(
+  $font-family: var(--font),
+  $headline-1:
+    mat.define-typography-level(112px, 112px, 300, $letter-spacing: -0.05em),
+  $headline-2:
+    mat.define-typography-level(56px, 56px, 400, $letter-spacing: -0.02em),
+  $headline-3:
+    mat.define-typography-level(45px, 48px, 400, $letter-spacing: -0.005em),
+  $headline-4: mat.define-typography-level(34px, 40px, 400),
+  $headline-5:
+    mat.define-typography-level(24px, 32px, 400, $letter-spacing: -0.019em),
+  $headline-6:
+    mat.define-typography-level(18px, 26px, 500, $letter-spacing: -0.014em),
+  $subtitle-1:
+    mat.define-typography-level(16px, 28px, 400, $letter-spacing: -0.011em),
+  $body-1:
+    mat.define-typography-level(15px, 24px, 400, $letter-spacing: -0.009em),
+  $subtitle-2:
+    mat.define-typography-level(14px, 24px, 500, $letter-spacing: -0.006em),
+  $body-2:
+    mat.define-typography-level(14px, 20px, 400, $letter-spacing: -0.006em),
+  $caption: mat.define-typography-level(12px, 20px, 400, $letter-spacing: 0),
+  $button:
+    mat.define-typography-level(14px, 14px, 500, $letter-spacing: -0.006em)
+) !default;
+
+// Define the palettes for your theme using the Material Design palettes available in palette.scss
+// (imported above). For each palette, you can optionally specify a default, lighter, and darker
+// hue. Available color palettes: https://material.io/design/color/
+$app-primary: mat.define-palette(
+  (
+    100: var(--color-primary-rgb),
+    500: var(--color-primary-rgb),
+    700: var(--color-primary-rgb),
+    contrast: (
+      100: var(--color-primary-contrast-rgb),
+      500: var(--color-primary-contrast-rgb),
+      700: var(--color-primary-contrast-rgb)
+    )
+  )
+) !default;
+
+$app-accent: mat.define-palette(
+  (
+    100: var(--color-accent-rgb),
+    500: var(--color-accent-rgb),
+    700: var(--color-accent-rgb),
+    contrast: (
+      100: var(--color-accent-contrast-rgb),
+      500: var(--color-accent-contrast-rgb),
+      700: var(--color-accent-contrast-rgb)
+    )
+  )
+) !default;
+
+// The warn palette is optional (defaults to red).
+$app-warn: mat.define-palette(
+  (
+    100: var(--color-warn-rgb),
+    500: var(--color-warn-rgb),
+    700: var(--color-warn-rgb),
+    contrast: (
+      100: var(--color-warn-contrast-rgb),
+      500: var(--color-warn-contrast-rgb),
+      700: var(--color-warn-contrast-rgb)
+    )
+  )
+) !default;
+
+$app-theme-foreground: (
+  text: black,
+  elevation: #000,
+  divider: rgba(82, 63, 105, 0.06),
+  dividers: rgba(82, 63, 105, 0.06)
+) !default;
+
+$app-theme-background: (
+  app-bar: #ebebee
+) !default;
+
+// Create the theme object (a Sass map containing all of the palettes).
+$app-theme: mat.define-light-theme(
+  (
+    color: (
+      primary: $app-primary,
+      accent: $app-accent,
+      warn: $app-warn,
+      is-dark: false
+    ),
+    typography: $config,
+    density: -1
+  )
+) !default;
+
+$app-theme: map.deep-merge(
+  $app-theme,
+  (
+    color: (
+      foreground:
+        map_merge(mat.$light-theme-foreground-palette, $app-theme-foreground),
+      background:
+        map_merge(mat.$light-theme-background-palette, $app-theme-background)
+    ),
+    // Required for @angular/material legacy compatibility
+    foreground:
+      map_merge(mat.$light-theme-foreground-palette, $app-theme-foreground),
+    background:
+      map_merge(mat.$light-theme-background-palette, $app-theme-background)
+  )
+);
+
+$app-dark-theme: mat.define-dark-theme(
+  (
+    color: (
+      primary: $app-primary,
+      accent: $app-accent,
+      warn: $app-warn,
+      is-dark: true
+    )
+  )
+) !default;
+
+$app-dark-theme-foreground: () !default;
+
+$app-dark-theme-background: (
+  app-bar: darken($sidenav-background, 5),
+  background: lighten($sidenav-background, 5),
+  card: $sidenav-background,
+  dialog: $sidenav-background,
+  status-bar: darken($sidenav-background, 5)
+) !default;
+
+$app-dark-theme: map.deep-merge(
+  $app-dark-theme,
+  (
+    color: (
+      foreground:
+        map_merge(
+          mat.$dark-theme-foreground-palette,
+          $app-dark-theme-foreground
+        ),
+      background:
+        map_merge(
+          mat.$dark-theme-background-palette,
+          $app-dark-theme-background
+        )
+    ),
+    // Required for @angular/material legacy compatibility
+    foreground:
+      map_merge(mat.$dark-theme-foreground-palette, $app-dark-theme-foreground),
+    background:
+      map_merge(mat.$dark-theme-background-palette, $app-dark-theme-background)
+  )
+);
+
+$light-primary-text: white;
+$light-secondary-text: rgba(white, 0.7);
+$light-disabled-text: rgba(white, 0.6);
+
+$dark-primary-text: rgba(black, 0.87);
+$dark-secondary-text: rgba(black, 0.54);
+$dark-disabled-text: rgba(black, 0.7);

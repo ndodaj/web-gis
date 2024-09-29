@@ -188,7 +188,7 @@ export class DocumentComponent implements AfterViewInit {
     }
   }
   downloadFile(row: any) {
-    const url = `http://195.201.1.79:5000/static/uploads/${row?.name}`;
+    const url = `localhost:5000/static/uploads/${row?.name}`;
 
     this.http
       .get(url, { observe: 'response', responseType: 'blob' })

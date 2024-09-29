@@ -1,0 +1,91 @@
+<form (ngSubmit)="save()" [formGroup]="form">
+  <div class="flex items-center" mat-dialog-title>
+    <h2 class="headline m-0 flex-auto">
+      {{ !!dialogData ? "Edit" : "Create" }}
+    </h2>
+    <button
+      class="text-secondary"
+      mat-dialog-close
+      mat-icon-button
+      type="button"
+    >
+      <mat-icon svgIcon="mat:close"></mat-icon>
+    </button>
+  </div>
+  <mat-divider class="text-border"></mat-divider>
+  <mat-dialog-content class="flex flex-col">
+    <div class="flex flex-col sm:flex-row sm:gap-4">
+      <mat-form-field class="flex-auto">
+        <mat-label>First Name</mat-label>
+        <input formControlName="first_name" matInput />
+      </mat-form-field>
+      <mat-form-field class="flex-auto">
+        <mat-label>Last Name</mat-label>
+        <input formControlName="last_name" matInput />
+      </mat-form-field>
+    </div>
+    <div class="flex flex-col sm:flex-row sm:gap-4">
+      <mat-form-field class="flex-auto">
+        <mat-label>User Name</mat-label>
+        <input formControlName="username" matInput />
+      </mat-form-field>
+      <mat-form-field class="flex-auto">
+        <mat-label>Email</mat-label>
+        <input formControlName="email" matInput />
+        <mat-error *ngIf="form.get('email')?.hasError('invalidEmail')"
+          >The email is not in the correct format</mat-error
+        >
+      </mat-form-field>
+    </div>
+    <mat-form-field class="flex-auto">
+      <mat-label>Roles</mat-label>
+      <mat-select formControlName="role_id">
+        <mat-option *ngFor="let role of roles" [value]="role?.id">
+          {{ role?.name }}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <div
+      *ngIf="!this.dialogData"
+      class="flex flex-col sm:flex-row sm:gap-4"
+      formGroupName="passwordForm"
+    >
+      <mat-form-field class="flex-auto" *appTogglePasswordVisibility>
+        <mat-label>Password</mat-label>
+        <input type="password" formControlName="password" matInput />
+      </mat-form-field>
+      <mat-form-field class="flex-auto" *appTogglePasswordVisibility>
+        <mat-label>Confirm Password</mat-label>
+        <input type="password" matInput formControlName="confirmPassword" />
+        <mat-error
+          *ngIf="
+            form
+              .get('passwordForm')
+              ?.get('confirmPassword')
+              ?.hasError('notSame')
+          "
+        >
+          Passwords do not match
+        </mat-error>
+      </mat-form-field>
+    </div>
+    <mat-radio-group
+      *appHasAnyPermission="PERMISSIONS?.user_post_permission"
+      class="flex-auto"
+      formControlName="active"
+    >
+      <mat-label class="ml-1">Active? </mat-label>
+      <br />
+      <mat-radio-button
+        *ngFor="let activeStatus of activeOptions"
+        [value]="activeStatus.value"
+        >{{ activeStatus.label }}
+      </mat-radio-button>
+    </mat-radio-group>
+  </mat-dialog-content>
+  <mat-dialog-actions align="end">
+    <button mat-button mat-dialog-close type="button">Cancel</button>
+    <button color="primary" mat-flat-button type="submit">Save</button>
+  </mat-dialog-actions>
+</form>

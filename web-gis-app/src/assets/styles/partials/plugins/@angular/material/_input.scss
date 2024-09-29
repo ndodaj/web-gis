@@ -1,0 +1,37 @@
+.mdc-notched-outline__notch {
+  border-right: none;
+}
+
+:root {
+  --mdc-filled-text-field-disabled-label-text-color: theme(
+    "textColor.disabled"
+  );
+
+  --mdc-filled-text-field-disabled-input-text-color: theme(
+    "textColor.disabled"
+  );
+
+  --mdc-outlined-text-field-disabled-input-text-color: theme(
+    "textColor.disabled"
+  );
+
+  --mdc-outlined-text-field-disabled-label-text-color: theme(
+    "textColor.disabled"
+  );
+
+  --mat-form-field-disabled-input-text-placeholder-color: theme(
+    "textColor.disabled"
+  );
+
+  --mat-select-disabled-trigger-text-color: theme("textColor.disabled");
+
+  --mat-radio-disabled-label-color: theme("textColor.disabled");
+
+  --mat-datepicker-calendar-date-disabled-state-text-color: theme(
+    "textColor.disabled"
+  );
+
+  --mat-datepicker-range-input-disabled-state-text-color: theme(
+    "textColor.disabled"
+  );
+}

@@ -20,7 +20,7 @@ export class ViewDocumentComponent {
     this.fileName = this.dialogData?.name;
 
     this.preview = this.sanitizer.bypassSecurityTrustResourceUrl(
-      `http://195.201.1.79:5000/static/uploads/${this.fileName}`
+      `localhost:5000/static/uploads/${this.fileName}`
     );
   }
 }

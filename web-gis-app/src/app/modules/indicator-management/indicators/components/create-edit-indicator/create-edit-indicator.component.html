@@ -1,0 +1,63 @@
+<div class="card overflow-auto p-5">
+  <form (ngSubmit)="save()" [formGroup]="form">
+    <div class="pt-2 pb-4 border-b">
+      <h2 class="title m-0">
+        {{ !!dialogData ? "Edit Indicator" : "Create Indicator" }}
+      </h2>
+    </div>
+    <div class="flex flex-col sm:flex-row sm:gap-4">
+      <mat-form-field class="flex-auto">
+        <mat-label>Category of Indicator</mat-label>
+        <mat-select formControlName="indicator_category">
+          <mat-option
+            *ngFor="let indicator of indicatorCategories"
+            [value]="indicator.id"
+          >
+            {{ indicator.name }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+    <div class="flex flex-col sm:flex-row sm:gap-4">
+      <mat-form-field class="flex-auto">
+        <mat-label>Indicator</mat-label>
+        <input formControlName="name" matInput />
+      </mat-form-field>
+      <mat-form-field class="flex-auto">
+        <mat-label>Geometry of Indicator</mat-label>
+        <mat-select formControlName="geometry_type">
+          <mat-option
+            *ngFor="let geometry of geometryTypes"
+            [value]="geometry.id"
+          >
+            {{ geometry.type }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+    <mat-radio-group
+      *appHasAnyPermission="PERMISSIONS?.indicator_post_permission"
+      class="flex-auto"
+      formControlName="accepted"
+    >
+      <mat-label class="ml-1">Show Indicator ? </mat-label>
+      <br />
+      <mat-radio-button
+        *ngFor="let activeStatus of activeOptions"
+        [value]="activeStatus.value"
+        >{{ activeStatus.label }}
+      </mat-radio-button>
+    </mat-radio-group>
+    <div align="end" class="pt-4">
+      <button mat-button type="button" mat-dialog-close>Cancel</button>
+      <button
+        color="primary"
+        [disabled]="form.invalid || !form.dirty"
+        mat-flat-button
+        type="submit"
+      >
+        Save
+      </button>
+    </div>
+  </form>
+</div>

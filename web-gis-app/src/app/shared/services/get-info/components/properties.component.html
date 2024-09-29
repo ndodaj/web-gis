@@ -1,0 +1,67 @@
+<div class="card overflow-auto p-5">
+  <form (ngSubmit)="save()" [formGroup]="dynamicForm">
+    <div class="pt-2 pb-4 border-b">
+      <h2 class="title m-0">
+        {{ layerNameTitle }}
+      </h2>
+    </div>
+
+    <!-- <mat-label>{{ control.key }}</mat-label>
+      <input matInput [formControlName]="control.key" /> -->
+
+    <div *ngFor="let control of dynamicForm.controls | keyvalue">
+      <ng-container [ngSwitch]="control.key">
+        <div *ngSwitchCase="'date_time'">
+          <mat-form-field class="w-full" appearence="outline">
+            <mat-label>{{ transform(control.key) }}</mat-label>
+            <input
+              matInput
+              [matDatepicker]="picker"
+              [formControlName]="control.key"
+            />
+            <mat-datepicker-toggle
+              matIconSuffix
+              [for]="picker"
+            ></mat-datepicker-toggle>
+            <mat-datepicker #picker></mat-datepicker>
+          </mat-form-field>
+        </div>
+        <div *ngSwitchCase="'picture'" class="pb-8">
+          <input
+            type="file"
+            class="file-input"
+            [formControlName]="control.key"
+            (change)="onFileSelected($event)"
+            #fileUpload
+          />
+
+          <div class="file-upload">
+            {{ fileName || "No file uploaded yet." }}
+
+            <button
+              mat-mini-fab
+              color="primary"
+              class="upload-btn"
+              (click)="fileUpload.click()"
+            >
+              <mat-icon>attach_file</mat-icon>
+            </button>
+          </div>
+        </div>
+
+        <div *ngSwitchDefault>
+          <!-- Your code for handling all other cases -->
+          <mat-form-field class="w-full" appearence="outline">
+            <mat-label>{{ transform(control.key) }}</mat-label>
+            <input matInput [formControlName]="control.key" />
+          </mat-form-field>
+        </div>
+      </ng-container>
+    </div>
+
+    <div align="end" class="pt-4">
+      <button mat-button type="button" mat-dialog-close>Cancel</button>
+      <button color="primary" mat-flat-button type="submit">Save</button>
+    </div>
+  </form>
+</div>

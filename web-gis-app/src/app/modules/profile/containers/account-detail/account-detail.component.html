@@ -1,0 +1,74 @@
+<div class="card overflow-auto">
+  <div class="px-gutter py-4 border-b">
+    <h2 class="title m-0">{{ "userDetail" | translate }}</h2>
+  </div>
+
+  <div class="px-gutter py-4 grid grid-cols-1 sm:grid-cols-2 gap-4">
+    <div class="py-3 flex items-center">
+      <div
+        class="w-10 h-10 rounded-full bg-primary/10 text-primary ltr:mr-3 rtl:ml-3 flex items-center justify-center"
+      >
+        <mat-icon class="icon-sm" svgIcon="mat:account_box"></mat-icon>
+      </div>
+
+      <div>
+        <p class="m-0 body-1">
+          {{ userDetail?.username }}
+        </p>
+        <p class="m-0 caption text-hint">{{ "fullName" | translate }}</p>
+      </div>
+    </div>
+
+    <div class="py-3 flex items-center">
+      <div
+        class="w-10 h-10 rounded-full bg-primary/10 text-primary ltr:mr-3 rtl:ml-3 flex items-center justify-center"
+      >
+        <mat-icon class="icon-sm" svgIcon="mat:account_circle"></mat-icon>
+      </div>
+
+      <div>
+        <p class="m-0 body-1">{{ userDetail?.username }}</p>
+        <p class="m-0 caption text-hint">{{ "userName" | translate }}</p>
+      </div>
+    </div>
+
+    <div class="py-3 flex items-center">
+      <div
+        class="w-10 h-10 rounded-full bg-primary/10 text-primary ltr:mr-3 rtl:ml-3 flex items-center justify-center"
+      >
+        <mat-icon class="icon-sm" svgIcon="mat:mail"></mat-icon>
+      </div>
+
+      <div>
+        <p class="m-0 body-1">{{ userDetail?.email }}</p>
+        <p class="m-0 caption text-hint">Email</p>
+      </div>
+    </div>
+
+    <div class="py-3 flex items-center">
+      <div
+        class="w-10 h-10 rounded-full bg-primary/10 text-primary ltr:mr-3 rtl:ml-3 flex items-center justify-center"
+      >
+        <mat-icon class="icon-sm" svgIcon="mat:home"></mat-icon>
+      </div>
+
+      <div>
+        <p class="m-0 body-1">{{ userDetail?.roles | join : "name" }}</p>
+        <p class="m-0 caption text-hint">Role</p>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- <div class="flex justify-between mt-3">
+  <div
+    (click)="openChangePasswordModal()"
+    aria-hidden="true"
+    class="relative flex items-center cursor-pointer select-none rounded-full px-4 py-1 hover:bg-primary/10 trans-ease-out"
+    matRipple
+  >
+    <div class="p-2 bg-primary/10 text-primary rounded-full ltr:mr-4 rtl:ml-4">
+      <mat-icon class="block" svgIcon="mat:security"></mat-icon>
+    </div>
+    <p class="font-medium text-primary">{{ "changePassword" | translate }}</p>
+  </div>
+</div> -->

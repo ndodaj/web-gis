@@ -1,0 +1,385 @@
+@use '@material/theme/theme-color' as mdc-theme-color;
+@use '@material/menu-surface' as mdc-menu-surface;
+@use '@material/list/evolution-mixins' as mdc-list;
+@use '@material/typography' as mdc-typography;
+
+@use 'core/theming/theming';
+@use 'core/typography/typography';
+@use 'core/mdc-helpers/mdc-helpers';
+
+@use 'sass:math';
+@use '@angular/cdk';
+@use 'core/style/vendor-prefixes';
+@use 'core/style/variables.scss';
+
+// Gets the color to use for some text that is highlighted while a select has focus.
+@function _get-mdc-focused-text-color($palette) {
+  @return rgba(mdc-theme-color.prop-value($palette), 0.87);
+}
+
+@mixin color($config-or-theme) {
+  $config: theming.get-color-config($config-or-theme);
+
+  @include mdc-helpers.using-mdc-theme($config) {
+    @include _app-mat-select-buttons();
+    @include _app-mat-select-search-box();
+    $disabled-color: rgba(mdc-theme-color.prop-value(on-surface), 0.38);
+    @include mdc-menu-surface.core-styles(mdc-helpers.$mdc-theme-styles-query);
+    @include mdc-list.without-ripple(mdc-helpers.$mdc-theme-styles-query);
+
+    .app-mat-select-value {
+      color: rgba(mdc-theme-color.prop-value(on-surface), 0.87);
+    }
+
+    .app-mat-select-placeholder {
+      color: rgba(mdc-theme-color.prop-value(on-surface), 0.6);
+    }
+
+    .app-mat-select-disabled .app-mat-select-value {
+      color: $disabled-color;
+    }
+
+    .app-mat-select-arrow {
+      color: rgba(mdc-theme-color.prop-value(on-surface), 0.54);
+    }
+
+    .mat-mdc-form-field {
+      &.mat-focused {
+        &.mat-primary .app-mat-select-arrow {
+          color: _get-mdc-focused-text-color(primary);
+        }
+
+        &.mat-accent .app-mat-select-arrow {
+          color: _get-mdc-focused-text-color(secondary);
+        }
+
+        &.mat-warn .app-mat-select-arrow {
+          color: _get-mdc-focused-text-color(error);
+        }
+      }
+
+      .app-mat-select.app-mat-select-invalid .app-mat-select-arrow {
+        color: _get-mdc-focused-text-color(error);
+      }
+
+      .app-mat-select.app-mat-select-disabled .app-mat-select-arrow {
+        color: $disabled-color;
+      }
+    }
+  }
+}
+
+@mixin typography($config-or-theme) {
+  $config: typography.private-typography-to-2018-config(
+    theming.get-typography-config($config-or-theme)
+  );
+  @include mdc-helpers.using-mdc-typography($config) {
+    @include mdc-menu-surface.core-styles(
+      mdc-helpers.$mdc-typography-styles-query
+    );
+
+    .app-mat-select-panel {
+      @include mdc-list.list-base(mdc-helpers.$mdc-typography-styles-query);
+    }
+
+    .app-mat-select {
+      @include mdc-typography.typography(
+        body1,
+        $query: mdc-helpers.$mdc-typography-styles-query
+      );
+    }
+  }
+}
+
+@mixin density($config-or-theme) {
+}
+
+@mixin theme($theme-or-color-config) {
+  $theme: theming.private-legacy-get-theme($theme-or-color-config);
+  @include theming.private-check-duplicate-theme-styles(
+    $theme,
+    'app-mat-select'
+  ) {
+    $color: theming.get-color-config($theme);
+    $density: theming.get-density-config($theme);
+    $typography: theming.get-typography-config($theme);
+
+    @if $color != null {
+      @include color($color);
+    }
+    @if $density != null {
+      @include density($density);
+    }
+    @if $typography != null {
+      @include typography($typography);
+    }
+  }
+}
+
+@mixin _app-mat-select-buttons() {
+  .app-mat-select-back-button {
+    svg {
+      stroke: rgba(mdc-theme-color.prop-value(on-surface), 0.54);
+    }
+  }
+}
+
+@mixin _app-mat-select-search-box() {
+  .app-mat-select-search-box {
+    border-color: rgba(mdc-theme-color.prop-value(on-surface), 0.38);
+  }
+
+  .mat-primary .app-mat-select-search-box--focused {
+    border-color: rgba(mdc-theme-color.prop-value(primary), 1);
+    outline-color: rgba(mdc-theme-color.prop-value(primary), 1);
+  }
+
+  .mat-accent .app-mat-select-search-box--focused {
+    border-color: rgba(mdc-theme-color.prop-value(secondary), 1);
+    outline-color: rgba(mdc-theme-color.prop-value(secondary), 1);
+  }
+
+  .mat-warn .app-mat-select-search-box--focused {
+    border-color: rgba(mdc-theme-color.prop-value(error), 1);
+    outline-color: rgba(mdc-theme-color.prop-value(error), 1);
+  }
+
+  .app-mat-select-search-box-icon {
+    fill: rgba(mdc-theme-color.prop-value(on-surface), 0.54);
+  }
+
+  .app-mat-select-search-box-input {
+    &::placeholder {
+      color: rgba(mdc-theme-color.prop-value(on-surface), 0.6);
+    }
+
+    caret-color: _get-mdc-focused-text-color(primary);
+    color: rgba(mdc-theme-color.prop-value(on-surface), 0.87);
+  }
+}
+
+$mat-select-arrow-size: 5px !default;
+$mat-select-arrow-margin: 4px !default;
+$mat-select-panel-max-height: auto !default;
+$mat-select-placeholder-arrow-space: 2 *
+  ($mat-select-arrow-size + $mat-select-arrow-margin);
+$leading-width: 12px !default;
+$scale: 0.75 !default;
+
+// angular material css
+// We base the select panel styling on top of MDC's menu styles and we
+// implement the trigger ourselves since MDC doesn't provide an equivalent.
+
+@include mdc-menu-surface.core-styles($query: structure);
+
+.app-mat-select-panel * {
+  box-sizing: border-box;
+}
+
+.app-mat-select-arrow {
+  width: $mat-select-arrow-size * 2;
+  height: $mat-select-arrow-size;
+  position: relative;
+
+  svg {
+    fill: currentColor;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+
+    @include cdk.high-contrast(active, off) {
+      // On Chromium browsers the `currentColor` blends in with the
+      // background for SVGs so we have to fall back to `CanvasText`.
+      fill: CanvasText;
+
+      .app-mat-select-disabled & {
+        fill: GrayText;
+      }
+    }
+  }
+}
+
+// Note that the `.mdc-menu-surface` is here in order to bump up the specificity
+// and avoid interference with `mat-menu` which uses the same mixins from MDC.
+.mdc-menu-surface.app-mat-select-panel {
+  width: 100%; // Ensures that the panel matches the overlay width.
+  max-height: $mat-select-panel-max-height;
+  position: static; // MDC uses `absolute` by default which will throw off our positioning.
+  outline: 0;
+  background-color: white;
+
+  @include mdc-list.list-base($query: structure);
+  @include cdk.high-contrast(active, off) {
+    outline: solid 1px;
+  }
+
+  .cdk-overlay-pane:not(.app-mat-select-panel-above) & {
+    border-top-left-radius: 0;
+    border-top-right-radius: 0;
+    transform-origin: top center;
+  }
+
+  .app-mat-select-panel-above & {
+    border-bottom-left-radius: 0;
+    border-bottom-right-radius: 0;
+    transform-origin: bottom center;
+  }
+}
+
+// Our MDC form field implementation is based on the MDC text field which doesn't include styles
+// for select. The select specific styles are not present as they don't use their text field as a
+// container. Below are the styles to account for the select arrow icon at the end.
+.mat-mdc-form-field-type-app-mat-select {
+  &.mat-form-field-appearance-fill {
+    .mat-mdc-floating-label {
+      max-width: calc(100% - #{$mat-select-placeholder-arrow-space});
+    }
+
+    .mdc-floating-label--float-above {
+      $arrow-scale: math.div($mat-select-placeholder-arrow-space, $scale);
+      max-width: calc(100% / #{$scale} - #{$arrow-scale});
+    }
+  }
+
+  &.mat-form-field-appearance-outline {
+    .mdc-notched-outline__notch {
+      max-width: calc(
+        100% - #{2 * ($mat-select-placeholder-arrow-space + $leading-width)}
+      );
+    }
+
+    .mdc-text-field--label-floating .mdc-notched-outline__notch {
+      max-width: calc(100% - #{$leading-width * 2});
+    }
+  }
+}
+
+// Used to prevent inline elements from collapsing if their text bindings
+// become empty. This is preferable to inserting a blank space, because the
+// space can be read out by screen readers (see #21725).
+.app-mat-select-min-line:empty::before {
+  content: ' ';
+  white-space: pre;
+  width: 1px;
+  display: inline-block;
+
+  // Prevents some browsers from rendering the element in high contrast mode. Use `visibility`
+  // instead of `opacity` since VoiceOver + Chrome still reads out the space with the latter.
+  visibility: hidden;
+}
+
+// custom styles
+
+.app-mat-select-panel {
+  @apply flex flex-col box-border;
+  .app-mat-select-panel-header {
+    @apply flex items-center w-full p-2;
+    .app-mat-select-panel-search-box {
+      @apply mx-2;
+    }
+  }
+  .app-mat-select-panel-content {
+    @apply p-0 relative h-full;
+    .app-mat-select-virtual-scroll {
+      @apply h-full;
+      .mat-mdc-option {
+        @apply rounded text-sm font-medium transition duration-100 ease-out;
+        &.mdc-list-item--selected {
+          @apply bg-primary/10;
+        }
+      }
+    }
+  }
+}
+.app-mat-select-panel-bottom-sheet-view-type {
+  @apply w-8/12 top-1/4 left-1/4 bottom-0 #{!important};
+}
+
+.app-mat-select-panel-full-screen-view-type {
+  @apply w-full h-full inset-0 #{!important};
+}
+
+.app-mat-select {
+  @apply w-full inline-block outline-none;
+  &.app-mat-select-disabled & {
+    @include vendor-prefixes.user-select(none);
+    @apply cursor-default;
+  }
+  .app-mat-select-trigger {
+    @apply inline-flex items-center cursor-pointer relative w-full box-border;
+    .app-mat-select-value {
+      @apply w-full truncate;
+      .app-mat-select-value-text {
+        @apply truncate;
+      }
+      &--oneRowChip,
+      &--multipleRowChip {
+        @apply pr-2;
+      }
+      .app-mat-select-chips {
+        @apply overflow-hidden;
+        .app-mat-select-chip-grid-row {
+          @apply flex;
+
+          &--oneRowChip {
+            @apply flex-nowrap;
+          }
+
+          &--multipleRowChip {
+            @apply flex-wrap;
+          }
+
+          .app-mat-select-chip-grid-row-icon {
+            @apply flex items-center;
+          }
+        }
+        .app-mat-select-input-chips {
+          @apply w-0 h-0;
+        }
+      }
+    }
+
+    .app-mat-select-arrow-wrapper {
+      @apply h-6 flex  flex-shrink-0;
+
+      // When used in a fill appearance with a label, form-field the arrow should be shifted up 8px.
+      .mat-form-field-appearance-fill & {
+        @apply transform translate-y--8;
+      }
+
+      .mat-form-field-appearance-fill .mdc-text-field--no-label & {
+        @apply transform-none;
+      }
+    }
+  }
+
+  .app-mat-select-placeholder {
+    transition: color variables.$swift-ease-out-duration
+      math.div(variables.$swift-ease-out-duration, 3)
+      variables.$swift-ease-out-timing-function;
+
+    ._mat-animation-noopable & {
+      @apply transition-none;
+    }
+
+    .mat-form-field-hide-placeholder & {
+      @apply transition-none block;
+      color: transparent;
+      -webkit-text-fill-color: transparent;
+    }
+  }
+}
+
+body[dir='rtl'] {
+  .app-mat-select {
+    .app-mat-select-trigger {
+      .app-mat-select-value {
+        &--oneRowChip,
+        &--multipleRowChip {
+          @apply pl-2 pr-0;
+        }
+      }
+    }
+  }
+}
