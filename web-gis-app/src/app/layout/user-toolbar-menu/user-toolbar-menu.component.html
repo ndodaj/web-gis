@@ -1,0 +1,63 @@
+<!-- <div class="dropdown">
+  <div class="dropdown-header flex items-center justify-between">
+    <div class="flex items-center">
+      <div class="dropdown-heading-icon flex items-center justify-center">
+        <mat-icon svgIcon="mat:person"></mat-icon>
+      </div>
+      <div class="dropdown-heading">{{ userName }}</div>
+    </div>
+  </div>
+
+  <div class="dropdown-content">
+    <a
+      (click)="close()"
+      *ngFor="let item of items"
+      [routerLink]="item.route"
+      class="notification flex items-center"
+      matRipple
+    >
+      <mat-icon
+        [svgIcon]="item.icon"
+        class="notification-icon flex-none"
+      ></mat-icon>
+      <div class="flex-auto">
+        <div class="notification-label">{{ item.label }}</div>
+        <div class="notification-description">{{ item.description }}</div>
+      </div>
+    </a>
+  </div>
+
+  <div class="dropdown-footer flex items-center justify-between">
+    <a (click)="logout()" [routerLink]="['/login']" color="primary" mat-button
+      >Logout</a
+    >
+  </div>
+</div> -->
+<div class="app-user-menu">
+  <a
+    (click)="openProfile()"
+    aria-hidden="true"
+    class="app-user-menu-item"
+    matRipple
+    matRippleColor="rgb(var(--color-primary), 0.1)"
+  >
+    <mat-icon
+      class="app-user-menu-item__icon icon-sm"
+      svgIcon="mat:account_circle"
+    ></mat-icon>
+    <div class="app-user-menu-item__label">Profile</div>
+  </a>
+  <a
+    (click)="logout()"
+    aria-hidden="true"
+    class="app-user-menu-item"
+    matRipple
+    matRippleColor="rgb(var(--color-primary), 0.1)"
+  >
+    <mat-icon
+      class="app-user-menu-item__icon icon-sm"
+      svgIcon="mat:logout"
+    ></mat-icon>
+    <div class="app-user-menu-item__label">Sign Out</div>
+  </a>
+</div>

@@ -1,0 +1,99 @@
+<div class="selectControl" hidden id="selectControl">
+  <span class="close" (click)="closeSelectControlModal()">&times;</span>
+  <h1>Query Selector</h1>
+  <div style="margin-top: -2rem">
+    <label for="layerSelect">Select Indicator:</label>
+    <select id="layerSelect">
+      <option disabled selected value=""></option>
+    </select>
+    <label for="fieldSelect">Select Field:</label>
+    <select id="fieldSelect"></select>
+    <label for="operator">Select Operator:</label>
+    <select id="operator">
+      <option disabled selected value=""></option>
+      <option value="=">Equal (=)</option>
+      <option value=">">Greater Than (>)</option>
+      <option value="&lt;">Less Than (&lt;)</option>
+      <option value="LIKE">Like (LIKE)</option>
+    </select>
+    <label for="attributeSelect">Select Attribute:</label>
+    <select id="attributeSelect"></select>
+  </div>
+  <input
+    type="button"
+    value="Reset"
+    id="resetBtn"
+    class="layerSelectorButton"
+  />
+  <input id="sumbmitBtn" type="button" value="Submit" />
+</div>
+<div id="popup" class="ol-popup" cdkDrag>
+  <div
+    id="popup-title"
+    class="popup-title popup-title block text-sm font-medium leading-6 text-gray-900"
+  ></div>
+  <!-- <button color="primary" mat-flat-button type="submit" id="saveForm">
+    Save
+  </button> -->
+  <div id="popup-content"></div>
+
+  <button color="primary" mat-flat-button type="submit" id="saveForm">
+    Save
+  </button>
+</div>
+<div class="modal" id="myModal" cdkDrag>
+  <div class="modal-content">
+    <span (click)="closeModal()" class="close">&times;</span>
+    <p class="coords">Coordinates</p>
+    <table style="width: 100%">
+      <tr>
+        <th>Coordinate System</th>
+        <th>Easting</th>
+        <th>Northing</th>
+      </tr>
+      <tr>
+        <td id="coordinateSystem">KRGJSH 2010 / TM λ=20 o</td>
+        <td id="easting"></td>
+        <td id="northing"></td>
+      </tr>
+      <tr>
+        <td id="coordinateSystem">WGS84</td>
+        <td id="easting1"></td>
+        <td id="northing1"></td>
+      </tr>
+      <tr>
+        <td id="coordinateSystem">UTM Zone 34N</td>
+        <td id="easting2"></td>
+        <td id="northing2"></td>
+      </tr>
+    </table>
+  </div>
+</div>
+<section class="content">
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-md-12">
+        <div class="card p-0">
+          <div class="body p-15">
+            <div class="row">
+              <div class="map" id="map">
+                <div
+                  id="formContainer"
+                  class="form-container"
+                  style="display: none"
+                >
+                  <span
+                    (click)="closeInfoForm()"
+                    style="cursor: pointer"
+                    class="close-form"
+                    >&times;</span
+                  >
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

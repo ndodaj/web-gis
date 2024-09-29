@@ -1,0 +1,315 @@
+@import "node_modules/ol/ol.css";
+@import "node_modules/ol-ext/control/LayerSwitcher.css";
+@import "node_modules/ol-ext/control/Search.css";
+@import "node_modules/ol-ext/overlay/Popup.css";
+@import "node_modules/ol-ext/control/Overview.css";
+@import "node_modules/ol-ext/control/PrintDialog.css";
+@import "node_modules/ol-ext/control/Legend.css";
+@import "node_modules/ol-ext/dist/ol-ext.css";
+
+::ng-deep .p-dialog .p-dialog-header .p-dialog-title {
+  font-size: 0.98em !important;
+}
+::ng-deep .ol-control.ol-layerswitcher {
+  background: var(--primary-color);
+}
+
+::ng-deep .ol-search {
+  top: 5em;
+  left: 0.5em;
+}
+::ng-deep .ol-search ul {
+  max-width: 17.5em !important;
+}
+::ng-deep .ol-control.ol-legend {
+  bottom: 3em !important;
+}
+::ng-deep .ol-full-screen {
+  left: 0.5em !important;
+  right: auto !important;
+}
+::ng-deep .ol-zoom {
+  top: 2.5em;
+}
+::ng-deep .ol-attribution {
+  bottom: 2.4em;
+}
+
+::ng-deep .ol-scale-line .ol-unselectable {
+  bottom: 1rem;
+}
+
+#map {
+  position: absolute;
+  /* width: 100%; */
+  top: 4rem;
+  /* height: calc(100vh - 57px); */
+  /* overflow-x: hidden; */
+  /* overflow: hidden; */
+  /* overflow-y: hidden; */
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 1;
+}
+
+.search-wrapper {
+  position: relative;
+  left: 9rem;
+  width: 10px;
+  height: 20px;
+}
+
+/* The Modal (background) */
+::ng-deep .modal {
+  display: none;
+  position: fixed;
+  z-index: 1;
+  padding-top: 150px;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+}
+
+/* Modal Content */
+::ng-deep .modal-content {
+  border-radius: 1rem;
+  background-color: #fff;
+  margin: auto;
+  padding: 22px;
+  border: 1px solid #2196f3;
+  width: 35%;
+}
+// ::ng-deep .ol-layerswitcher > button {
+//   float: left !important;
+// }
+@media only screen and (max-width: 600px) {
+  ::ng-deep .material-icons {
+    font-size: 20px !important;
+  }
+  ::ng-deep .mat-mdc-icon-button.mat-mdc-button-base {
+    --mdc-icon-button-state-layer-size: 36px !important;
+    width: var(--mdc-icon-button-state-layer-size);
+    height: var(--mdc-icon-button-state-layer-size);
+    padding: 0px !important;
+  }
+  ::ng-deep .modal-content {
+    width: 60%;
+  }
+}
+
+.coords {
+  position: relative;
+  bottom: 1rem;
+  font-weight: bold;
+}
+#selectControl {
+  top: 9.2rem;
+  left: 0.5rem;
+}
+
+.form-container {
+  width: 200px;
+  border: 1px solid #2196f3;
+  border-radius: 0.5rem;
+  padding: 15px;
+  position: fixed;
+  top: 9rem;
+  left: 0.535em;
+  height: auto;
+  background-color: #fff;
+  z-index: 1000;
+}
+
+/* Add custom CSS to format the form rows */
+::ng-deep .form-container-el {
+  display: block;
+}
+
+::ng-deep .form-container-el label {
+  display: inline-flex;
+  // width: 100px;
+  text-align: left;
+  margin-right: 110px;
+}
+
+::ng-deep .form-container-el input {
+  display: inline-block;
+  width: 100%;
+  margin-bottom: 5px;
+}
+
+/* ol-mouse posistion */
+.custom-mouse-position {
+  position: fixed;
+  bottom: 30px;
+  right: 10px;
+  background-color: rgba(101, 97, 97, 0.507);
+  padding: 5px 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  font-size: 14px;
+  color: #ffffff;
+}
+
+.ol-attribution {
+  bottom: 25px;
+  color: blue;
+}
+
+/* scale-bar  */
+::ng-deep .ol-scale-bar {
+  display: flex;
+  justify-content: center;
+  align-items: flex-end;
+  position: absolute;
+  bottom: 30px;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+/* The Close Button */
+
+.close {
+  position: relative;
+  color: #aaaaaa;
+  float: right;
+  font-size: 28px;
+  font-weight: bold;
+  bottom: 1.765rem;
+  left: 1rem;
+}
+.myModal {
+  display: block;
+  z-index: 99999;
+}
+
+.myFormContainer {
+  display: block;
+}
+.ol-popup {
+  display: none;
+  position: absolute;
+  background-color: white;
+  padding: 15px;
+  border: 1px solid #cccccc;
+  top: 5rem;
+  left: 16rem;
+  min-width: 100px;
+  z-index: 10000;
+}
+.closePopUp {
+  display: none;
+}
+.showPop {
+  display: block;
+}
+// #saveForm {
+//   display: none;
+// }
+.popupInput {
+  border: 1px solid !important;
+  margin-top: 0.5rem !important;
+  height: 1.5rem !important;
+}
+.close:hover,
+.close:focus {
+  color: #000;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+/* Custom CSS for the scale input */
+#scaleInput {
+  width: 150px;
+  text-align: center;
+  padding: 5px;
+  font-size: 14px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+.panelBtn {
+  background-color: white;
+  float: left;
+  z-index: 10;
+  position: relative;
+  font-size: 1.7em;
+}
+
+table,
+th,
+td {
+  border: 1px solid #2196f3;
+}
+
+.selectControl {
+  position: fixed;
+  top: 90px;
+  left: 20px;
+  width: auto;
+  height: auto;
+  background-color: #fff;
+  z-index: 1000;
+  width: 200px;
+  margin: 0 auto;
+  padding: 20px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.mySelectControl {
+  display: block;
+}
+
+.selectControl h1 {
+  font-size: 18px;
+  margin-bottom: 10px;
+  font-weight: 500;
+  position: relative;
+  top: -1.345em;
+}
+
+.selectControl label {
+  display: block;
+  font-weight: bold;
+  margin-top: 10px;
+}
+
+.selectControl select {
+  width: 100%;
+  padding: 5px;
+  margin-top: 5px;
+  border: 1px solid #ccc;
+  border-radius: 3px;
+}
+.selectControl input {
+  font-size: 13px;
+}
+.selectControl input[type="button"] {
+  background-color: #2196f3;
+  color: white;
+  border: none;
+  border-radius: 3px;
+  padding: 5px 10px;
+  cursor: pointer;
+  transition: background-color 0.2s;
+  display: inline-block;
+  margin-top: 15px;
+}
+.selectControl #resetBtn {
+  margin-right: 0.5em;
+  background: darkgray;
+}
+.selectControl #resetBtn:hover {
+  background: gray;
+}
+.selectControl input[type="button"]:hover {
+  background-color: #0056b3;
+}
+
+::ng-deep .ol-ext-buttons {
+  display: none;
+}

@@ -1,0 +1,71 @@
+<!-- <button
+  [matMenuTriggerFor]="menu"
+  class="text-sm font-medium custom-padding-top"
+  mat-icon-button
+  id="measure-length"
+  title="Measures"
+  color="primary"
+>
+  <mat-icon>area_chart</mat-icon>
+</button> -->
+<button
+  [matMenuTriggerFor]="menu"
+  class="text-sm font-medium"
+  id="measure-length"
+  mat-icon-button
+  title="Measures"
+>
+  <mat-icon svgIcon="mat:square_foot"></mat-icon>
+</button>
+<mat-menu #menu="matMenu">
+  <section [formGroup]="measureForm">
+    <div mat-menu-item>
+      <mat-checkbox
+        class="example-margin"
+        labelPosition="after"
+        id="measureLength"
+        formControlName="measureLength"
+      >
+        Measure Length
+      </mat-checkbox>
+    </div>
+
+    <div mat-menu-item>
+      <mat-checkbox
+        class="example-margin"
+        labelPosition="after"
+        id="measureLength"
+        formControlName="measureArea"
+      >
+        Measure Area
+      </mat-checkbox>
+    </div>
+
+    <div mat-menu-item>
+      <mat-checkbox
+        class="example-margin"
+        labelPosition="after"
+        id="segments"
+        formControlName="measureSegmentLength"
+      >
+        Show segment lengths
+      </mat-checkbox>
+    </div>
+
+    <div mat-menu-item>
+      <mat-checkbox
+        class="example-margin"
+        labelPosition="after"
+        id="clear"
+        formControlName="measureClearPrevious"
+      >
+        Clear previous measure
+      </mat-checkbox>
+    </div>
+  </section>
+
+  <button class="pl-4" mat-menu-item (click)="removeDrawInteraction()">
+    <mat-icon>clear</mat-icon>
+    <span>Clear Measure</span>
+  </button>
+</mat-menu>

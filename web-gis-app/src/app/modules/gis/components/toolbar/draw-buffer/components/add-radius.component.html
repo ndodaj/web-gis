@@ -1,0 +1,16 @@
+<div class="card overflow-auto p-5">
+  <form (ngSubmit)="submitForm()" [formGroup]="form">
+    <div class="pt-2 pb-4 border-b">
+      <h2 class="title m-0">Add Radius In Meters</h2>
+    </div>
+
+    <mat-form-field class="flex-auto w-full">
+      <mat-label>Enter radius in meters</mat-label>
+      <input formControlName="radius" type="number" matInput />
+    </mat-form-field>
+    <div align="end" class="pt-4">
+      <button mat-button type="button" mat-dialog-close>Cancel</button>
+      <button color="primary" mat-flat-button type="submit">Save</button>
+    </div>
+  </form>
+</div>

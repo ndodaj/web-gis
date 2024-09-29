@@ -1,0 +1,33 @@
+<form [formGroup]="form">
+  <ng-container *ngFor="let field of fields">
+    <ng-container [ngSwitch]="field.type">
+      <mat-form-field *ngSwitchCase="'text'">
+        <input
+          matInput
+          [formControlName]="field.name"
+          [placeholder]="field.placeholder"
+        />
+      </mat-form-field>
+      <mat-form-field *ngSwitchCase="'number'">
+        <input
+          matInput
+          type="number"
+          [formControlName]="field.name"
+          [placeholder]="field.placeholder"
+        />
+      </mat-form-field>
+      <mat-form-field *ngSwitchCase="'email'">
+        <input
+          matInput
+          type="email"
+          [formControlName]="field.name"
+          [placeholder]="field.placeholder"
+        />
+      </mat-form-field>
+      <!-- Add more cases for different input types as needed -->
+    </ng-container>
+  </ng-container>
+  <button mat-raised-button color="primary" (click)="submitForm()">
+    Submit
+  </button>
+</form>

@@ -1,0 +1,107 @@
+<div class="w-full h-full bg-pattern flex flex-col items-center justify-center">
+  <div @fadeInUp class="card overflow-hidden w-full max-w-xl">
+    <div class="p-6 pb-0 flex flex-col items-center justify-center">
+      <div class="fill-current text-center">
+        <img class="w-16" alt="pont logo" src="assets/img/logo.svg" />
+      </div>
+    </div>
+
+    <div class="text-center mt-4">
+      <h2 class="title m-0">Build Green Group Albania</h2>
+      <h4 class="body-2 text-secondary m-0">{{ "signUpMsg" | translate }}</h4>
+    </div>
+
+    <form
+      [formGroup]="form"
+      (ngSubmit)="signUp()"
+      class="p-6 flex flex-col gap-4"
+    >
+      <div class="flex flex-col">
+        <div class="flex flex-col sm:flex-row sm:gap-4">
+          <mat-form-field class="flex-auto">
+            <mat-label>First Name</mat-label>
+            <input formControlName="first_name" matInput />
+          </mat-form-field>
+          <mat-form-field class="flex-auto">
+            <mat-label>Last Name</mat-label>
+            <input formControlName="last_name" matInput />
+          </mat-form-field>
+        </div>
+        <div class="flex flex-col sm:flex-row sm:gap-4">
+          <mat-form-field class="flex-auto">
+            <mat-label>User Name</mat-label>
+            <input formControlName="username" matInput />
+          </mat-form-field>
+          <mat-form-field class="flex-auto">
+            <mat-label>Email</mat-label>
+            <input formControlName="email" matInput />
+            <mat-error *ngIf="form.get('email')?.hasError('invalidEmail')"
+              >The email is not in the correct format</mat-error
+            >
+          </mat-form-field>
+        </div>
+        <mat-form-field class="flex-auto">
+          <mat-label>Roles</mat-label>
+          <mat-select formControlName="role_id">
+            <mat-option *ngFor="let role of roles" [value]="role.id">
+              {{ role.name }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+        <div
+          class="flex flex-col sm:flex-row sm:gap-4"
+          formGroupName="passwordForm"
+        >
+          <mat-form-field class="flex-auto" *appTogglePasswordVisibility>
+            <mat-label>Password</mat-label>
+            <input type="password" formControlName="password" matInput />
+          </mat-form-field>
+          <mat-form-field class="flex-auto" *appTogglePasswordVisibility>
+            <mat-label>Confirm Password</mat-label>
+            <input type="password" matInput formControlName="confirmPassword" />
+            <mat-error
+              *ngIf="
+                form
+                  .get('passwordForm')
+                  ?.get('confirmPassword')
+                  ?.hasError('notSame')
+              "
+            >
+              Passwords do not match
+            </mat-error>
+          </mat-form-field>
+        </div>
+        <!-- <mat-radio-group class="flex-auto" formControlName="active">
+          <mat-label class="ml-1">Active? </mat-label>
+          <br />
+          <mat-radio-button
+            *ngFor="let activeStatus of activeOptions"
+            [value]="activeStatus.value"
+            >{{ activeStatus.label }}
+          </mat-radio-button>
+        </mat-radio-group> -->
+      </div>
+
+      <button
+        color="primary"
+        [disabled]="form.invalid"
+        mat-fab
+        extended
+        type="submit"
+      >
+        <mat-icon *ngIf="loading"
+          ><mat-spinner color="accent" diameter="20"> </mat-spinner
+        ></mat-icon>
+        Sign Up
+      </button>
+      <p class="mt-5 text-center text-sm text-gray-500">
+        Have an account?
+        <a
+          [routerLink]="['/auth/login']"
+          class="font-semibold leading-6 text-indigo-600 hover:text-indigo-500"
+          >Login</a
+        >
+      </p>
+    </form>
+  </div>
+</div>

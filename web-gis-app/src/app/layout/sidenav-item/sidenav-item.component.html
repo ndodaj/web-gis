@@ -1,0 +1,101 @@
+<ng-container *appHasAnyPermission="item.anyPermission">
+  <a
+    *ngIf="isLink(item) && !isFunction(item.route)"
+    [fragment]="item.fragment"
+    [routerLinkActiveOptions]="item.routerLinkActiveOptions || { exact: false }"
+    [routerLink]="item.route"
+    class="app-sidenav-item"
+    matRipple
+    matRippleColor="var(--sidenav-item-ripple-color)"
+    routerLinkActive="app-sidenav-item--active"
+  >
+    <mat-icon
+      *ngIf="level === 0"
+      [svgIcon]="item.icon || ''"
+      class="app-sidenav-item__icon"
+    ></mat-icon>
+    <span class="app-sidenav-item__label" appEllipsisTooltip>{{
+      item.label
+    }}</span>
+    <span
+      *ngIf="item.badge"
+      [ngClass]="[item.badge.bgClass, item.badge.textClass]"
+      class="app-sidenav-item__badge"
+      >{{ item.badge.value }}</span
+    >
+  </a>
+
+  <div
+    (click)="item.route()"
+    aria-hidden="true"
+    *ngIf="isLink(item) && isFunction(item.route)"
+    class="app-sidenav-item"
+    matRipple
+    matRippleColor="var(--sidenav-item-ripple-color)"
+    routerLinkActive="app-sidenav-item--active"
+  >
+    <mat-icon
+      *ngIf="level === 0"
+      [svgIcon]="item.icon || ''"
+      class="app-sidenav-item__icon"
+    ></mat-icon>
+    <span class="app-sidenav-item__label" appEllipsisTooltip>{{
+      item.label
+    }}</span>
+    <span
+      *ngIf="item.badge"
+      [ngClass]="[item.badge.bgClass, item.badge.textClass]"
+      class="app-sidenav-item__badge"
+      >{{ item.badge.value }}</span
+    >
+  </div>
+
+  <ng-container *ngIf="isDropdown(item)">
+    <div
+      (click)="toggleOpen()"
+      aria-hidden="true"
+      [class.app-sidenav-item--active]="isOpen || isActive"
+      [class.app-sidenav-item--open]="isOpen"
+      class="app-sidenav-item"
+      matRipple
+      matRippleColor="var(--sidenav-item-ripple-color)"
+    >
+      <mat-icon
+        *ngIf="level === 0"
+        [svgIcon]="item.icon || ''"
+        class="app-sidenav-item__icon"
+      ></mat-icon>
+      <span class="app-sidenav-item__label" appEllipsisTooltip>{{
+        item.label
+      }}</span>
+      <span
+        *ngIf="item.badge"
+        [ngClass]="[item.badge.bgClass, item.badge.textClass]"
+        class="app-sidenav-item__badge"
+        >{{ item.badge.value }}</span
+      >
+      <mat-icon
+        class="app-sidenav-item__dropdown-icon"
+        svgIcon="mat:keyboard_arrow_right"
+      ></mat-icon>
+    </div>
+    <div [@dropdown]="isOpen" class="app-sidenav-item__dropdown">
+      <app-sidenav-item
+        *ngFor="let subItem of item.children"
+        [item]="subItem"
+        [level]="level + 1"
+      ></app-sidenav-item>
+    </div>
+  </ng-container>
+
+  <ng-container *ngIf="isSubheading(item)">
+    <div class="app-sidenav-subheading" appEllipsisTooltip>
+      {{ item.label }}
+    </div>
+    <app-sidenav-item
+      *ngFor="let subItem of item.children"
+      [item]="subItem"
+      [level]="0"
+    ></app-sidenav-item>
+  </ng-container>
+</ng-container>

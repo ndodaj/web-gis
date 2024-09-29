@@ -1,0 +1,6 @@
+<mat-progress-bar
+  [class.visible]="$any(value$ | async) > 0 && (value$ | async) !== 100"
+  [value]="value$ | async"
+  class="progress-bar"
+  mode="determinate"
+></mat-progress-bar>

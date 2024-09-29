@@ -1,0 +1,18 @@
+<ng-container *ngIf="buttonType === 'mat-icon'; else templateName">
+  <button
+    *ngIf="isUserLoggedIn"
+    (click)="activate($event)"
+    class="text-sm font-medium"
+    mat-icon-button
+    title="Edit Indicator"
+  >
+    <mat-icon>edit</mat-icon>
+  </button>
+</ng-container>
+
+<ng-template #templateName>
+  <button mat-menu-item (click)="activate($event)">
+    <mat-icon>edit</mat-icon>
+    <span>Edit Indicator</span>
+  </button>
+</ng-template>

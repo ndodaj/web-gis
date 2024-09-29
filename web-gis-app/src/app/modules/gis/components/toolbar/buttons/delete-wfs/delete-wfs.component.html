@@ -1,0 +1,13 @@
+<!-- <button
+  *ngIf="isUserLoggedIn"
+  (click)="activate($event)"
+  class="text-sm font-medium"
+  mat-icon-button
+  title="Remove WFS"
+>
+  <mat-icon>delete</mat-icon>
+</button> -->
+<button mat-menu-item (click)="activate($event)">
+  <mat-icon>delete</mat-icon>
+  <span>Remove Feature</span>
+</button>

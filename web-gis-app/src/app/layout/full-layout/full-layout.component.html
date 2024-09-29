@@ -1,0 +1,31 @@
+<ng-template #sidenavRef>
+  <app-sidenav [collapsed]="sidenavCollapsed$ | async"></app-sidenav>
+</ng-template>
+
+<ng-template #toolbarRef>
+  <app-toolbar
+    [hasShadow]="toolbarShadowEnabled$ | async"
+    [mobileQuery]="(isDesktop$ | async) !== true"
+    class="app-toolbar"
+  ></app-toolbar>
+</ng-template>
+
+<ng-template #footerRef>
+  <app-footer *ngIf="isFooterVisible$ | async" class="app-footer"></app-footer>
+</ng-template>
+
+<ng-template #secondaryToolbarRef>
+  <app-secondary-toolbar [title]="pageTitle$ | async">
+    <app-breadcrumb
+      *ngIf="breadcrumb$ | async as breadcrumb"
+      [crumbs]="breadcrumb"
+    ></app-breadcrumb>
+  </app-secondary-toolbar>
+</ng-template>
+
+<app-content-layout
+  [footerRef]="footerRef"
+  [sidenavRef]="sidenavRef"
+  [secondaryToolbarRef]="secondaryToolbarRef"
+  [toolbarRef]="toolbarRef"
+></app-content-layout>

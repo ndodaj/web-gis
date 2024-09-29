@@ -1,0 +1,62 @@
+<div
+  (mouseenter)="collapseOpenSidenav()"
+  (mouseleave)="collapseCloseSidenav()"
+  [class.collapsed]="collapsed"
+  [class.open]="collapsed && (collapsedOpen$ | async)"
+  class="sidenav flex flex-col"
+>
+  <div class="app-sidenav-toolbar__container">
+    <div class="sidenav-toolbar flex-none flex items-center">
+      <a [routerLink]="['/map']">
+        <img
+          [src]="imageUrl$ | async"
+          alt="Logo"
+          class="ml-14 w-16 select-none flex-none"
+      /></a>
+
+      <!-- <h2 class="app-sidenav-toolbar__headline flex-auto">
+        {{ title$ | async }}
+      </h2> -->
+      <div class="flex-1"></div>
+      <button
+        (click)="toggleCollapse()"
+        *ngIf="showCollapsePin$ | async"
+        class="-mr-4 leading-none flex-none hidden lg:block"
+        mat-icon-button
+        title="Toggle Sidenav"
+        type="button"
+      >
+        <mat-icon
+          *ngIf="!collapsed"
+          class="icon-xs text-white"
+          color="warn"
+          svgIcon="mat:keyboard_double_arrow_left"
+        ></mat-icon>
+        <mat-icon
+          *ngIf="collapsed"
+          class="icon-xs text-white"
+          color="warn"
+          svgIcon="mat:keyboard_double_arrow_right"
+        ></mat-icon>
+      </button>
+    </div>
+
+    <div class="app-sidenav-toolbar__divider"></div>
+  </div>
+
+  <app-scrollbar class="flex-1 flex flex-col">
+    <div class="pt-6 flex-1">
+      <app-sidenav-item
+        *ngFor="let item of items; trackBy: trackByRoute"
+        [item]="item"
+        [level]="0"
+      ></app-sidenav-item>
+    </div>
+
+    <div
+      class="app-sidenav-footer flex items-center justify-center opacity-20 px-6 py-6 select-none flex-none"
+    >
+      <img [src]="imageUrl$ | async" alt="Logo" class="w-12 select-none" />
+    </div>
+  </app-scrollbar>
+</div>

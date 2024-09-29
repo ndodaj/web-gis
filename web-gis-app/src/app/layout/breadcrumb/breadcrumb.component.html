@@ -1,0 +1,30 @@
+<div class="flex items-center">
+  <a
+    class="app-breadcrumb-item body-2 text-hint leading-none hover:text-primary no-underline trans-ease-out ltr:mr-2 rtl:ml-2"
+    [routerLink]="['']"
+  >
+    <mat-icon svgIcon="mat:home" class="icon-sm"></mat-icon>
+  </a>
+
+  <ng-container
+    *ngFor="let crumb of crumbs; last as isLast; trackBy: trackByValue"
+  >
+    <mat-icon
+      svgIcon="mat:chevron_right"
+      class="w-1 h-1 icon-sm rounded-full ltr:mr-2 rtl:ml-2"
+    ></mat-icon>
+    <a
+      *ngIf="!!crumb.routerLink; else elseBlock"
+      class="app-breadcrumb-item body-2 text-hint leading-none hover:text-primary no-underline trans-ease-out ltr:mr-2 rtl:ml-2"
+    >
+      {{ crumb.label }}</a
+    >
+    <ng-template #elseBlock
+      ><span
+        [ngClass]="{ 'text-secondary': isLast }"
+        class="app-breadcrumb-item body-2 text-hint leading-none hover:text-primary trans-ease-out ltr:mr-2 rtl:ml-2"
+        >{{ crumb.label }}</span
+      ></ng-template
+    >
+  </ng-container>
+</div>

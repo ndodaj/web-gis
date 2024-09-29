@@ -1,0 +1,360 @@
+@import "node_modules/ol/ol.css";
+
+$button-width: 36px;
+$button-height: 36px;
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+// .ol-zoom {
+//   display: none;
+// }
+
+/* ol-mouse position */
+.custom-mouse-position {
+  position: fixed;
+  bottom: 50px;
+  right: 10px;
+  background-color: rgba(187, 178, 178, 0.507);
+  padding: 5px 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  font-size: 14px;
+  color: #ffffff;
+}
+
+.ol-attribution {
+  bottom: 25px;
+  color: blue;
+}
+
+/* scale-bar  */
+.ol-scale-bar {
+  display: flex;
+  justify-content: center;
+  align-items: flex-end;
+  position: absolute;
+  bottom: 30px;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+header {
+  font-weight: bold;
+  font-size: 15px;
+  text-align: left;
+  margin-bottom: 10px;
+  border-bottom: 1px solid black;
+}
+
+.grid-container {
+  display: grid;
+  /* grid-template-columns: 100%; */
+  grid-template-rows: 7% 93%;
+  height: 100vh;
+}
+
+.ol-search {
+  top: 3.5em !important;
+  left: 0.5em !important;
+}
+
+.navbar {
+  position: relative;
+  background: #ffffff;
+  height: fit-content;
+  display: flex;
+  align-items: center;
+  padding-bottom: 10px;
+  border-bottom: 0.5px solid #d8d8d8;
+}
+
+.buttons {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  height: fit-content;
+}
+
+button {
+  width: $button-width;
+  height: $button-height;
+  margin: 0 2px;
+}
+
+button:hover {
+  background-color: rgba(255, 255, 255, 0.15);
+}
+
+button mat-icon {
+  font-size: 20px;
+  color: #050505;
+}
+
+.text-label {
+  font-size: 15px;
+  position: relative;
+  bottom: 10px;
+}
+
+.input-check {
+  position: relative;
+  bottom: 10px;
+}
+
+.ol-search {
+  position: absolute;
+  left: 0;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  width: 259px;
+  z-index: 122;
+}
+
+.ol-layerswitcher {
+  pointer-events: auto;
+  position: absolute;
+  left: 10px;
+  width: 20%;
+}
+
+.ol-layerswitcher-image > button,
+.ol-layerswitcher > button {
+  background-color: white;
+  float: left;
+  z-index: 10;
+  position: relative;
+  font-size: 1.7em;
+}
+
+.form-container {
+  padding: 30px;
+  position: fixed;
+  top: 90px;
+  right: 20px;
+  width: auto;
+  height: auto;
+  background-color: #c7e6ff;
+  z-index: 1000;
+  opacity: 0.9;
+}
+
+/* Add custom CSS to format the form rows */
+.form-container-el {
+  display: block;
+}
+
+.form-container-el label {
+  display: inline-flex;
+  // width: 100px;
+  text-align: left;
+  margin-right: 10px;
+}
+
+.form-container-el input {
+  display: inline-block;
+  width: calc(
+    100% - 120px
+  ); /* Adjust the width to create space between label and input */
+  margin-bottom: 5px;
+}
+
+hr {
+  border: none;
+  border-top: 1px solid #ccc;
+  margin: 10px 0;
+}
+
+/* The Close Button */
+.close {
+  color: #aaaaaa;
+  float: right;
+  font-size: 28px;
+  font-weight: bold;
+}
+
+.close:hover,
+close:focus {
+  color: #000;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+table,
+th,
+td {
+  border: 1px solid black;
+}
+
+/* Custom CSS for the scale input */
+#scaleInput {
+  width: 150px;
+  text-align: center;
+  padding: 5px;
+  font-size: 14px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+.buttons {
+  width: 100%;
+}
+
+.buttons button {
+  transform: scale(1.2);
+  margin-right: 5px;
+}
+
+.measurement {
+  border: 1px solid #050505;
+  padding: 5px;
+  display: inline-block;
+  margin-right: 20px;
+}
+
+.ol-ext-print-dialog .ol-print-param {
+  position: absolute;
+  overflow-x: hidden;
+  top: 50px;
+  bottom: 20px;
+  left: 20px;
+  width: 18rem;
+  background-color: #fff;
+  padding: 1em;
+  box-sizing: border-box;
+}
+
+#printContent {
+  position: relative;
+}
+
+.search-wrapper {
+  padding-top: 5px;
+  position: absolute;
+  top: 0px;
+  right: 35px;
+  z-index: 1;
+
+  .nominatim {
+    position: relative !important;
+    top: 3.5em !important;
+    left: 0.5em !important;
+  }
+
+  .ol-control {
+    position: relative !important;
+  }
+
+  .ol-search {
+    position: relative;
+    top: 3.5em !important;
+    left: 0.5em !important;
+  }
+}
+
+.autocomplete {
+  width: 100%;
+}
+
+.ol-scale-bar .ol-unselectable {
+  left: 45% !important;
+}
+
+.ol-layerswitcher-image > button,
+.ol-layerswitcher > button {
+  background-color: white;
+  float: left;
+  z-index: 10;
+  position: relative;
+  font-size: 1.7em;
+}
+
+#map .ol-layerswitcher.ol-unselectable.ol-control.ol-forceopen.ol-collapsed {
+  pointer-events: auto;
+  position: absolute;
+  top: 50px;
+  right: 87%;
+}
+
+mat-toolbar {
+  background: inherit !important;
+  padding: 0 !important;
+}
+.ol-layerswitcher-image > button .ol-layerswitcher > button {
+  background-color: white;
+  float: left !important;
+  z-index: 10;
+  position: relative;
+  font-size: 1.7em;
+}
+
+.ol-control,
+.ol-layerswitcher {
+  position: absolute;
+  right: 91em !important;
+  text-align: left;
+  top: 3em;
+  max-height: calc(100% - 6em);
+  box-sizing: border-box;
+  overflow: hidden;
+}
+
+.custom-mouse-position {
+  top: 40em !important;
+  position: absolute !important;
+  left: 80rem !important;
+}
+
+span.mat-mdc-button-persistent-ripple.mdc-icon-button__ripple {
+  width: 35px;
+  height: 35px;
+}
+
+button.fa-button {
+  padding: 0 0 0 0;
+  height: 30px;
+  width: 30px;
+}
+
+button mat-icon {
+  font-size: 19px;
+  color: #050505;
+  height: 17px;
+  width: 17px;
+}
+
+.search-wrapper {
+  padding-top: 5px;
+  position: relative;
+  bottom: 25px;
+  z-index: 1;
+  right: 41px;
+  font-size: 15px;
+  margin-bottom: 25px;
+}
+
+.text-label,
+.input-check {
+  bottom: 2px;
+}
+
+button#selectControlButton {
+  width: auto;
+}
+
+ul.autocomplete {
+  width: inherit;
+}
+
+.autocomplete {
+  width: inherit;
+}
+
+#printContent {
+  margin-left: 15px;
+  margin-top: 5px;
+}

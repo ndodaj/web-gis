@@ -1,0 +1,16 @@
+/* You can add global styles to this file, and also import other style files */
+@import "~simplebar/dist/simplebar.css";
+@import "~highlight.js/styles/androidstudio.css";
+@import "./assets/styles/core";
+@import "node_modules/ol/ol.css";
+@import "node_modules/primeng/resources/primeng.min.css";
+@import "node_modules/primeng/resources/themes/saga-blue/theme.css";
+@import "node_modules/primeicons/primeicons.css";
+
+@import "node_modules/ol-ext/control/LayerSwitcher.css";
+@import "node_modules/ol-ext/control/Search.css";
+@import "node_modules/ol-ext/overlay/Popup.css";
+@import "node_modules/ol-ext/control/Overview.css";
+@import "node_modules/ol-ext/control/PrintDialog.css";
+@import "node_modules/ol-ext/control/Legend.css";
+@import "node_modules/ol-ext/dist/ol-ext.css";

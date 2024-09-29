@@ -1,0 +1,40 @@
+<mat-toolbar class="z-10 sm:justify-center md:justify-start">
+  <app-arrow-back
+    class="hidden sm:block md:block lg:block xl:block"
+  ></app-arrow-back>
+  <app-arrow-forward
+    class="hidden sm:block md:block lg:block xl:block"
+  ></app-arrow-forward>
+  <app-zoom-out
+    class="hidden sm:block md:block lg:block xl:block"
+  ></app-zoom-out>
+  <app-zoom-in class="hidden sm:block md:block lg:block xl:block"></app-zoom-in>
+  <app-scale-input
+    class="hidden sm:block md:block lg:block xl:block"
+  ></app-scale-input>
+  <app-identify class="sm:small-icons"></app-identify>
+  <app-coords></app-coords>
+  <app-pan class="hidden sm:block md:block lg:block xl:block"></app-pan>
+  <app-zoom-extent></app-zoom-extent>
+  <app-grid-view
+    class="hidden sm:block md:block lg:block xl:block"
+  ></app-grid-view>
+  <app-get-location></app-get-location>
+  <app-messurement></app-messurement>
+  <app-select-control-button></app-select-control-button>
+  <app-print-content></app-print-content>
+
+  <app-layer-transaction></app-layer-transaction>
+
+  <app-edit-layer
+    [buttonType]="'mat-icon'"
+    class="hidden sm:block md:block lg:block xl:block"
+  ></app-edit-layer>
+
+  <app-save-to-layer
+    [buttonType]="'mat-icon'"
+    class="hidden sm:block md:block lg:block xl:block"
+  ></app-save-to-layer>
+
+  <app-notification-list></app-notification-list>
+</mat-toolbar>

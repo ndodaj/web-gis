@@ -1,0 +1,32 @@
+<button
+  *ngIf="isUserLoggedIn"
+  [matMenuTriggerFor]="menu"
+  class="text-sm font-medium"
+  mat-icon-button
+  title="Indicator Transactions"
+>
+  <mat-icon svgIcon="mat:layers"></mat-icon>
+</button>
+<mat-menu #menu="matMenu">
+  <app-select-feature></app-select-feature>
+  <app-add-data></app-add-data>
+  <app-modify-wfs></app-modify-wfs>
+  <app-draw-buffer></app-draw-buffer>
+
+  <app-delete-wfs></app-delete-wfs>
+  <app-edit-attributes></app-edit-attributes>
+  <app-edit-layer
+    [buttonType]="'mat-menu'"
+    class="block sm:hidden md:hidden lg:hidden xl:hidden"
+  ></app-edit-layer>
+
+  <app-save-to-layer
+    [buttonType]="'mat-menu'"
+    class="block sm:hidden md:hidden lg:hidden xl:hidden"
+  ></app-save-to-layer>
+
+  <!-- <app-notification-list
+    [buttonType]="'mat-menu'"
+    class="block sm:hidden md:hidden lg:hidden xl:hidden"
+  ></app-notification-list> -->
+</mat-menu>

@@ -1,0 +1,58 @@
+<div
+  [class.boxed]="isBoxed$ | async"
+  [class.horizontal-layout]="(isLayoutVertical$ | async) !== true"
+  [class.is-mobile]="(isDesktop$ | async) !== true"
+  [class.vertical-layout]="isLayoutVertical$ | async"
+  [class.has-fixed-footer]="
+    (isFooterFixed$ | async) && (isFooterVisible$ | async)
+  "
+  [class.has-footer]="isFooterVisible$ | async"
+  [class.scroll-disabled]="scrollDisabled$ | async"
+  [class.toolbar-fixed]="isToolbarFixed$ | async"
+  [class.sidenav-collapsed]="sidenavCollapsed$ | async"
+  [class.content-container]="containerEnabled$ | async"
+  class="page-container"
+>
+  <app-progress-bar></app-progress-bar>
+  <mat-sidenav-container class="sidenav-container">
+    <mat-sidenav
+      #sidenav
+      [disableClose]="isDesktop$ | async"
+      [fixedInViewport]="(isDesktop$ | async) !== true"
+      [mode]="
+        (isDesktop$ | async) !== true || (isLayoutVertical$ | async)
+          ? 'over'
+          : 'side'
+      "
+      [opened]="(isDesktop$ | async) && (isLayoutVertical$ | async) !== true"
+      class="sidenav"
+    >
+      <ng-container *ngTemplateOutlet="sidenavRef"></ng-container>
+    </mat-sidenav>
+
+    <mat-sidenav
+      #quickpanel
+      [fixedInViewport]="(isDesktop$ | async) !== true"
+      class="quickpanel"
+      mode="over"
+      position="end"
+    >
+      <ng-container *ngTemplateOutlet="quickpanelRef"></ng-container>
+    </mat-sidenav>
+
+    <mat-sidenav-content class="sidenav-content">
+      <ng-container *ngTemplateOutlet="toolbarRef"></ng-container>
+
+      <main class="content">
+        <div class="app-page app-page-card">
+          <ng-container *ngTemplateOutlet="secondaryToolbarRef"></ng-container>
+          <div class="app-page-content mt-8 px-gutter">
+            <router-outlet></router-outlet>
+          </div>
+        </div>
+      </main>
+
+      <ng-container *ngTemplateOutlet="footerRef"></ng-container>
+    </mat-sidenav-content>
+  </mat-sidenav-container>
+</div>

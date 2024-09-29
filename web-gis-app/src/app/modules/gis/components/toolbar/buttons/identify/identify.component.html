@@ -1,0 +1,19 @@
+<button
+  mat-icon-button
+  class="text-sm font-medium"
+  id="identify"
+  title="Get Information"
+  (click)="getInfo()"
+>
+  <mat-icon svgIcon="mat:info"></mat-icon>
+</button>
+
+<!-- Define the overlay panel -->
+<p-overlayPanel #op [style]="{ width: '450px' }" [showCloseIcon]="true">
+  <ng-template pTemplate="content">
+    <!-- Display properties -->
+    <div *ngIf="properties">
+      <p *ngFor="let prop of properties">{{ prop.key }}: {{ prop.value }}</p>
+    </div>
+  </ng-template>
+</p-overlayPanel>

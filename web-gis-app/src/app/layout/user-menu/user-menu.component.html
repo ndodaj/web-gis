@@ -1,0 +1,41 @@
+<div class="app-user-menu">
+  <a
+    (click)="openDashboard()"
+    aria-hidden="true"
+    class="app-user-menu-item"
+    matRipple
+    matRippleColor="rgb(var(--color-primary), 0.1)"
+  >
+    <mat-icon
+      class="app-user-menu-item__icon icon-sm"
+      svgIcon="mat:dashboard"
+    ></mat-icon>
+    <div class="app-user-menu-item__label">Dashboard</div>
+  </a>
+  <a
+    (click)="openProfile()"
+    aria-hidden="true"
+    class="app-user-menu-item"
+    matRipple
+    matRippleColor="rgb(var(--color-primary), 0.1)"
+  >
+    <mat-icon
+      class="app-user-menu-item__icon icon-sm"
+      svgIcon="mat:account_circle"
+    ></mat-icon>
+    <div class="app-user-menu-item__label">Profile</div>
+  </a>
+  <a
+    (click)="logout()"
+    aria-hidden="true"
+    class="app-user-menu-item"
+    matRipple
+    matRippleColor="rgb(var(--color-primary), 0.1)"
+  >
+    <mat-icon
+      class="app-user-menu-item__icon icon-sm"
+      svgIcon="mat:logout"
+    ></mat-icon>
+    <div class="app-user-menu-item__label">Sign Out</div>
+  </a>
+</div>

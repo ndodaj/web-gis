@@ -1,0 +1,60 @@
+@import "~node_modules/ol/ol.css";
+
+$button-width: 36px;
+$button-height: 36px;
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+header {
+  font-weight: bold;
+  font-size: 15px;
+  text-align: left;
+  margin-bottom: 10px;
+  border-bottom: 1px solid black;
+}
+
+.ol-search {
+  position: absolute;
+  left: 0;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  width: 259px;
+  z-index: 122;
+}
+
+.search-wrapper {
+  position: absolute;
+  top: 5px;
+  right: 35px;
+  z-index: 1;
+
+  .nominatim {
+    position: relative !important;
+    top: 3.5em !important;
+    left: 0.5em !important;
+  }
+
+  .ol-control {
+    position: relative !important;
+  }
+
+  .ol-search {
+    position: relative;
+    top: 3.5em !important;
+    left: 0.5em !important;
+  }
+}
+
+.search-wrapper {
+  position: relative;
+  bottom: 25px;
+  z-index: 1;
+  right: 41px;
+  font-size: 15px;
+  margin-bottom: 45px;
+}

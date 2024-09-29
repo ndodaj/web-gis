@@ -1,0 +1,29 @@
+<div>
+  <div class="flex items-center" mat-dialog-title>
+    <h2 class="headline m-0 flex-auto">Document</h2>
+    <button
+      class="text-secondary"
+      mat-dialog-close
+      mat-icon-button
+      type="button"
+    >
+      <mat-icon svgIcon="mat:close"></mat-icon>
+    </button>
+  </div>
+  <mat-dialog-content class="flex flex-col">
+    <div *ngIf="preview">
+      <iframe
+        width="100%"
+        height="350px"
+        [src]="preview"
+        frameborder="0"
+      ></iframe>
+    </div>
+  </mat-dialog-content>
+
+  <mat-dialog-actions align="end">
+    <button mat-button type="button" mat-dialog-close>
+      Close
+    </button></mat-dialog-actions
+  >
+</div>
