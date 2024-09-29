@@ -31,8 +31,7 @@ springdoc:
   packages-to-scan: al.webgis.webgis.controller
 
 server:
-  address:
-  port: 8083
+  port: 9000
 
 geoserver:
   username: admin

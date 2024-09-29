@@ -11,7 +11,7 @@ services:
     ports:
       - "5432:5432"
     networks:
-      - webgis-network
+      - backend
     volumes:
 #      - postgres_data:/var/lib/postgresql/data
       - postgis_data:/var/lib/postgresql/data
@@ -24,7 +24,7 @@ services:
     ports:
       - "8080:8080"
     networks:
-      - webgis-network
+      - backend
     environment:
       - GEOSERVER_DATA_DIR=/var/local/geoserver_data
     volumes:
@@ -32,39 +32,26 @@ services:
     depends_on:
       - postgis-db
 
-  webgis-fe:
-    image: node:latest
-    container_name: webgis-fe
-    volumes:
-      - ./angular-app:/app
-    command: sh -c "npm install && npm run start"
-    ports:
-      - "4200:4200"
-    networks:
-      - webgis-network
-    depends_on:
-      - webgis
-
 
   webgis:
 #    image: 'docker-spring-boot-postgres:latest'
     build:
       context: .
-    container_name: webgis-be
+    container_name: webgis
     environment:
       SPRING_DATASOURCE_URL: jdbc:postgresql://postgis-db:5432/postgis-test
       SPRING_DATASOURCE_USERNAME: postgres
       SPRING_DATASOURCE_PASSWORD: root
       SPRING_JPA_HIBERNATE_DDL_AUTO: update
     ports:
-      - "8083:8083"
+      - "9000:9000"
     networks:
-      - webgis-network
+      - backend
     depends_on:
       - postgis-db
 
 networks:
-  webgis-network:
+  backend:
     driver: bridge
 
 volumes:

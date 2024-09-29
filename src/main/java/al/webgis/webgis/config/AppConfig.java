@@ -26,7 +26,7 @@ public class AppConfig {
                 .components(new Components().addSecuritySchemes("bearer-jwt",
                         new SecurityScheme().type(SecurityScheme.Type.HTTP).scheme("bearer").bearerFormat("JWT")
                                 .in(SecurityScheme.In.HEADER).name("Authorization")))
-                .info(new Info().title("App API").version("snapshot"))
+                .info(new Info().title("WebGis API").version("0.0.1-SNAPSHOT"))
                 .addSecurityItem(
                         new SecurityRequirement().addList("bearer-jwt", Arrays.asList("read", "write")));
     }
