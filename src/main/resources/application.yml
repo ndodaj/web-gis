@@ -36,4 +36,4 @@ server:
 geoserver:
   username: admin
   password: geoserver
-  url: http://localhost:8080/geoserver
+  url: http://20.67.236.132/:8080/geoserver
