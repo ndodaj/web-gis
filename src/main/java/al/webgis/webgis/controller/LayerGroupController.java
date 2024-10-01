@@ -9,6 +9,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -35,8 +36,8 @@ public class LayerGroupController {
     }
 
     @Operation(summary = "Retrieve layer group by name" , description = "Retrieve layer group by layerGroupName")
-    @GetMapping("/layer-group")
-    public String getLayerGroup(@RequestParam String layerGroupName, @RequestParam(required = false) String workspaceName) {
+    @GetMapping("/layer-group/{layerGroupName}")
+    public String getLayerGroup(@PathVariable String layerGroupName, @RequestParam(required = false) String workspaceName) {
         return geoServerService.getLayerGroup(layerGroupName);
     }
 
@@ -45,21 +46,16 @@ public class LayerGroupController {
         return geoServerService.createLayerGroup(createLayerGroupDTO);
     }
 
-    @PutMapping("/layer-group")
-    public String updateLayerGroup(@RequestParam String layerGroupName,
+    @PutMapping("/layer-group/{layerGroupName}")
+    public String updateLayerGroup(@PathVariable String layerGroupName,
                                    @RequestParam(required = false) String workspaceName,
                                    @RequestBody CreateUpdateLayerGroupDTO updatedLayerGroup) {
         return geoServerService.updatedLayerGroup(updatedLayerGroup, layerGroupName);
     }
 
-    @DeleteMapping("/layer-group-ws")
-    public String deleteLayerGroup( @RequestParam String layerGroupName, @RequestParam(required = false) String workspace) {
+    @DeleteMapping("/layer-group/{layerGroupName}")
+    public String deleteLayerGroup( @PathVariable String layerGroupName, @RequestParam(required = false) String workspace) {
         return geoServerService.deleteLayerGroup(workspace, layerGroupName);
-    }
-
-    @DeleteMapping("/layer-group")
-    public String deleteLayerGroup(@RequestParam String layerGroupName) {
-        return geoServerService.deleteLayerGroup(layerGroupName);
     }
 
 
