@@ -1,4 +1,4 @@
-package al.webgis.webgis.model;
+package al.webgis.webgis.model.layergroups;
 
 import lombok.Getter;
 import lombok.Setter;

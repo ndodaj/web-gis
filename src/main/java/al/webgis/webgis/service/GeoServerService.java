@@ -1,12 +1,11 @@
 package al.webgis.webgis.service;
 
 
-import al.webgis.webgis.model.CreateUpdateLayerGroupDTO;
-import al.webgis.webgis.model.InsertFeatureDto;
-import al.webgis.webgis.model.LayerGroupsDTO;
+import al.webgis.webgis.model.layergroups.CreateUpdateLayerGroupDTO;
+import al.webgis.webgis.model.layergroups.InsertFeatureDto;
+import al.webgis.webgis.model.layergroups.LayerGroupsDTO;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;

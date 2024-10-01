@@ -1,7 +1,7 @@
 package al.webgis.webgis.controller;
 
-import al.webgis.webgis.model.CreateUpdateLayerGroupDTO;
-import al.webgis.webgis.model.LayerGroupsDTO;
+import al.webgis.webgis.model.layergroups.CreateUpdateLayerGroupDTO;
+import al.webgis.webgis.model.layergroups.LayerGroupsDTO;
 import al.webgis.webgis.service.GeoServerService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -37,12 +37,14 @@ public class LayerGroupController {
 
     @Operation(summary = "Retrieve layer group by name" , description = "Retrieve layer group by layerGroupName")
     @GetMapping("/layer-group/{layerGroupName}")
-    public String getLayerGroup(@PathVariable String layerGroupName, @RequestParam(required = false) String workspaceName) {
+    public String getLayerGroup(@PathVariable String layerGroupName,
+                                @RequestParam(required = false) String workspaceName) {
         return geoServerService.getLayerGroup(layerGroupName);
     }
 
     @PostMapping("/layer-group")
-    public String createLayerGroup(@RequestBody CreateUpdateLayerGroupDTO createLayerGroupDTO, @RequestParam(required = false) String workspaceName) {
+    public String createLayerGroup(@RequestBody CreateUpdateLayerGroupDTO createLayerGroupDTO,
+                                   @RequestParam(required = false) String workspaceName) {
         return geoServerService.createLayerGroup(createLayerGroupDTO);
     }
 
@@ -54,7 +56,8 @@ public class LayerGroupController {
     }
 
     @DeleteMapping("/layer-group/{layerGroupName}")
-    public String deleteLayerGroup( @PathVariable String layerGroupName, @RequestParam(required = false) String workspace) {
+    public String deleteLayerGroup(@PathVariable String layerGroupName,
+                                   @RequestParam(required = false) String workspace) {
         return geoServerService.deleteLayerGroup(workspace, layerGroupName);
     }
 

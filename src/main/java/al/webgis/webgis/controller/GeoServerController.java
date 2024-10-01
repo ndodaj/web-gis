@@ -1,6 +1,6 @@
 package al.webgis.webgis.controller;
 
-import al.webgis.webgis.model.InsertFeatureDto;
+import al.webgis.webgis.model.layergroups.InsertFeatureDto;
 import al.webgis.webgis.service.GeoServerService;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.extern.slf4j.Slf4j;

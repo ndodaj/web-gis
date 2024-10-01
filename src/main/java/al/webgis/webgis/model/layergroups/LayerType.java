@@ -1,4 +1,4 @@
-package al.webgis.webgis.model;
+package al.webgis.webgis.model.layergroups;
 
 public enum LayerType {
     LINESTRING("LineString"),
