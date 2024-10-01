@@ -13,14 +13,12 @@
 	<version>0.0.1-SNAPSHOT</version>
 	<name>webgis</name>
 	<description>Webgis demo with spring boot</description>
-	<url/>
 
 	<properties>
 		<java.version>17</java.version>
 		<geotools.version>19-SNAPSHOT</geotools.version>
 	</properties>
 	<dependencies>
-
 
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
@@ -32,7 +30,6 @@
 			<artifactId>spring-boot-starter-test</artifactId>
 			<scope>test</scope>
 		</dependency>
-
 
 		<dependency>
 			<groupId>org.postgresql</groupId>
@@ -51,6 +48,11 @@
             <scope>provided</scope>
         </dependency>
 
+		<dependency>
+			<groupId>com.h2database</groupId>
+			<artifactId>h2</artifactId>
+		</dependency>
+
 		<!-- https://mvnrepository.com/artifact/jakarta.persistence/jakarta.persistence-api -->
 		<dependency>
 			<groupId>jakarta.persistence</groupId>
@@ -63,26 +65,15 @@
 			<artifactId>spring-boot-starter-data-jpa</artifactId>
 		</dependency>
 
-
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-security</artifactId>
 		</dependency>
 
-
-
-		<!--		<dependency>-->
-<!--			<groupId>org.geotools</groupId>-->
-<!--			<artifactId>gt-shapefile</artifactId>-->
-<!--			<version>${geotools.version}</version>-->
-<!--		</dependency>-->
-<!--		<dependency>-->
-<!--			<groupId>org.geotools</groupId>-->
-<!--			<artifactId>gt-swing</artifactId>-->
-<!--			<version>${geotools.version}</version>-->
-<!--		</dependency>-->
-
-
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-configuration-processor</artifactId>
+		</dependency>
 	</dependencies>
 
 	<repositories>
