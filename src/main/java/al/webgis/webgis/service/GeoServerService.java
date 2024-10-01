@@ -6,6 +6,7 @@ import al.webgis.webgis.model.InsertFeatureDto;
 import al.webgis.webgis.model.LayerGroupsDTO;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -32,10 +33,14 @@ public class GeoServerService {
     @Value("${geoserver.url}")
     private String geoServerUrl;
 
-    private final RestTemplate restTemplate;
 
-    public GeoServerService(RestTemplate restTemplate) {
+
+    private final RestTemplate restTemplate;
+    private final ObjectMapper objectMapper;
+
+    public GeoServerService(RestTemplate restTemplate, ObjectMapper objectMapper) {
         this.restTemplate = restTemplate;
+        this.objectMapper = objectMapper;
         // Add basic authentication
         this.restTemplate.getInterceptors().add(
                 new BasicAuthenticationInterceptor("admin", "geoserver")
@@ -291,7 +296,7 @@ public class GeoServerService {
         return response.getBody();
     }
 
-    public LayerGroupsDTO getAllLayerGroups() {
+    public LayerGroupsDTO getAllLayerGroups(String workspaceName) {
         LayerGroupsDTO output = null;
         // Set up basic authentication
         HttpHeaders headers = new HttpHeaders();
@@ -300,15 +305,21 @@ public class GeoServerService {
         String authHeader = "Basic " + new String(encodedAuth);
         headers.set("Authorization", authHeader);
         headers.set("Content-Type", "application/json");
-        String url = String.format("%s/rest/layergroups.json", geoServerUrl);
+
+        String url;
+        if (workspaceName != null) {
+            url = String.format("%s/rest/workspaces/%s/layergroups.json", geoServerUrl, workspaceName);
+        } else {
+            url = String.format("%s/rest/layergroups.json", geoServerUrl);
+        }
 
         HttpEntity<String> entity = new HttpEntity<>(headers);
         ResponseEntity<String> response = restTemplate.exchange(url, HttpMethod.GET, entity, String.class);
         try {
-            output = new ObjectMapper().readValue(response.getBody(), LayerGroupsDTO.class);
+            output = objectMapper.readValue(response.getBody(), LayerGroupsDTO.class);
 
         } catch (JsonProcessingException e) {
-            e.printStackTrace();
+            e.printStackTrace(); // @TODO handle in a controller advice
         }
         return output;
 

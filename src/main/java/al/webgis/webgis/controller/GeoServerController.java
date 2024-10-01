@@ -51,16 +51,10 @@ public class GeoServerController {
         return geoServerService.updateFeatureAttribute(workspace, layerName, featureId, attributeName, newValue);
     }
 
-
-
-
-
     @PostMapping("/create-layer")
     public String createLayer(@RequestParam String workspace, @RequestParam String dataStore, @RequestParam String layerName, @RequestParam String nativeName, @RequestParam String srs) {
         return geoServerService.createLayer(workspace, dataStore, layerName, nativeName, srs);
     }
-
-
 
     @GetMapping("/geoserver/getAllLayers")
     public String getLayers() {
@@ -71,7 +65,6 @@ public class GeoServerController {
     public String getStyles() {
         return geoServerService.getAllStyles();
     }
-
 
     @PutMapping("/edit-layer")
     public String editLayer(@RequestParam String workspace, @RequestParam String layerName, @RequestParam String title, @RequestParam String abstractText) {
@@ -87,7 +80,6 @@ public class GeoServerController {
     public String getLayer(@RequestParam String workspace, @RequestParam String layerName) {
         return geoServerService.getLayer(workspace, layerName);
     }
-
 
     @PostMapping("/add-attribute")
     public String addAttribute(@RequestParam String workspace, @RequestParam String dataStore, @RequestParam String featureType, @RequestParam String attributeName, @RequestParam String attributeType) {
