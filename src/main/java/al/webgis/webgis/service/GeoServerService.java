@@ -1,24 +1,18 @@
 package al.webgis.webgis.service;
 
 
-import al.webgis.webgis.model.layergroups.CreateUpdateLayerGroupDTO;
 import al.webgis.webgis.model.layergroups.InsertFeatureDto;
-import al.webgis.webgis.model.layergroups.LayerGroupsDTO;
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.client.support.BasicAuthenticationInterceptor;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
-import java.io.IOException;
 import java.util.Base64;
-import java.util.Collections;
 
 @Service
 public class GeoServerService {
@@ -175,70 +169,11 @@ public class GeoServerService {
         return response.getBody();
     }
 
-    public String createLayerGroup(CreateUpdateLayerGroupDTO createLayerGroupDTO) {
-        String url = geoServerUrl + "/rest" + "/layergroups";
 
-        // Set up basic authentication
-        HttpHeaders headers = new HttpHeaders();
-        String auth = username + ":" + password;
-        byte[] encodedAuth = Base64.getEncoder().encodeToString(auth.getBytes()).getBytes();
-        String authHeader = "Basic " + new String(encodedAuth);
-        headers.set("Authorization", authHeader);
-        headers.setContentType(MediaType.APPLICATION_JSON);
-        headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
 
-        ObjectMapper mapper = new ObjectMapper();
-        String s2 = "";
-        try {
-            s2 = mapper.writeValueAsString(createLayerGroupDTO);
 
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        HttpEntity<String> entity = new HttpEntity<>(s2, headers);
-        ResponseEntity<String> response = restTemplate.exchange(url, HttpMethod.POST, entity, String.class);
-        return response.getBody();
-    }
 
-    public String updatedLayerGroup(CreateUpdateLayerGroupDTO updateLayerGroup, String layerGroupName) {
-        String url = geoServerUrl + "/rest/layergroups/" + layerGroupName;
 
-        // Set up basic authentication
-        HttpHeaders headers = new HttpHeaders();
-        String auth = username + ":" + password;
-        byte[] encodedAuth = Base64.getEncoder().encodeToString(auth.getBytes()).getBytes();
-        String authHeader = "Basic " + new String(encodedAuth);
-        headers.set("Authorization", authHeader);
-        headers.set("Content-Type", "application/json");
-
-        ObjectMapper mapper = new ObjectMapper();
-        String s2 = "";
-        try {
-            s2 = mapper.writeValueAsString(updateLayerGroup);
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        HttpEntity<String> entity = new HttpEntity<>(s2, headers);
-
-        ResponseEntity<String> response = restTemplate.exchange(url, HttpMethod.PUT, entity, String.class);
-        return response.getBody();
-    }
-
-    public String deleteLayerGroup(String workspace, String layerGroupName) {
-        String url = geoServerUrl + "/rest/workspaces/" + workspace + "/layergroups/" + layerGroupName;
-
-        // Set up basic authentication
-        HttpHeaders headers = new HttpHeaders();
-        String auth = username + ":" + password;
-        byte[] encodedAuth = Base64.getEncoder().encodeToString(auth.getBytes()).getBytes();
-        String authHeader = "Basic " + new String(encodedAuth);
-        headers.set("Authorization", authHeader);
-
-        HttpEntity<String> entity = new HttpEntity<>(headers);
-        ResponseEntity<String> response = restTemplate.exchange(url, HttpMethod.DELETE, entity, String.class);
-        return response.getStatusCode().toString();
-    }
 
     public String deleteLayerGroup(String layerGroupName) {
         String url = geoServerUrl + "/rest/layergroups/" + layerGroupName;
@@ -255,20 +190,7 @@ public class GeoServerService {
         return response.getStatusCode().toString();
     }
 
-    public String getLayerGroup(String layerGroupName) {
-        String url = geoServerUrl + "/rest/layergroups/" + layerGroupName + ".json";
 
-        // Set up basic authentication
-        HttpHeaders headers = new HttpHeaders();
-        String auth = username + ":" + password;
-        byte[] encodedAuth = Base64.getEncoder().encodeToString(auth.getBytes()).getBytes();
-        String authHeader = "Basic " + new String(encodedAuth);
-        headers.set("Authorization", authHeader);
-
-        HttpEntity<String> entity = new HttpEntity<>(headers);
-        ResponseEntity<String> response = restTemplate.exchange(url, HttpMethod.GET, entity, String.class);
-        return response.getBody();
-    }
 
     public String createLayer(String workspace, String dataStore, String layerName, String nativeName, String srs) {
         String url = geoServerUrl + "/rest/workspaces/" + workspace + "/datastores/" + dataStore + "/featuretypes";
@@ -295,34 +217,7 @@ public class GeoServerService {
         return response.getBody();
     }
 
-    public LayerGroupsDTO getAllLayerGroups(String workspaceName) {
-        LayerGroupsDTO output = null;
-        // Set up basic authentication
-        HttpHeaders headers = new HttpHeaders();
-        String auth = username + ":" + password;
-        byte[] encodedAuth = Base64.getEncoder().encodeToString(auth.getBytes()).getBytes();
-        String authHeader = "Basic " + new String(encodedAuth);
-        headers.set("Authorization", authHeader);
-        headers.set("Content-Type", "application/json");
 
-        String url;
-        if (workspaceName != null) {
-            url = String.format("%s/rest/workspaces/%s/layergroups.json", geoServerUrl, workspaceName);
-        } else {
-            url = String.format("%s/rest/layergroups.json", geoServerUrl);
-        }
-
-        HttpEntity<String> entity = new HttpEntity<>(headers);
-        ResponseEntity<String> response = restTemplate.exchange(url, HttpMethod.GET, entity, String.class);
-        try {
-            output = objectMapper.readValue(response.getBody(), LayerGroupsDTO.class);
-
-        } catch (JsonProcessingException e) {
-            e.printStackTrace(); // @TODO handle in a controller advice
-        }
-        return output;
-
-    }
 
 
     public String editLayer(String workspace, String layerName, String title, String abstractText) {

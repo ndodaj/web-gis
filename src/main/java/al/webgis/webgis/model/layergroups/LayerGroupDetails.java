@@ -8,15 +8,15 @@ import java.util.List;
 
 @Getter
 @Setter
-public class LayerGroupDTO {
+public class LayerGroupDetails {
     private String name;
     private String mode;
     private String title;
     private List<LayerDTO> layers;
     private Styles styles;
-    // bounds
+    private Bounds bounds; // @TODO fix doubles
     // metadata
-    // abstractTxt
+    private String abstractTxt;
     private PublishedDto publishables;
 
 }

@@ -6,7 +6,7 @@ import lombok.Setter;
 @Getter
 @Setter
 public class CreateUpdateLayerGroupDTO {
-    private LayerGroupDTO layerGroup;
+    private LayerGroupDetails layerGroup;
     private String name;
 
 
