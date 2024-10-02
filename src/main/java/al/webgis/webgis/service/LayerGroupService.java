@@ -78,8 +78,16 @@ public class LayerGroupService {
         return output;
     }
 
-    public String createLayerGroup(CreateUpdateLayerGroupDTO createLayerGroupDTO) {
-        String url = geoServerUrl + "/rest" + "/layergroups";
+    public CreateUpdateLayerGroupDTO createLayerGroup(CreateUpdateLayerGroupDTO createLayerGroupDTO, String workspaceName) {
+
+        CreateUpdateLayerGroupDTO output = null;
+        String url;
+        if (workspaceName != null) {
+            url = String.format("%s/rest/workspaces/%s/layergroups.json", geoServerUrl, workspaceName);
+        } else {
+            url = String.format("%s/rest/layergroups.json", geoServerUrl);
+        }
+
 
         // Set up basic authentication
         HttpHeaders headers = new HttpHeaders();
@@ -100,7 +108,13 @@ public class LayerGroupService {
         }
         HttpEntity<String> entity = new HttpEntity<>(s2, headers);
         ResponseEntity<String> response = restTemplate.exchange(url, HttpMethod.POST, entity, String.class);
-        return response.getBody();
+        try {
+            output = objectMapper.readValue(response.getBody(), CreateUpdateLayerGroupDTO.class);
+
+        } catch (JsonProcessingException e) {
+            e.printStackTrace(); // @TODO handle in a controller advice
+        }
+        return output;
     }
 
     public LayerGroupsList getAllLayerGroups(String workspaceName) {

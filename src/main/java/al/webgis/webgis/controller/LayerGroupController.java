@@ -3,7 +3,6 @@ package al.webgis.webgis.controller;
 import al.webgis.webgis.model.layergroups.CreateUpdateLayerGroupDTO;
 import al.webgis.webgis.model.layergroups.LayerGroupDetailsWrapper;
 import al.webgis.webgis.model.layergroups.LayerGroupsList;
-import al.webgis.webgis.model.layergroups.LayerGroups;
 import al.webgis.webgis.service.LayerGroupService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -45,9 +44,10 @@ public class LayerGroupController {
     }
 
     @PostMapping("/layer-group")
-    public String createLayerGroup(@RequestBody CreateUpdateLayerGroupDTO createLayerGroupDTO,
-                                   @RequestParam(required = false) String workspaceName) {
-        return layerGroupService.createLayerGroup(createLayerGroupDTO);
+    public ResponseEntity<CreateUpdateLayerGroupDTO> createLayerGroup(
+            @RequestBody CreateUpdateLayerGroupDTO createLayerGroupDTO,
+            @RequestParam(required = false) String workspaceName) {
+        return ResponseEntity.ok(layerGroupService.createLayerGroup(createLayerGroupDTO, workspaceName));
     }
 
     @PutMapping("/layer-group/{layerGroupName}")
