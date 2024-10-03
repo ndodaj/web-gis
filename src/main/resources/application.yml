@@ -2,7 +2,7 @@ spring:
   application:
     name: webgis
   datasource:
-    url: jdbc:postgresql://20.67.236.132:5432/postgis-test
+    url: jdbc:postgresql://localhost/postgis-test
     username: postgres
     password: root
     driver-class-name: org.postgresql.Driver
