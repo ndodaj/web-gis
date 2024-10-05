@@ -190,94 +190,6 @@ public class GeoServerService {
         return response.getStatusCode().toString();
     }
 
-
-
-    public String createLayer(String workspace, String dataStore, String layerName, String nativeName, String srs) {
-        String url = geoServerUrl + "/rest/workspaces/" + workspace + "/datastores/" + dataStore + "/featuretypes";
-
-        // Set up basic authentication
-        HttpHeaders headers = new HttpHeaders();
-        String auth = username + ":" + password;
-        byte[] encodedAuth = Base64.getEncoder().encodeToString(auth.getBytes()).getBytes();
-        String authHeader = "Basic " + new String(encodedAuth);
-        headers.set("Authorization", authHeader);
-        headers.set("Content-Type", "application/json");
-
-        // Create Layer JSON payload
-        String layerJson = "{"
-                + "\"featureType\": {"
-                + "\"name\": \"" + layerName + "\","
-                + "\"nativeName\": \"" + nativeName + "\","
-                + "\"srs\": \"" + srs + "\""
-                + "}"
-                + "}";
-
-        HttpEntity<String> entity = new HttpEntity<>(layerJson, headers);
-        ResponseEntity<String> response = restTemplate.exchange(url, HttpMethod.POST, entity, String.class);
-        return response.getBody();
-    }
-
-
-
-
-    public String editLayer(String workspace, String layerName, String title, String abstractText) {
-        String url = geoServerUrl + "/rest/layers/" + workspace + ":" + layerName;
-
-        // Set up basic authentication
-        HttpHeaders headers = new HttpHeaders();
-        String auth = username + ":" + password;
-        byte[] encodedAuth = Base64.getEncoder().encodeToString(auth.getBytes()).getBytes();
-        String authHeader = "Basic " + new String(encodedAuth);
-        headers.set("Authorization", authHeader);
-        headers.set("Content-Type", "application/json");
-
-        // Create Layer JSON payload
-        String layerJson = "{"
-                + "\"layer\": {"
-                + "\"enabled\": true,"
-                + "\"title\": \"" + title + "\","
-                + "\"abstract\": \"" + abstractText + "\""
-                + "}"
-                + "}";
-
-        HttpEntity<String> entity = new HttpEntity<>(layerJson, headers);
-        ResponseEntity<String> response = restTemplate.exchange(url, HttpMethod.PUT, entity, String.class);
-        return response.getBody();
-    }
-
-
-    public String deleteLayer(String workspace, String layerName) {
-        String url = geoServerUrl + "/rest/layers/" + workspace + ":" + layerName;
-
-        // Set up basic authentication
-        HttpHeaders headers = new HttpHeaders();
-        String auth = username + ":" + password;
-        byte[] encodedAuth = Base64.getEncoder().encodeToString(auth.getBytes()).getBytes();
-        String authHeader = "Basic " + new String(encodedAuth);
-        headers.set("Authorization", authHeader);
-
-        HttpEntity<String> entity = new HttpEntity<>(headers);
-        ResponseEntity<String> response = restTemplate.exchange(url, HttpMethod.DELETE, entity, String.class);
-        return response.getStatusCode().toString();
-    }
-
-
-    public String getLayer(String workspace, String layerName) {
-        String url = geoServerUrl + "/rest/layers/" + workspace + ":" + layerName + ".json";
-
-        // Set up basic authentication
-        HttpHeaders headers = new HttpHeaders();
-        String auth = username + ":" + password;
-        byte[] encodedAuth = Base64.getEncoder().encodeToString(auth.getBytes()).getBytes();
-        String authHeader = "Basic " + new String(encodedAuth);
-        headers.set("Authorization", authHeader);
-
-        HttpEntity<String> entity = new HttpEntity<>(headers);
-        ResponseEntity<String> response = restTemplate.exchange(url, HttpMethod.GET, entity, String.class);
-        return response.getBody();
-    }
-
-
     public String addAttribute(String workspace, String dataStore, String featureType, String attributeName, String attributeType) {
         String url = geoServerUrl + "/rest/workspaces/" + workspace + "/datastores/" + dataStore + "/featuretypes/" + featureType + "/attributes";
 
@@ -495,21 +407,6 @@ public class GeoServerService {
 
     }
 
-
-    public String getAllLayers() {
-        // Set up basic authentication
-        HttpHeaders headers = new HttpHeaders();
-        String auth = username + ":" + password;
-        byte[] encodedAuth = Base64.getEncoder().encodeToString(auth.getBytes()).getBytes();
-        String authHeader = "Basic " + new String(encodedAuth);
-        headers.set("Authorization", authHeader);
-        headers.set("Content-Type", "application/json");
-        String url = String.format("%s/rest/layers.json", geoServerUrl);
-
-        HttpEntity<String> entity = new HttpEntity<>(headers);
-        ResponseEntity<String> response = restTemplate.exchange(url, HttpMethod.GET, entity, String.class);
-        return response.getBody();
-    }
 
     public String getAllStyles() {
         // Set up basic authentication

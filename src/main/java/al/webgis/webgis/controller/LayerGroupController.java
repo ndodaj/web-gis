@@ -58,9 +58,10 @@ public class LayerGroupController {
     }
 
     @DeleteMapping("/layer-group/{layerGroupName}")
-    public String deleteLayerGroup(@PathVariable String layerGroupName,
+    public ResponseEntity<Void> deleteLayerGroup(@PathVariable String layerGroupName,
                                    @RequestParam(required = false) String workspace) {
-        return layerGroupService.deleteLayerGroup(workspace, layerGroupName);
+        layerGroupService.deleteLayerGroup(workspace, layerGroupName);
+        return ResponseEntity.ok().build();
     }
 
 

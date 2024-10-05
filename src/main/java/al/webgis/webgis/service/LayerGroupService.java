@@ -1,9 +1,7 @@
 package al.webgis.webgis.service;
 
 import al.webgis.webgis.model.layergroups.CreateUpdateLayerGroupDTO;
-import al.webgis.webgis.model.layergroups.LayerGroupDetails;
 import al.webgis.webgis.model.layergroups.LayerGroupDetailsWrapper;
-import al.webgis.webgis.model.layergroups.LayerGroups;
 import al.webgis.webgis.model.layergroups.LayerGroupsList;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -171,7 +169,7 @@ public class LayerGroupService {
         return response.getBody();
     }
 
-    public String deleteLayerGroup(String workspace, String layerGroupName) {
+    public void deleteLayerGroup(String workspace, String layerGroupName) {
         String url = geoServerUrl + "/rest/workspaces/" + workspace + "/layergroups/" + layerGroupName;
 
         // Set up basic authentication
@@ -182,8 +180,7 @@ public class LayerGroupService {
         headers.set("Authorization", authHeader);
 
         HttpEntity<String> entity = new HttpEntity<>(headers);
-        ResponseEntity<String> response = restTemplate.exchange(url, HttpMethod.DELETE, entity, String.class);
-        return response.getStatusCode().toString();
+        restTemplate.exchange(url, HttpMethod.DELETE, entity, String.class);
     }
 
 }

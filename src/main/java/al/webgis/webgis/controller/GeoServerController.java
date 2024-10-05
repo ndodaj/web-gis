@@ -4,6 +4,7 @@ import al.webgis.webgis.model.layergroups.InsertFeatureDto;
 import al.webgis.webgis.service.GeoServerService;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -51,35 +52,18 @@ public class GeoServerController {
         return geoServerService.updateFeatureAttribute(workspace, layerName, featureId, attributeName, newValue);
     }
 
-    @PostMapping("/create-layer")
-    public String createLayer(@RequestParam String workspace, @RequestParam String dataStore, @RequestParam String layerName, @RequestParam String nativeName, @RequestParam String srs) {
-        return geoServerService.createLayer(workspace, dataStore, layerName, nativeName, srs);
-    }
 
-    @GetMapping("/geoserver/getAllLayers")
-    public String getLayers() {
-        return geoServerService.getAllLayers();
-    }
+
+
 
     @GetMapping("/geoserver/getAllStyles")
     public String getStyles() {
         return geoServerService.getAllStyles();
     }
 
-    @PutMapping("/edit-layer")
-    public String editLayer(@RequestParam String workspace, @RequestParam String layerName, @RequestParam String title, @RequestParam String abstractText) {
-        return geoServerService.editLayer(workspace, layerName, title, abstractText);
-    }
 
-    @DeleteMapping("/delete-layer")
-    public String deleteLayer(@RequestParam String workspace, @RequestParam String layerName) {
-        return geoServerService.deleteLayer(workspace, layerName);
-    }
 
-    @GetMapping("/get-layer")
-    public String getLayer(@RequestParam String workspace, @RequestParam String layerName) {
-        return geoServerService.getLayer(workspace, layerName);
-    }
+
 
     @PostMapping("/add-attribute")
     public String addAttribute(@RequestParam String workspace, @RequestParam String dataStore, @RequestParam String featureType, @RequestParam String attributeName, @RequestParam String attributeType) {

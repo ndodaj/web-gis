@@ -1,0 +1,28 @@
+
+spring:
+  datasource:
+#    url: jdbc:h2:mem:testdb;MODE=PostgreSQL
+#    url: jdbc:h2:mem:testdb;DB_CLOSE_DELAY=-1;DATABASE_TO_UPPER=false;MODE=PostgreSQL
+    url: jdbc:h2:~/db/development;DATABASE_TO_UPPER=false;MODE=PostgreSQL;AUTO_SERVER=TRUE;DB_CLOSE_DELAY=-1
+    username: sa
+    password:
+    driverClassName: org.h2.Driver
+  jpa:
+    database-platform: org.hibernate.dialect.H2Dialect
+    database: h2
+    hibernate:
+      ddl-auto: none
+  h2:
+    console:
+      enabled: true
+
+  flyway:
+    enabled: true
+    baseline-on-migrate: true
+    table: SCHEMA_HISTORY
+    locations:
+      - classpath:/db/migration
+      - classpath:/db/migration-data
+
+
+
