@@ -16,7 +16,14 @@ spring:
     database-platform: org.hibernate.dialect.PostgreSQLDialect
     hibernate:
       ddl-auto: none
-
+  flyway:
+    enabled: true
+    baseline-on-migrate: true
+    table: SCHEMA_HISTORY
+    locations:
+      - classpath:/db/migration
+      - classpath:/db/migration-data
+    schemas: webgis
 
 springdoc:
   swagger-ui:
