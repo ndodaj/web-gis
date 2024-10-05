@@ -23,7 +23,7 @@ spring:
     locations:
       - classpath:/db/migration
       - classpath:/db/migration-data
-    schemas: webgis
+    schemas: public
 
 springdoc:
   swagger-ui:
