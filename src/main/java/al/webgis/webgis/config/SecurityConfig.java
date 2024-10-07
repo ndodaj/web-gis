@@ -33,24 +33,24 @@ public class SecurityConfig {
 
 
                         .anyRequest().permitAll()
-                )
-                .sessionManagement(sessionManagement -> sessionManagement
-                        .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-                )
-//                .formLogin(Customizer.withDefaults())
-//                .oauth2Login(Customizer.withDefaults());
-
-//                .formLogin(formLogin -> formLogin
-//                        .loginPage("/login")
-//                        .permitAll()
+                );
+//                .sessionManagement(sessionManagement -> sessionManagement
+//                        .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
 //                )
-//                .oauth2Login(oauth2Login -> oauth2Login
-//                        .loginPage("/oauth2/authorization/google")
-//                )
-        ;
-
-        http.addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);
-        http.addFilterBefore(new JwtRequestFilter(new JwtUtil()), UsernamePasswordAuthenticationFilter.class);
+////                .formLogin(Customizer.withDefaults())
+////                .oauth2Login(Customizer.withDefaults());
+//
+////                .formLogin(formLogin -> formLogin
+////                        .loginPage("/login")
+////                        .permitAll()
+////                )
+////                .oauth2Login(oauth2Login -> oauth2Login
+////                        .loginPage("/oauth2/authorization/google")
+////                )
+//        ;
+//
+//        http.addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);
+//        http.addFilterBefore(new JwtRequestFilter(new JwtUtil()), UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
     }
