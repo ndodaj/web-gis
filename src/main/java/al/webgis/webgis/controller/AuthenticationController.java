@@ -23,7 +23,7 @@ public class AuthenticationController {
     }
 
     @PostMapping("/authenticate")
-    public String createAuthenticationToken(@RequestBody AuthenticationRequest authenticationRequest) {
+    public String authenticate(@RequestBody AuthenticationRequest authenticationRequest) {
         AuthenticationResponse authenticationResponse = userService.loadUserByCredentials(authenticationRequest);
         return jwtUtil.generateToken(authenticationResponse.username(), authenticationResponse.roles());
     }

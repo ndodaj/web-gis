@@ -4,6 +4,7 @@ import al.webgis.webgis.model.Role;
 import al.webgis.webgis.security.JwtRequestFilter;
 import al.webgis.webgis.security.JwtUtil;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -24,33 +25,32 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @EnableWebSecurity
 public class SecurityConfig {
 
+    @Autowired
+    private JwtUtil jwtUtil;
+
     @Bean
-    SecurityFilterChain securityFilterChain(HttpSecurity http, JwtRequestFilter jwtRequestFilter) throws Exception {
+    SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http.csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(authorize -> authorize
                         .requestMatchers("/authenticate", "/swagger-ui/**", "/v3/api-docs/**", "/h2-console/**")
                         .permitAll()
 
 
-                        .anyRequest().permitAll()
-                );
-//                .sessionManagement(sessionManagement -> sessionManagement
-//                        .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-//                )
-////                .formLogin(Customizer.withDefaults())
-////                .oauth2Login(Customizer.withDefaults());
-//
-////                .formLogin(formLogin -> formLogin
-////                        .loginPage("/login")
-////                        .permitAll()
-////                )
-////                .oauth2Login(oauth2Login -> oauth2Login
-////                        .loginPage("/oauth2/authorization/google")
-////                )
-//        ;
-//
-//        http.addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);
-//        http.addFilterBefore(new JwtRequestFilter(new JwtUtil()), UsernamePasswordAuthenticationFilter.class);
+//                        .requestMatchers(HttpMethod.GET, "/geoserver/layergroups").hasAnyAuthority(Role.ADMIN.name())
+//                        .requestMatchers(HttpMethod.POST, "/geoserver/layergroups").hasAnyAuthority(Role.ADMIN.name())
+//                        .requestMatchers(HttpMethod.GET, "/geoserver/layergroups/{id}").hasAnyAuthority(Role.ADMIN.name())
+//                        .requestMatchers(HttpMethod.PUT, "/geoserver/layergroups/{id}").hasAnyAuthority(Role.ADMIN.name())
+//                        .requestMatchers(HttpMethod.DELETE, "/geoserver/layergroups/{id}").hasAnyAuthority(Role.ADMIN.name())
+
+                        .anyRequest().authenticated()
+                )
+                .sessionManagement(sessionManagement -> sessionManagement
+                        .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                )
+
+        ;
+
+        http.addFilterBefore(new JwtRequestFilter(jwtUtil), UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
     }

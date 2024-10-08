@@ -1,6 +1,5 @@
 package al.webgis.webgis.controller;
 
-import al.webgis.webgis.model.layers.LayerWrapper;
 import al.webgis.webgis.model.layers.LayersResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.extern.slf4j.Slf4j;
@@ -30,25 +29,26 @@ public class LayerController {
         return ResponseEntity.ok(layerService.getAllLayers(workspaceName));
     }
 
-    @PostMapping("/create-layer")
+    @GetMapping("/{layerName}")
+    public String getLayer(@RequestParam String workspace, @RequestParam String layerName) {
+        return layerService.getLayer(workspace, layerName);
+    }
+
+    @PostMapping
     public String createLayer(@RequestParam String workspace, @RequestParam String dataStore, @RequestParam String layerName, @RequestParam String nativeName, @RequestParam String srs) {
         return layerService.createLayer(workspace, dataStore, layerName, nativeName, srs);
     }
 
-
-    @PutMapping("/edit-layer")
+    @PutMapping("/{layerName}")
     public String editLayer(@RequestParam String workspace, @RequestParam String layerName, @RequestParam String title, @RequestParam String abstractText) {
         return layerService.editLayer(workspace, layerName, title, abstractText);
     }
 
-    @DeleteMapping("/delete-layer")
+    @DeleteMapping("/{layerName}")
     public ResponseEntity<Void> deleteLayer(@RequestParam String workspace, @RequestParam String layerName) {
         layerService.deleteLayer(workspace, layerName);
         return ResponseEntity.ok().build();
     }
 
-    @GetMapping("/get-layer")
-    public String getLayer(@RequestParam String workspace, @RequestParam String layerName) {
-        return layerService.getLayer(workspace, layerName);
-    }
+
 }

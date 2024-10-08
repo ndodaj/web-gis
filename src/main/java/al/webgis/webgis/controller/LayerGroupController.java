@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/geoserver/layergroup")
+@RequestMapping("/geoserver/layergroups")
 @Tag(name = "Layer groups - Geo Server APIs", description = "Layer groups - Geo Server APIs")
 @Slf4j
 public class LayerGroupController {
@@ -30,34 +30,34 @@ public class LayerGroupController {
         this.layerGroupService = layerGroupService;
     }
 
-    @GetMapping("/layer-groups")
+    @GetMapping
     @Operation(summary = "Retrieve all layer groups", description =  "Retrieve all layer groups" )
     public ResponseEntity<LayerGroupsList> getLayerGroups(@RequestParam(required = false) String workspaceName) {
         return ResponseEntity.ok(layerGroupService.getAllLayerGroups(workspaceName));
     }
 
     @Operation(summary = "Retrieve layer group by name" , description = "Retrieve layer group by layerGroupName")
-    @GetMapping("/layer-group/{layerGroupName}")
+    @GetMapping("/{layerGroupName}")
     public ResponseEntity<LayerGroupDetailsWrapper> getLayerGroup(@PathVariable String layerGroupName,
                                                                   @RequestParam(required = false) String workspaceName) {
         return ResponseEntity.ok(layerGroupService.getLayerGroup(layerGroupName, workspaceName));
     }
 
-    @PostMapping("/layer-group")
+    @PostMapping
     public ResponseEntity<CreateUpdateLayerGroupDTO> createLayerGroup(
             @RequestBody CreateUpdateLayerGroupDTO createLayerGroupDTO,
             @RequestParam(required = false) String workspaceName) {
         return ResponseEntity.ok(layerGroupService.createLayerGroup(createLayerGroupDTO, workspaceName));
     }
 
-    @PutMapping("/layer-group/{layerGroupName}")
+    @PutMapping("/{layerGroupName}")
     public String updateLayerGroup(@PathVariable String layerGroupName,
                                    @RequestParam(required = false) String workspaceName,
                                    @RequestBody CreateUpdateLayerGroupDTO updatedLayerGroup) {
         return layerGroupService.updatedLayerGroup(updatedLayerGroup, layerGroupName);
     }
 
-    @DeleteMapping("/layer-group/{layerGroupName}")
+    @DeleteMapping("/{layerGroupName}")
     public ResponseEntity<Void> deleteLayerGroup(@PathVariable String layerGroupName,
                                    @RequestParam(required = false) String workspace) {
         layerGroupService.deleteLayerGroup(workspace, layerGroupName);

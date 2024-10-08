@@ -19,27 +19,38 @@ import org.springframework.stereotype.Component;
 
 import java.security.Key;
 import java.util.Arrays;
-import java.util.Base64;
 import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.function.Function;
 
 @Component
 @Slf4j
-public class JwtUtil {
+public class JwtUtil implements InitializingBean {
 
-    @Value("${jwt.base64-secret}")
     private String secret;
 
-    @Value("${jwt.token-validity}")
     private long tokenValidity;
 
     private Key key;
 
+
+    public JwtUtil(@Value("${jwt.base64-secret}") String base64Secret,
+                   @Value("${jwt.token-validity}") long tokenValidityInSeconds) {
+        this.secret = base64Secret;
+        this.tokenValidity = tokenValidityInSeconds * 1000;
+    }
+
+    @Override
+    public void afterPropertiesSet() {
+        byte[] keyBytes = Decoders.BASE64.decode(secret);
+        this.key = Keys.hmacShaKeyFor(keyBytes);
+    }
+
+
     private static final String AUTHORITIES_KEY = "auth";
+
 
     public String generateToken(String username, List<String> authorities) {
         Map<String, Object> claims = new HashMap<>();
@@ -48,8 +59,7 @@ public class JwtUtil {
     }
 
     private String createToken(Map<String, Object> claims, String subject) {
-        byte[] keyBytes = Decoders.BASE64.decode(secret);
-        this.key = Keys.hmacShaKeyFor(keyBytes);
+
         return Jwts.builder()
                 .setClaims(claims)
                 .setSubject(subject)
