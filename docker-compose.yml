@@ -7,7 +7,7 @@ services:
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: root
-      POSTGRES_DB: postgis-test
+      POSTGRES_DB: postgis_test
     ports:
       - "5432:5432"
     networks:
@@ -39,7 +39,7 @@ services:
       context: .
     container_name: webgis
     environment:
-      SPRING_DATASOURCE_URL: jdbc:postgresql://postgis-db:5432/postgis-test
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgis-db:5432/postgis_test
       SPRING_DATASOURCE_USERNAME: postgres
       SPRING_DATASOURCE_PASSWORD: root
       SPRING_JPA_HIBERNATE_DDL_AUTO: update
