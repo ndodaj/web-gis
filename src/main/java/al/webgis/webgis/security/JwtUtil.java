@@ -7,6 +7,7 @@ import io.jsonwebtoken.MalformedJwtException;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
+import io.jsonwebtoken.security.SignatureException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Value;
@@ -70,18 +71,9 @@ public class JwtUtil implements InitializingBean {
     }
 
 
-    public boolean validateToken(String authToken) {
-        try {
-            Jwts.parser().setSigningKey(key).parseClaimsJws(authToken);
-            return true;
-        } catch (SecurityException | MalformedJwtException e) {
-            log.info("Invalid JWT signature.");
-            log.trace("Invalid JWT signature trace: {}", e);
-        } catch (IllegalArgumentException e) {
-            log.info("JWT token compact of handler are invalid.");
-            log.trace("JWT token compact of handler are invalid trace: {}", e);
-        }
-        return false;
+    public boolean validateToken(String authToken) throws SignatureException, MalformedJwtException {
+        Jwts.parser().setSigningKey(key).parseClaimsJws(authToken);
+        return true;
     }
 
     public Authentication getAuthentication(String token) {

@@ -3,6 +3,7 @@ package al.webgis.webgis.config;
 import al.webgis.webgis.model.Role;
 import al.webgis.webgis.security.JwtRequestFilter;
 import al.webgis.webgis.security.JwtUtil;
+import jakarta.servlet.http.HttpServletResponse;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationListener;
@@ -18,7 +19,10 @@ import org.springframework.security.config.annotation.web.configurers.AbstractHt
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.access.AccessDeniedHandler;
+import org.springframework.security.web.authentication.Http403ForbiddenEntryPoint;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @Configuration
@@ -30,7 +34,8 @@ public class SecurityConfig {
 
     @Bean
     SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        http.csrf(AbstractHttpConfigurer::disable)
+        http
+                .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(authorize -> authorize
                         .requestMatchers("/authenticate", "/swagger-ui/**", "/v3/api-docs/**", "/h2-console/**")
                         .permitAll()
@@ -42,11 +47,17 @@ public class SecurityConfig {
 //                        .requestMatchers(HttpMethod.PUT, "/geoserver/layergroups/{id}").hasAnyAuthority(Role.ADMIN.name())
 //                        .requestMatchers(HttpMethod.DELETE, "/geoserver/layergroups/{id}").hasAnyAuthority(Role.ADMIN.name())
 
-                        .anyRequest().authenticated()
+                                .anyRequest().authenticated()
+
                 )
-                .sessionManagement(sessionManagement -> sessionManagement
-                        .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-                )
+                .exceptionHandling( e -> e
+                        .accessDeniedHandler(customAccessDeniedHandler())
+                        .authenticationEntryPoint(customAuthenticationEntryPoint()))
+
+
+//                .sessionManagement(sessionManagement -> sessionManagement
+//                        .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+//                )
 
         ;
 
@@ -56,6 +67,20 @@ public class SecurityConfig {
     }
 
 
+    @Bean
+    public AccessDeniedHandler customAccessDeniedHandler() {
+        return (request, response, accessDeniedException) ->
+                response.sendError(HttpServletResponse.SC_FORBIDDEN,
+                        "Access Denied: " + accessDeniedException.getMessage());
+    }
+
+    // Custom AuthenticationEntryPoint for handling 401 Unauthorized responses
+    @Bean
+    public AuthenticationEntryPoint customAuthenticationEntryPoint() {
+        return (request, response, accessDeniedException) ->
+                response.sendError(HttpServletResponse.SC_UNAUTHORIZED,
+                        "Unauthorized :" + accessDeniedException.getMessage());
+    }
 
 
     @Bean
