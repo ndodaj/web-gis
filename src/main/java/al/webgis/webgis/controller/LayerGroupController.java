@@ -1,12 +1,14 @@
 package al.webgis.webgis.controller;
 
 import al.webgis.webgis.model.layergroups.CreateUpdateLayerGroupDTO;
+import al.webgis.webgis.model.layergroups.LayerDTO;
 import al.webgis.webgis.model.layergroups.LayerGroupDetailsWrapper;
-import al.webgis.webgis.model.layergroups.LayerGroupsList;
 import al.webgis.webgis.service.LayerGroupService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -32,8 +34,8 @@ public class LayerGroupController {
 
     @GetMapping
     @Operation(summary = "Retrieve all layer groups", description =  "Retrieve all layer groups" )
-    public ResponseEntity<LayerGroupsList> getLayerGroups(@RequestParam(required = false) String workspaceName) {
-        return ResponseEntity.ok(layerGroupService.getAllLayerGroups(workspaceName));
+    public ResponseEntity<Page<LayerDTO>> getLayerGroups(@RequestParam(required = false) String workspaceName, Pageable pageable) {
+        return ResponseEntity.ok(layerGroupService.getAllLayerGroups(workspaceName, pageable));
     }
 
     @Operation(summary = "Retrieve layer group by name" , description = "Retrieve layer group by layerGroupName")

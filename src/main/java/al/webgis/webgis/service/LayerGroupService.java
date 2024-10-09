@@ -1,12 +1,16 @@
 package al.webgis.webgis.service;
 
 import al.webgis.webgis.model.layergroups.CreateUpdateLayerGroupDTO;
+import al.webgis.webgis.model.layergroups.LayerDTO;
 import al.webgis.webgis.model.layergroups.LayerGroupDetailsWrapper;
 import al.webgis.webgis.model.layergroups.LayerGroupsList;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
@@ -19,6 +23,7 @@ import org.springframework.web.client.RestTemplate;
 import java.io.IOException;
 import java.util.Base64;
 import java.util.Collections;
+import java.util.List;
 
 @Service
 @Slf4j
@@ -115,8 +120,8 @@ public class LayerGroupService {
         return output;
     }
 
-    public LayerGroupsList getAllLayerGroups(String workspaceName) {
-        LayerGroupsList output = null;
+    public Page<LayerDTO> getAllLayerGroups(String workspaceName, Pageable pageable) {
+        LayerGroupsList layerGroupsList = null;
         // Set up basic authentication
         HttpHeaders headers = new HttpHeaders();
         String auth = username + ":" + password;
@@ -135,12 +140,23 @@ public class LayerGroupService {
         HttpEntity<String> entity = new HttpEntity<>(headers);
         ResponseEntity<String> response = restTemplate.exchange(url, HttpMethod.GET, entity, String.class);
         try {
-            output = objectMapper.readValue(response.getBody(), LayerGroupsList.class);
+            layerGroupsList = objectMapper.readValue(response.getBody(), LayerGroupsList.class);
 
         } catch (JsonProcessingException e) {
             e.printStackTrace(); // @TODO handle in a controller advice
         }
-        return output;
+
+        if(layerGroupsList == null || layerGroupsList.getLayerGroups() == null) {
+            return new PageImpl<>(Collections.emptyList());
+        }
+
+        List<LayerDTO> layerGroups = layerGroupsList.getLayerGroups().getLayerGroup();
+
+        int start = (int) pageable.getOffset();
+        int end = Math.min((start + pageable.getPageSize()), layerGroups.size());
+        List<LayerDTO> paginatedList = layerGroups.subList(start, end);
+
+        return new PageImpl<>(paginatedList, pageable, layerGroups.size());
 
     }
 
