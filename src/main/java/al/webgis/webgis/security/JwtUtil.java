@@ -1,7 +1,9 @@
 package al.webgis.webgis.security;
 
 
+import al.webgis.webgis.model.JwtDTO;
 import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.MalformedJwtException;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -30,9 +32,9 @@ import java.util.Map;
 @Slf4j
 public class JwtUtil implements InitializingBean {
 
-    private String secret;
+    private final String secret;
 
-    private long tokenValidity;
+    private final long tokenValidity;
 
     private Key key;
 
@@ -53,38 +55,53 @@ public class JwtUtil implements InitializingBean {
     private static final String AUTHORITIES_KEY = "auth";
 
 
-    public String generateToken(String username, List<String> authorities) {
+    public JwtDTO generateToken(String username, List<String> authorities) {
         Map<String, Object> claims = new HashMap<>();
         claims.put("auth", authorities);
         return createToken(claims, username);
     }
 
-    private String createToken(Map<String, Object> claims, String subject) {
+    private JwtDTO createToken(Map<String, Object> claims, String subject) {
 
-        return Jwts.builder()
+        JwtDTO jwtDTO = new JwtDTO();
+        jwtDTO.setToken(Jwts.builder()
                 .setClaims(claims)
                 .setSubject(subject)
                 .setIssuedAt(new Date(System.currentTimeMillis()))
                 .setExpiration(new Date(System.currentTimeMillis() + tokenValidity))
                 .signWith(key, SignatureAlgorithm.HS512)
-                .compact();
+                .compact());
+        return jwtDTO;
     }
 
 
-    public boolean validateToken(String authToken) throws SignatureException, MalformedJwtException {
-        Jwts.parser().setSigningKey(key).parseClaimsJws(authToken);
-        return true;
+    public Claims validateToken(String authToken) throws SignatureException, MalformedJwtException {
+
+        Jws<Claims> claimsJws = Jwts.parserBuilder()
+                .setSigningKey(key) // Set the signing key
+                .build()
+                .parseClaimsJws(authToken); // Parse the claims
+
+        Claims claims = claimsJws.getBody();
+
+        Date expiration = claims.getExpiration();
+        if (expiration != null && expiration.before(new Date())) {
+            throw new SignatureException("Expired or invalid token");
+        }
+        return claims;
+
+//        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+//        String issuer = claims.getSubject();
+//        if (!authentication.getName().equals(issuer))
+//            throw new SignatureException("Invalid issuer");
     }
 
-    public Authentication getAuthentication(String token) {
-        Claims claims = Jwts.parser().setSigningKey(secret).parseClaimsJws(token).getBody();
-
+    public Authentication getAuthentication(Claims claims) {
         Collection<? extends GrantedAuthority> authorities = Arrays
                 .stream(claims.get(AUTHORITIES_KEY).toString().split(",")).map(SimpleGrantedAuthority::new)
                 .toList();
 
         User principal = new User(claims.getSubject(), "", authorities);
-
-        return new UsernamePasswordAuthenticationToken(principal, token, authorities);
+        return new UsernamePasswordAuthenticationToken(principal, authorities);
     }
 }

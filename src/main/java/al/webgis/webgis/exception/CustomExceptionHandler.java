@@ -2,6 +2,7 @@ package al.webgis.webgis.exception;
 
 import io.jsonwebtoken.MalformedJwtException;
 import io.jsonwebtoken.security.SignatureException;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.client.HttpClientErrorException;
 
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -79,8 +81,11 @@ public class CustomExceptionHandler {
     }
 
     @ExceptionHandler(MalformedJwtException.class)
-    public ResponseEntity<String> handleMalformedJwtException(MalformedJwtException ex) {
-        return new ResponseEntity<>("Authentication Failed: " + ex.getMessage(), HttpStatus.UNAUTHORIZED);
+    public void handleJwtAuthenticationException(MalformedJwtException ex, HttpServletResponse response) throws IOException {
+        log.info("Authentication Failed: {MalformedJwtException} " + ex.getMessage());
+        response.setStatus(HttpStatus.UNAUTHORIZED.value());
+        response.setContentType("application/json");
+        response.getWriter().write("{\"error\": \"" + ex.getMessage() + "\"}");
     }
 
 
