@@ -1,11 +1,9 @@
-<mat-toolbar class="z-10 sm:justify-center md:justify-start">
+<mat-toolbar class="ml-4 gap-2 z-10 sm:justify-center md:justify-start">
   <app-arrow-back
     class="hidden sm:block md:block lg:block xl:block"
   ></app-arrow-back>
-  <app-arrow-forward
-    class="hidden sm:block md:block lg:block xl:block"
-  >
-</app-arrow-forward>
+  <app-arrow-forward class="hidden sm:block md:block lg:block xl:block">
+  </app-arrow-forward>
 
   <app-zoom-out
     class="hidden sm:block md:block lg:block xl:block"
@@ -37,6 +35,6 @@
     [buttonType]="'mat-icon'"
     class="hidden sm:block md:block lg:block xl:block"
   ></app-save-to-layer>
-
-  <app-notification-list></app-notification-list>
+  <!--
+  <app-notification-list></app-notification-list> -->
 </mat-toolbar>

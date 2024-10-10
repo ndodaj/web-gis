@@ -107,7 +107,7 @@ const defaultConfig: ThemeConfig = {
   layout: 'horizontal',
   boxed: false,
   sidenav: {
-    title: 'Build Green Group Albania',
+    title: 'Web Gis App',
     imageUrl: 'assets/img/logo.svg',
     showCollapsePin: true,
     user: {

@@ -80,7 +80,6 @@ export class GisMapComponent implements OnInit, OnDestroy {
   });
 
   layerGroups = [];
-
   printControl = new PrintDialog({
     immediate: true,
     collapsed: false,

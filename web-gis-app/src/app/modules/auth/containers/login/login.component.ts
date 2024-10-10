@@ -4,11 +4,9 @@ import {
   UntypedFormGroup,
   Validators,
 } from '@angular/forms';
-import { ActivatedRoute, Router } from '@angular/router';
 import { fadeInUp400ms } from '@shared/animations/fade-in-up.animation';
 import { AccountService } from '@core/api/services/account.service';
 import { finalize, take, tap } from 'rxjs/operators';
-import { AuthService } from '@core/services/auth.service';
 
 @Component({
   selector: 'app-login',
@@ -20,11 +18,8 @@ export class LoginComponent implements OnInit {
   loading!: boolean;
 
   constructor(
-    private router: Router,
     private fb: UntypedFormBuilder,
-    private accountService: AccountService,
-    private route: ActivatedRoute,
-    private authService: AuthService
+    private accountService: AccountService
   ) {}
 
   ngOnInit() {
@@ -40,15 +35,15 @@ export class LoginComponent implements OnInit {
     }
     this.loading = true;
     const { username, password } = this.form.getRawValue();
-    const redirectUrl =
-      this.route.snapshot.queryParams.redirectUrl || '/dashboard';
+    // const redirectUrl =
+    //   this.route.snapshot.queryParams.redirectUrl || '/dashboard';
 
     const payload = {
       username: username,
       password: password,
-      provider: 'db',
-      refresh: true,
     };
+
+    console.log(payload);
 
     this.accountService
       .login(payload)
@@ -58,17 +53,7 @@ export class LoginComponent implements OnInit {
           this.loading = false;
         }),
         tap((response) => {
-          this.authService.setUserLoggedInAccount(response);
-          this.accountService
-            .getCurrentUser()
-            .pipe(
-              take(1),
-              tap((res) => {
-                this.authService.setUserLoggedInRoles(res?.data.roles[0]);
-                this.router.navigateByUrl(redirectUrl);
-              })
-            )
-            .subscribe();
+          console.log('response', response);
         })
       )
       .subscribe();

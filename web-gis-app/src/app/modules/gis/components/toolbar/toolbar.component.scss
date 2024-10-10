@@ -78,11 +78,17 @@ header {
   align-items: center;
   height: fit-content;
 }
-
+::ng-deep .customBtn {
+  background: white !important;
+  // mat-icon {
+  //   color: black !important;
+  // }
+}
 button {
   width: $button-width;
   height: $button-height;
   margin: 0 2px;
+  background-color: white !important;
 }
 
 button:hover {

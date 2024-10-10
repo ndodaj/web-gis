@@ -1,67 +1,65 @@
-<nav>
-  <div class="mx-auto px-0 sm:px-2 md:px-2 lg:px-2 xl:px-2">
-    <div class="relative flex h-16 items-center justify-between">
-      <div class="flex items-center justify-center sm:justify-start">
-        <div
-          class="flex flex-shrink-0 items-center hidden sm:block md:block lg:block xl:block"
-        >
-          <a [routerLink]="['/']" class="rtl:ml-4 block flex items-center">
-            <img alt="Logo" class="h-8 w-auto" src="assets/img/logo.svg" />
-          </a>
-        </div>
-        <app-toolbar></app-toolbar>
-      </div>
+<div class="mx-auto px-0 sm:px-2 md:px-2 lg:px-2 xl:px-2">
+  <div class="relative flex h-16 items-center justify-between z-10">
+    <div class="flex items-center justify-center sm:justify-start">
       <div
-        class="absolute inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0"
+        class="flex flex-shrink-0 items-center hidden sm:block md:block lg:block xl:block"
       >
-        <!-- Profile dropdown -->
-        <div class="relative">
-          <ng-container *ngIf="isLogedIn; else elseBlock">
+        <a [routerLink]="['/']" class="rtl:ml-4 block flex items-center">
+          <img alt="Logo" class="h-8 w-auto" src="assets/img/logo.svg" />
+        </a>
+      </div>
+      <app-toolbar></app-toolbar>
+    </div>
+    <div
+      class="absolute inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0"
+    >
+      <!-- Profile dropdown -->
+      <div class="relative">
+        <ng-container *ngIf="isLogedIn; else elseBlock">
+          <div class="-mx-1 flex items-center">
+            <div class="px-1">
+              <div
+                #originRef
+                (click)="showPopover(originRef)"
+                [class.bg-hover]="dropdownOpen"
+                aria-hidden="true"
+                class="flex items-center rounded cursor-pointer relative trans-ease-out select-none py-1 pr-1 pl-3 hover:bg-hover"
+              >
+                <div
+                  class="body-1 font-medium leading-snug ltr:mr-3 rtl:ml-3 hidden sm:block"
+                >
+                  {{ userName }}
+                </div>
+                <div
+                  class="rounded-full h-9 w-9 flex items-center justify-center text-primary bg-primary/10"
+                >
+                  <mat-icon svgIcon="mat:person"></mat-icon>
+                </div>
+              </div>
+            </div>
+          </div>
+        </ng-container>
+
+        <ng-template #elseBlock>
+          <a (click)="login()">
             <div class="-mx-1 flex items-center">
               <div class="px-1">
                 <div
-                  #originRef
-                  (click)="showPopover(originRef)"
-                  [class.bg-hover]="dropdownOpen"
-                  aria-hidden="true"
                   class="flex items-center rounded cursor-pointer relative trans-ease-out select-none py-1 pr-1 pl-3 hover:bg-hover"
                 >
                   <div
-                    class="body-1 font-medium leading-snug ltr:mr-3 rtl:ml-3 hidden sm:block"
-                  >
-                    {{ userName }}
-                  </div>
-                  <div
-                    class="rounded-full h-9 w-9 flex items-center justify-center text-primary bg-primary/10"
+                    class="rounded-full h-9 w-9 flex items-center justify-center text-primary bg-primary/10 customBtn"
                   >
                     <mat-icon svgIcon="mat:person"></mat-icon>
                   </div>
                 </div>
               </div>
             </div>
-          </ng-container>
-
-          <ng-template #elseBlock>
-            <a (click)="login()">
-              <div class="-mx-1 flex items-center">
-                <div class="px-1">
-                  <div
-                    class="flex items-center rounded cursor-pointer relative trans-ease-out select-none py-1 pr-1 pl-3 hover:bg-hover"
-                  >
-                    <div
-                      class="rounded-full h-9 w-9 flex items-center justify-center text-primary bg-primary/10"
-                    >
-                      <mat-icon svgIcon="mat:person"></mat-icon>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </a>
-          </ng-template>
-        </div>
+          </a>
+        </ng-template>
       </div>
     </div>
   </div>
+</div>
 
-  <app-gis-map></app-gis-map>
-</nav>
+<app-gis-map></app-gis-map>

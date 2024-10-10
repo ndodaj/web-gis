@@ -89,17 +89,4 @@ export class PrintService implements OnInit {
       }
     });
   }
-
-  panelHeader() {
-    const treePanelHeader = document.createElement('header');
-
-    treePanelHeader.innerHTML = 'INDICATORS';
-    this.mapService.layerSwitcher.setHeader(treePanelHeader);
-    const layerSwitcherElement = this.mapService.layerSwitcher['element'];
-    //const btn = layerSwitcherElement.getElementsByTagName('button');
-    layerSwitcherElement.classList;
-    layerSwitcherElement.style.position = 'absolute';
-    layerSwitcherElement.style.top = '0.5em';
-    layerSwitcherElement.style.left = 'auto';
-  }
 }

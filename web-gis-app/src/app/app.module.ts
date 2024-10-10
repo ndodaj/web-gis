@@ -18,6 +18,8 @@ import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
 import { MapModule } from './modules/gis/map.module';
 import { ColorPickerModule } from 'ngx-color-picker';
+import { SpeedDialModule } from 'primeng/speeddial';
+import { ButtonModule } from 'primeng/button';
 export function initializeApp(appConfigService: AppConfigService) {
   return () => {
     return appConfigService.loadConfig();
@@ -47,6 +49,8 @@ export function HttpLoaderFactory(http: HttpClient) {
     }),
     BrowserAnimationsModule,
     MomentDateModule,
+    SpeedDialModule,
+    ButtonModule,
   ],
   providers: [
     {

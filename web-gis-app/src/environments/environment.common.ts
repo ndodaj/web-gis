@@ -8,6 +8,6 @@ export const environmentCommon: EnvironmentConfig = {
   loggedInUserCacheStorageKey: 'loggedInUser',
   loggedInUserCacheStorageKeyRole: 'permissions',
   appVersion: require('package.json')?.version,
-  url: 'localhost:8080/geoserver/test/wms',
+  url: 'http://20.67.236.132:8080/geoserver/test/wms',
   geoportal_url: 'https://geoportal.asig.gov.al',
 };

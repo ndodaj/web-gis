@@ -1,8 +1,8 @@
 {
   "api": {
-    "baseUrl": "localhost:5000",
+    "baseUrl": "http://20.67.236.132:9000",
     "version": "1"
   },
   "environmentName": "Production",
-  "geoserverUrl": "localhost:8080"
+  "geoserverUrl": "http://20.67.236.132:8080"
 }

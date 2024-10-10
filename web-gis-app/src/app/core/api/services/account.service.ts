@@ -12,11 +12,10 @@ export class AccountService extends BaseService {
     super(config);
   }
 
-  login(payload: any): Observable<any> {
-    return this.http.post<any>(
-      this.entityUrl + '/api/v1/security/login',
-      payload
-    );
+  login(payload: any): Observable<string> {
+    console.log(payload);
+
+    return this.http.post<string>(this.entityUrl + '/authenticate', payload);
   }
   // Method to fetch permissions for a specific role
   getRolePermissions(roleId: number): Observable<any[]> {
