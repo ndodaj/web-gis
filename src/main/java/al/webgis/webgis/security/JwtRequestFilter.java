@@ -60,10 +60,9 @@ public class JwtRequestFilter extends OncePerRequestFilter {
 
         String jwt = authHeader.substring(7);
 
-        Claims claims;
 
         try {
-            claims = jwtUtil.validateToken(jwt);
+            jwtUtil.validateToken(jwt.trim());
         } catch (SecurityException | MalformedJwtException e) {
             log.info("Invalid JWT signature.");
             log.trace("Invalid JWT signature trace: {}", e.getMessage());
@@ -103,11 +102,6 @@ public class JwtRequestFilter extends OncePerRequestFilter {
             response.getWriter().write(convertObjectToJson(e));
             return;
         }
-
-        Authentication authentication = jwtUtil.getAuthentication(claims);
-        SecurityContextHolder.getContext().setAuthentication(authentication);
-        log.debug("set Authentication to security context for '{}', uri: {}", authentication.getName(), requestURI);
-
 
         chain.doFilter(request, response);
     }

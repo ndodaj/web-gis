@@ -17,6 +17,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Component;
 
@@ -88,12 +89,13 @@ public class JwtUtil implements InitializingBean {
         if (expiration != null && expiration.before(new Date())) {
             throw new SignatureException("Expired or invalid token");
         }
-        return claims;
 
-//        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-//        String issuer = claims.getSubject();
-//        if (!authentication.getName().equals(issuer))
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String issuer = claims.getSubject();
+//        if (!authentication.getName().equals(issuer)) {
 //            throw new SignatureException("Invalid issuer");
+//        }
+        return claims;
     }
 
     public Authentication getAuthentication(Claims claims) {
