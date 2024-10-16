@@ -1,6 +1,7 @@
 package al.webgis.webgis.config;
 
 import al.webgis.webgis.security.JwtRequestFilter;
+import al.webgis.webgis.security.JwtUtil;
 import al.webgis.webgis.service.CustomUserDetailsService;
 import jakarta.servlet.http.HttpServletResponse;
 import org.slf4j.LoggerFactory;
@@ -28,7 +29,8 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 public class SecurityConfig {
 
     @Autowired
-    JwtRequestFilter jwtRequestFilter;
+    private JwtUtil jwtUtil;
+
 
     @Autowired
     private CustomUserDetailsService userDetailsService;
@@ -63,7 +65,7 @@ public class SecurityConfig {
 
         ;
 
-        http.addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);
+        http.addFilterBefore(new JwtRequestFilter(jwtUtil), UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
     }
