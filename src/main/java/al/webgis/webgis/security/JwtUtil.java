@@ -90,11 +90,11 @@ public class JwtUtil implements InitializingBean {
             throw new SignatureException("Expired or invalid token");
         }
 
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        String issuer = claims.getSubject();
-//        if (!authentication.getName().equals(issuer)) {
-//            throw new SignatureException("Invalid issuer");
-//        }
+//        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+//        String issuer = claims.getSubject();
+////        if (!authentication.getName().equals(issuer)) {
+////            throw new SignatureException("Invalid issuer");
+////        }
         return claims;
     }
 

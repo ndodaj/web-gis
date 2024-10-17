@@ -11,12 +11,15 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.AuthenticationProvider;
+import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.authentication.event.AuthenticationSuccessEvent;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.AuthenticationEntryPoint;
@@ -29,7 +32,8 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 public class SecurityConfig {
 
     @Autowired
-    private JwtUtil jwtUtil;
+    private JwtRequestFilter jwtRequestFilter;
+
 
 
     @Autowired
@@ -59,13 +63,14 @@ public class SecurityConfig {
                         .authenticationEntryPoint(customAuthenticationEntryPoint()))
 
 
-//                .sessionManagement(sessionManagement -> sessionManagement
-//                        .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-//                )
+                .sessionManagement(sessionManagement -> sessionManagement
+                        .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                )
+                .authenticationProvider(authenticationProvider())
+                .addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class)
 
         ;
 
-        http.addFilterBefore(new JwtRequestFilter(jwtUtil), UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
     }
@@ -113,6 +118,14 @@ public class SecurityConfig {
             Authentication authentication = event.getAuthentication();
             LoggerFactory.getLogger(SecurityConfig.class).info("LOGIN SUCCESFUL [{}] - {}", authentication.getClass().getSimpleName(), authentication.getName());
         };
+    }
+
+    @Bean
+    public AuthenticationProvider authenticationProvider() {
+        DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
+        authProvider.setUserDetailsService(userDetailsService);
+        authProvider.setPasswordEncoder(passwordEncoder());
+        return authProvider;
     }
 
 
