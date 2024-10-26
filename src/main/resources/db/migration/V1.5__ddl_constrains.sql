@@ -8,6 +8,10 @@ ALTER TABLE user_roles
 ALTER TABLE user_roles
     ADD CONSTRAINT role_id_fk foreign key (role_id) references roles (id);
 
+ALTER TABLE token
+    ADD CONSTRAINT user_id_token_fk FOREIGN KEY (user_id) REFERENCES users (id);
+
+
   
   
   

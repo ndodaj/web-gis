@@ -1,4 +1,4 @@
 package al.webgis.webgis.model;
 
-public record UserDto(Integer id, String username) {
+public record UserDto(Long id, String username) {
 }

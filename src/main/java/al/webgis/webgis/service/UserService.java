@@ -3,7 +3,7 @@ package al.webgis.webgis.service;
 import al.webgis.webgis.converter.UserConverter;
 import al.webgis.webgis.entity.UserEntity;
 import al.webgis.webgis.model.AuthenticationRequest;
-import al.webgis.webgis.model.AuthenticationResponse;
+import al.webgis.webgis.model.UserDetailsResponse;
 import al.webgis.webgis.model.UserDto;
 import al.webgis.webgis.model.UserRegistrationDto;
 import al.webgis.webgis.repository.UserRepository;
@@ -66,15 +66,15 @@ public class UserService {
         userRepository.save(userConverter.toEntity(userRegistrationDto));
     }
 
-    public AuthenticationResponse loadUserByCredentials(AuthenticationRequest authenticationRequest) {
-        UserEntity userEntity = userRepository.findByUsername(authenticationRequest.username())
+    public UserDetailsResponse loadUserByCredentials(AuthenticationRequest authenticationRequest) {
+        UserEntity userEntity = userRepository.findByEmail(authenticationRequest.getEmail())
                 .orElseThrow(() -> new BadCredentialsException("User ot found"));
-        if(!bCryptPasswordEncoder.matches(authenticationRequest.password(), userEntity.getPassword())) {
+        if (!bCryptPasswordEncoder.matches(authenticationRequest.getPassword(), userEntity.getPassword())) {
             throw new BadCredentialsException("Bad credentials");
         }
         List<String> roles = new ArrayList<>();
         userEntity.getRoles().forEach(role -> roles.add(role.getName().name()));
-        return new AuthenticationResponse(authenticationRequest.username(), roles);
+        return new UserDetailsResponse(authenticationRequest.getEmail(), roles);
 
 
 

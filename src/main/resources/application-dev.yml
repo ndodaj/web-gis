@@ -23,6 +23,7 @@ spring:
     locations:
       - classpath:/db/migration
       - classpath:/db/migration-data
+    schemas: public
 
 
 

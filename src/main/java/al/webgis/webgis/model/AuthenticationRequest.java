@@ -1,5 +1,12 @@
 package al.webgis.webgis.model;
 
 
-public record AuthenticationRequest(String username, String password) {
+import lombok.Getter;
+import lombok.Setter;
+
+@Getter
+@Setter
+public class AuthenticationRequest {
+    private String email;
+    private String password;
 }

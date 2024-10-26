@@ -1,9 +1,18 @@
 package al.webgis.webgis.model;
 
-import java.util.List;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.Setter;
 
-public record AuthenticationResponse(
-        String username,
-        List<String> roles
-) {
+@Getter
+@Setter
+@Builder
+public class AuthenticationResponse {
+    private String token;
+    private String refreshToken;
+
+    public AuthenticationResponse(String token, String refreshToken) {
+        this.token = token;
+        this.refreshToken = refreshToken;
+    }
 }

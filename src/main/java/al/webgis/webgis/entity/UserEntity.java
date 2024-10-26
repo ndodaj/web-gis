@@ -3,6 +3,7 @@ package al.webgis.webgis.entity;
 
 import al.webgis.webgis.model.AccountType;
 import al.webgis.webgis.model.StatusEnum;
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -29,13 +30,13 @@ import java.util.List;
 @Getter
 @Setter
 @Entity
-@Table(name = "users")
+@Table(name = "users", schema = "public")
 public class UserEntity extends AuditEntity<String> {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", updatable = false, nullable = false)
-    private Integer id;
+    private Long id;
 
     @NotBlank
     @Size(min = 5, max = 45)
@@ -84,7 +85,7 @@ public class UserEntity extends AuditEntity<String> {
 
     @ManyToMany
     @JoinTable(
-            name = "user_roles",
+            name = "user_roles", schema = "public",
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "role_id")
     )

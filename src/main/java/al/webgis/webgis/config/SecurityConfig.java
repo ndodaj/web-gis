@@ -1,7 +1,6 @@
 package al.webgis.webgis.config;
 
 import al.webgis.webgis.security.JwtRequestFilter;
-import al.webgis.webgis.security.JwtUtil;
 import al.webgis.webgis.service.CustomUserDetailsService;
 import jakarta.servlet.http.HttpServletResponse;
 import org.slf4j.LoggerFactory;

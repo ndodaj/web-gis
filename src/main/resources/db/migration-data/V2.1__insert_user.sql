@@ -16,7 +16,7 @@ INSERT INTO users (
 VALUES ('admin',
         'System',
         'Admin',
-        'john.doe@example.com',
+        'a.b@c.al',
         '$2a$10$fAb5yDYznme2vPNov0KY1eyJfNFo4yteoeC/V1oRhJNgwwvzn52B6',
         '1990-01-01',
         '0691231231',
