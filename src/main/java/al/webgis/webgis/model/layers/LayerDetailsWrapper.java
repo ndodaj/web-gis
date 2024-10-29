@@ -9,6 +9,6 @@ import java.util.List;
 
 @Getter
 @Setter
-public class LayerWrapper {
-    private List<LayerDTO> layer;
+public class LayerDetailsWrapper {
+    private List<LayerDetails> layer;
 }

@@ -5,6 +5,8 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class LayersResponse {
-    private LayerWrapper layers;
+public class LayerListDto {
+    private LayersDto layersDto;
+
+
 }
