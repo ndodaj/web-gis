@@ -1,6 +1,6 @@
 package al.webgis.webgis.model.layergroups;
 
-import al.webgis.webgis.model.Styles;
+import al.webgis.webgis.model.styles.Styles;
 import lombok.Getter;
 import lombok.Setter;
 

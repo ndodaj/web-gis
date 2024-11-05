@@ -5,7 +5,6 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class CreateStyleDTO {
-    private String name;
-    private String filename;
+public class CreateStyleXmlDTO {
+
 }

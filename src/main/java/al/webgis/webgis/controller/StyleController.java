@@ -1,7 +1,10 @@
 package al.webgis.webgis.controller;
 
-import al.webgis.webgis.model.StyleDTO;
+import al.webgis.webgis.model.styles.RetrieveSingleStyleDto;
+import al.webgis.webgis.model.styles.StyleDTO;
 import al.webgis.webgis.model.styles.CreateStyleDTO;
+import al.webgis.webgis.model.styles.create.NamedLayer;
+import al.webgis.webgis.model.styles.create.StyledLayerDescriptor;
 import al.webgis.webgis.service.StyleService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -16,6 +19,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 
@@ -33,19 +37,19 @@ public class StyleController {
 
     @GetMapping
     @Operation(summary = "Retrieve all styles", description = "Retrieve all styles")
-    public ResponseEntity<Page<StyleDTO>> getstyles(Pageable pageable) {
-        return ResponseEntity.ok(styleService.getAllStyles(pageable));
+    public ResponseEntity<Page<StyleDTO>> getStyles(@RequestParam(required = false) String workspaceName, Pageable pageable) {
+        return ResponseEntity.ok(styleService.getAllStyles(pageable, workspaceName));
     }
 
     @Operation(summary = "Retrieve style by name", description = "Retrieve style by name")
     @GetMapping("/{styleName}")
-    public ResponseEntity<StyleDTO> getstyle(@PathVariable String styleName) {
-        return ResponseEntity.ok(styleService.getStyle(styleName));
+    public ResponseEntity<RetrieveSingleStyleDto> getStyle(@PathVariable String styleName, @RequestParam(required = false) String workspaceName) {
+        return ResponseEntity.ok(styleService.getStyle(styleName, workspaceName));
     }
 
     @PostMapping
-    public ResponseEntity<CreateStyleDTO> createstyle(@RequestBody CreateStyleDTO createstyleDTO) {
-        return ResponseEntity.ok(styleService.createStyle(createstyleDTO));
+    public ResponseEntity<NamedLayer> createstyle(@RequestBody StyledLayerDescriptor style, @RequestParam(required = false) String workspaceName) {
+        return ResponseEntity.ok(styleService.namedLayer(style, workspaceName));
     }
 
     @PutMapping("/{styleName}")

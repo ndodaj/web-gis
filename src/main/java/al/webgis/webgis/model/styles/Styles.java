@@ -1,4 +1,4 @@
-package al.webgis.webgis.model;
+package al.webgis.webgis.model.styles;
 
 import lombok.Getter;
 import lombok.Setter;
