@@ -48,8 +48,8 @@ public class StyleController {
     }
 
     @PostMapping
-    public ResponseEntity<NamedLayer> createstyle(@RequestBody StyledLayerDescriptor style, @RequestParam(required = false) String workspaceName) {
-        return ResponseEntity.ok(styleService.namedLayer(style, workspaceName));
+    public ResponseEntity<NamedLayer> createstyle(@RequestBody NamedLayer namedLayer, @RequestParam(required = false) String workspaceName) {
+        return ResponseEntity.ok(styleService.namedLayer(namedLayer, workspaceName));
     }
 
     @PutMapping("/{styleName}")

@@ -2,13 +2,9 @@ package al.webgis.webgis.model.styles.create;
 
 import lombok.Getter;
 import lombok.Setter;
-import lombok.ToString;
 
 @Getter
 @Setter
-public class Filter {
-
-    private PropertyIsEqualTo propertyIsEqualTo;
-
+public class CreateLayerWrapper {
+    private StyledLayerDescriptor styledLayerDescriptor;
 }
-
