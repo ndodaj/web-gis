@@ -6,13 +6,12 @@ import {
   ViewChild,
   ViewContainerRef,
 } from '@angular/core';
-import { Rotate, ZoomSlider, ZoomToExtent } from 'ol/control';
+import { Rotate, ScaleLine, ZoomSlider, ZoomToExtent } from 'ol/control';
 import DragRotate from 'ol/interaction/DragRotate.js';
 import { altKeyOnly } from 'ol/events/condition';
 import { Draw } from 'ol/interaction';
 import ExtendedTileLayer from '@shared/ol/customLayers/extendedTileLayer';
 import { WMTSCapabilities } from 'ol/format';
-import PrintDialog from 'ol-ext/control/PrintDialog';
 import LayerSwitcher from 'ol-ext/control/LayerSwitcher';
 import WMTS, { optionsFromCapabilities } from 'ol/source/WMTS';
 import { attributions } from '@shared/ol/attributions/attributions';
@@ -27,6 +26,26 @@ import { PrintService } from '@shared/services/print/print.service';
 
 import proj4 from 'proj4';
 import { register } from 'ol/proj/proj4';
+import { IndicatorCategoryDtoService } from '@core/api/services/indicator-category-dto.service';
+import { take, tap } from 'rxjs';
+import { IndicatorDtoService } from '@core/api/services/indicator-dto.service';
+import ExtendedPrintDialog from '@shared/ol/customLayers/extendedPrintControl';
+import { MatTableDataSource } from '@angular/material/table';
+import { MatExpansionPanel } from '@angular/material/expansion';
+import { CdkDrag } from '@angular/cdk/drag-drop';
+export interface PeriodicElement {
+  name: string;
+  position: number;
+  weight: number;
+  symbol: string;
+}
+
+export interface UserData {
+  id: string;
+  name: string;
+  progress: string;
+  fruit: string;
+}
 
 // proj4.defs(
 //   'EPSG:6870',
@@ -47,10 +66,15 @@ const wmts_parser = new WMTSCapabilities();
   styleUrls: ['./gis-map.component.scss'],
 })
 export class GisMapComponent implements OnInit, OnDestroy {
+  @ViewChild('featuresPanel') featuresPanel!: MatExpansionPanel;
+  @ViewChild(CdkDrag) dragRef!: CdkDrag;
   newItem!: any;
   legend!: any;
   drawLine!: Draw;
   drawPoly!: Draw;
+  cartoDarkImage = 'cartodark.png';
+  osmImage = 'assets/img/cartodark.png';
+  bingMapImage = 'assets/img/cartodark.png';
   public toggle: boolean = false;
 
   @ViewChild('popupContent', { static: true }) popupContent!: ElementRef;
@@ -63,6 +87,8 @@ export class GisMapComponent implements OnInit, OnDestroy {
       4731041.924406727,
     ],
   });
+  displayedColumns: string[] = ['id', 'name', 'progress', 'fruit'];
+  dataSource!: MatTableDataSource<UserData>;
 
   zoomSlider = new ZoomSlider();
 
@@ -80,8 +106,7 @@ export class GisMapComponent implements OnInit, OnDestroy {
   });
 
   layerGroups = [];
-
-  printControl = new PrintDialog({
+  printControl = new ExtendedPrintDialog({
     immediate: true,
     collapsed: false,
   });
@@ -97,10 +122,37 @@ export class GisMapComponent implements OnInit, OnDestroy {
     public coordsService: CoordinatesService,
     public layerControlService: LayerControlService,
     public printService: PrintService,
+    private indicatorCategoryDtoService: IndicatorCategoryDtoService,
+    private indicatorDtoService: IndicatorDtoService,
     public vcRef: ViewContainerRef
   ) {}
 
   ngOnInit() {
+    this.indicatorCategoryDtoService
+      .getIndicatorCategories('ne', undefined)
+      .pipe(
+        take(1),
+        tap((response) => {
+          console.log(response?.content);
+          response?.content.forEach((layerGroup: any) => {
+            const layerGroupInfo =
+              this.mapService.constructLayerGroup(layerGroup);
+            console.log(layerGroupInfo);
+
+            this.mapService.getMap().addLayer(layerGroupInfo);
+            this.indicatorDtoService
+              .getIndicators('ne', undefined)
+              .pipe(
+                take(1),
+                tap((response) => {
+                  console.log('layers', response?.layers);
+                })
+              )
+              .subscribe();
+          });
+        })
+      )
+      .subscribe();
     this.mapService
       .getLayerGroupsGeo()
       .then((response: any) => {
@@ -150,10 +202,25 @@ export class GisMapComponent implements OnInit, OnDestroy {
     this.mapService.createMap();
 
     this.mapService.getMap().addInteraction(this.dragRotateInteraction);
-
+    const scaleLine = new ScaleLine({
+      steps: 5,
+      bar: true,
+      text: true,
+    });
+    // const zoomSlider = new ZoomSlider({
+    //   target: 'map',
+    // });
+    // const mousePosition = new MousePosition({
+    //   target: 'map',
+    // });
+    //var scaleLineControl = new ol.control.CanvasScaleLine();
     this.mapService.getMap().addInteraction(this.styleService.modify);
-    this.mapService.getMap().addControl(this.mapService.layerSwitcher);
+    this.mapService.setInteraction();
+    //this.mapService.getMap().addControl(this.mapService.layerSwitcher);
     this.mapService.getMap().addControl(this.printService.printControl);
+    this.mapService.getMap().addControl(scaleLine);
+    //this.mapService.getMap().addControl(zoomSlider);
+    //this.mapService.getMap().addControl(mousePosition);
 
     this.layerControlService.layerSelectionChange();
     this.layerControlService.operatorSelect();
@@ -162,8 +229,9 @@ export class GisMapComponent implements OnInit, OnDestroy {
 
     this.printService.printControl.setSize('A4');
     this.printService.printControl.setOrientation('landscape');
-    this.printService.printControl.setMargin(5);
+    this.printService.printControl.setMargin(6);
     this.printService.printControl['element'].click();
+
     this.printService.printDialog();
     this.printService.printControl2();
     this.printService.onPrint();
@@ -176,13 +244,33 @@ export class GisMapComponent implements OnInit, OnDestroy {
     this.getOrtofoto2015();
 
     this.mapService.getMap().addControl(this.mapService.legendCtrl);
+    console.log(this.featuresPanel);
   }
 
   closeInfoForm() {
     const closeForm = document.getElementById('formContainer')!;
     closeForm.style.display = 'none';
   }
+  resetPosition() {
+    const accordion = document.getElementById('accordion')!;
+    accordion.style.transform = 'translate3d(0px, 0px, 0px)';
 
+    // Optionally, set additional styles if needed
+    accordion.style.position = 'fixed'; // Ensure it's fixed at the bottom
+    accordion.style.bottom = '0'; // Set position to bottom
+    accordion.style.width = '100%';
+    if (this.dragRef) {
+      this.dragRef.reset();
+    }
+  }
+  applyFilter(event: Event) {
+    const filterValue = (event.target as HTMLInputElement).value;
+    this.dataSource.filter = filterValue.trim().toLowerCase();
+
+    if (this.dataSource.paginator) {
+      this.dataSource.paginator.firstPage();
+    }
+  }
   public onEventLog(event: string, data: any): void {
     console.log(event, data);
   }
@@ -219,6 +307,87 @@ export class GisMapComponent implements OnInit, OnDestroy {
       .catch(() => {
         // Handle errors if necessary
       });
+  }
+  toggleMenu() {
+    const baseLayerMenu = document.getElementById('baseLayerMenu');
+    // const arrowIcon = document.getElementById('arrowIcon');
+    if (baseLayerMenu) {
+      baseLayerMenu.classList.toggle('hidden');
+    }
+  }
+  setBaseLayer(layerType: string) {
+    switch (layerType) {
+      case 'osm':
+        extendedLayerGroup.baseLayerGroup.getLayers().forEach((layer) => {
+          console.log(layer.getProperties().title);
+          if (
+            layer.getProperties()?.title === 'OSM' &&
+            layer.getProperties().visible === false
+          ) {
+            document.querySelector('#osmMap')?.classList.add('border-red-400');
+            // this.isCartoDark = false;
+            this.cartoDarkImage = 'osmmap.png';
+            layer.setVisible(true);
+          } else if (layer.getProperties()?.title !== 'OSM') {
+            layer.setVisible(false);
+            document
+              .querySelector('#bingMap')
+              ?.classList.remove('border-red-400');
+            document
+              .querySelector('#cartoDark')
+              ?.classList.remove('border-red-400');
+          }
+        });
+        break;
+      case 'bingmap':
+        extendedLayerGroup.baseLayerGroup.getLayers().forEach((layer) => {
+          console.log(layer.getProperties().title);
+          if (
+            layer.getProperties()?.title === 'BingMaps' &&
+            layer.getProperties().visible === false
+          ) {
+            document.querySelector('#bingMap')?.classList.add('border-red-400');
+            console.log(layer.getProperties());
+            layer.setVisible(true);
+            this.cartoDarkImage = 'bingmap.png';
+          } else if (layer.getProperties()?.title !== 'BingMaps') {
+            layer.setVisible(false);
+            document
+              .querySelector('#osmMap')
+              ?.classList.remove('border-red-400');
+            document
+              .querySelector('#cartoDark')
+              ?.classList.remove('border-red-400');
+          }
+        });
+        break;
+      case 'cartodark':
+        extendedLayerGroup.baseLayerGroup.getLayers().forEach((layer) => {
+          console.log(layer.getProperties().title);
+          if (
+            layer.getProperties()?.title === 'CartoDarkAll' &&
+            layer.getProperties().visible === false
+          ) {
+            document
+              .querySelector('#cartoDark')
+              ?.classList.add('border-red-400');
+            console.log(layer.getProperties());
+            layer.setVisible(true);
+            this.cartoDarkImage = 'cartodark.png';
+          } else if (layer.getProperties()?.title !== 'CartoDarkAll') {
+            layer.setVisible(false);
+            document
+              .querySelector('#bingMap')
+              ?.classList.remove('border-red-400');
+            document
+              .querySelector('#osmMap')
+              ?.classList.remove('border-red-400');
+          }
+        });
+        break;
+      default:
+        break;
+    }
   }
 
   updateScaleOnChange() {

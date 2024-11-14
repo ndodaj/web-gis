@@ -16,6 +16,8 @@ export class PrintContentComponent implements OnInit {
   }
 
   selectPrintButton() {
+    console.log('lll');
+
     const olPrintButton = document.querySelector('.ol-print') as HTMLElement;
     const buttonsContainer = document.querySelector(
       '#printContent'

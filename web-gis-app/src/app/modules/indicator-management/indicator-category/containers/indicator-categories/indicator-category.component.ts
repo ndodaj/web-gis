@@ -27,7 +27,6 @@ import { AutoUnsubscribe } from '@core/utils';
 export class IndicatorCategoryComponent implements AfterViewInit {
   displayedColumns: string[] = [
     'name',
-    'indicators',
     // 'accepted',
     // 'created_by',
     // 'created_on',
@@ -60,16 +59,17 @@ export class IndicatorCategoryComponent implements AfterViewInit {
           this.isLoadingResults = true;
 
           const payload = {
-            order_column: 'created_on',
-            order_direction: this.sort.direction,
             page: this.paginator.pageIndex,
-            page_size: this.paginator.pageSize,
+            size: this.paginator.pageSize,
+            sort: [this.sort.direction],
           };
           return this.indicatorCategoryDtoService
-            .getIndicatorCategories(payload)
+            .getIndicatorCategories('ne', payload)
             .pipe(catchError(() => observableOf(null)));
         }),
         map((data) => {
+          console.log(data, this.sort.direction);
+
           this.isLoadingResults = false;
           this.isRateLimitReached = data === null;
 
@@ -77,36 +77,41 @@ export class IndicatorCategoryComponent implements AfterViewInit {
             return [];
           }
 
-          this.resultsLength = data.count;
+          this.resultsLength = data.totalElements;
 
-          return data.result;
+          return data.content;
         })
       )
-      .subscribe((data) => (this.dataSource.data = data));
+      .subscribe((data) => {
+        console.log(data);
+
+        this.dataSource.data = data;
+      });
   }
 
   refreshDataSource() {
     this.isLoadingResults = true;
 
     const payload = {
-      order_column: 'created_on',
-      order_direction: this.sort.direction,
       page: this.paginator.pageIndex,
-      page_size: this.paginator.pageSize,
+      size: this.paginator.pageSize,
+      sort: [this.sort.direction],
     };
 
     this.indicatorCategoryDtoService
-      .getIndicatorCategories(payload)
+      .getIndicatorCategories('ne', payload)
       .pipe(catchError(() => observableOf(null)))
       .subscribe((data) => {
+        console.log(data);
+
         this.isLoadingResults = false;
         if (data === null) {
           return;
         }
 
-        this.resultsLength = data.count;
+        this.resultsLength = data.totalElements;
 
-        this.dataSource.data = data.result;
+        this.dataSource.data = data.content;
       });
   }
 

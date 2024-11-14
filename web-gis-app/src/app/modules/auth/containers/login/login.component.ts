@@ -4,10 +4,10 @@ import {
   UntypedFormGroup,
   Validators,
 } from '@angular/forms';
-import { ActivatedRoute, Router } from '@angular/router';
 import { fadeInUp400ms } from '@shared/animations/fade-in-up.animation';
+import { ActivatedRoute, Router } from '@angular/router';
 import { AccountService } from '@core/api/services/account.service';
-import { finalize, take, tap } from 'rxjs/operators';
+import { finalize, take, tap } from 'rxjs';
 import { AuthService } from '@core/services/auth.service';
 
 @Component({
@@ -22,14 +22,14 @@ export class LoginComponent implements OnInit {
   constructor(
     private router: Router,
     private fb: UntypedFormBuilder,
-    private accountService: AccountService,
     private route: ActivatedRoute,
+    private accountService: AccountService,
     private authService: AuthService
   ) {}
 
   ngOnInit() {
     this.form = this.fb.group({
-      username: ['', Validators.required],
+      email: ['', Validators.required],
       password: ['', Validators.required],
     });
   }
@@ -39,16 +39,17 @@ export class LoginComponent implements OnInit {
       return;
     }
     this.loading = true;
-    const { username, password } = this.form.getRawValue();
+    const { email, password } = this.form.getRawValue();
     const redirectUrl =
       this.route.snapshot.queryParams.redirectUrl || '/dashboard';
 
     const payload = {
-      username: username,
+      email: email,
       password: password,
-      provider: 'db',
-      refresh: true,
     };
+    console.log(payload);
+    //this.router.navigateByUrl(redirectUrl);
+    // console.log(payload);
 
     this.accountService
       .login(payload)
@@ -58,17 +59,9 @@ export class LoginComponent implements OnInit {
           this.loading = false;
         }),
         tap((response) => {
+          console.log('response', response);
           this.authService.setUserLoggedInAccount(response);
-          this.accountService
-            .getCurrentUser()
-            .pipe(
-              take(1),
-              tap((res) => {
-                this.authService.setUserLoggedInRoles(res?.data.roles[0]);
-                this.router.navigateByUrl(redirectUrl);
-              })
-            )
-            .subscribe();
+          this.router.navigateByUrl(redirectUrl);
         })
       )
       .subscribe();

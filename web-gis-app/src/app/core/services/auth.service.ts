@@ -53,6 +53,8 @@ export class AuthService {
     );
 
   public setUserLoggedInAccount = (response: any): void => {
+    console.log(response);
+
     environment.cacheStorage.setItem(
       environment.loggedInUserCacheStorageKey,
       JSON.stringify(response)
@@ -78,9 +80,10 @@ export class AuthService {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   public getDecodedTokenClaim(claimPropertyName: string): any {
     const result = this.getUserLoggedInAccount()
-      ?.access_token?.split('.')[1]
+      ?.token?.split('.')[1]
       .replace(/-/g, '+')
       .replace(/_/g, '/');
+    console.log(result);
 
     if (typeof result !== 'string') {
       throw new Error('Invalid token specified!');

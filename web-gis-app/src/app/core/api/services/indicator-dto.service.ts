@@ -12,7 +12,7 @@ export class IndicatorDtoService extends BaseService {
     super(config);
   }
 
-  getIndicators(payload?: any): Observable<any> {
+  getIndicators1(workspaceName?: string, payload?: any): Observable<any> {
     let params = new HttpParams();
     payload = {
       order_column: payload?.order_column,
@@ -21,12 +21,24 @@ export class IndicatorDtoService extends BaseService {
       page_size: payload?.page_size,
     };
     params = params.append('q', JSON.stringify(payload));
+    console.log(params);
+
     if (payload === undefined) {
-      return this.http.get<any>(this.apiUrl + '/api/v1/indicatormodelapi/');
+      return this.http.get<any>(this.apiUrl + 'geoserver/layers');
     } else {
-      return this.http.get<any>(this.apiUrl + '/api/v1/indicatormodelapi/', {
-        params,
-      });
+      return this.http.get<any>(
+        this.apiUrl +
+          `/geoserver/layers?workspaceName=${workspaceName}&page=${0}`
+      );
     }
+  }
+
+  getIndicators(workspaceName?: string, payload?: any): Observable<any> {
+    console.log(workspaceName, payload?.sort[0]);
+
+    return this.http.get<any>(
+      this.apiUrl +
+        `/geoserver/layers?workspaceName=${workspaceName}&page=${payload.page}&size=${payload.size}&sort=${payload.sort[0]}`
+    );
   }
 }

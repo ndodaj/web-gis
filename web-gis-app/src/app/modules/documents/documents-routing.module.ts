@@ -3,7 +3,6 @@ import { RouterModule } from '@angular/router';
 
 import { AppRoutes } from '@core/models/app-routes';
 import { DocumentComponent } from './containers/history/document.component';
-import { AppPermissionsEnum } from '@core/models/app-permissions-enum';
 
 const routes: AppRoutes = [
   { path: '', redirectTo: 'documents', pathMatch: 'full' },
@@ -13,7 +12,7 @@ const routes: AppRoutes = [
     data: {
       breadcrumb: 'List',
       pageTitle: 'Documents',
-      anyPermission: AppPermissionsEnum.document_get_permission,
+      //anyPermission: AppPermissionsEnum.document_get_permission,
     },
   },
 ];

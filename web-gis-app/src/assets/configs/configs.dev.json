@@ -1,6 +1,6 @@
 {
   "api": {
-    "baseUrl": "http://localhost:4200",
+    "baseUrl": "http://20.67.236.132:9000",
     "version": "1"
   },
   "environmentName": "Development",

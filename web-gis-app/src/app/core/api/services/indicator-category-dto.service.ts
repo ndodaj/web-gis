@@ -1,4 +1,4 @@
-import { HttpClient, HttpParams } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { BaseService } from '../base-service';
 import { AppConfigService } from '@core/services/app-config.service';
@@ -12,26 +12,13 @@ export class IndicatorCategoryDtoService extends BaseService {
     super(config);
   }
 
-  getIndicatorCategories(payload?: any): Observable<any> {
-    let params = new HttpParams();
-    payload = {
-      order_column: payload?.order_column,
-      order_direction: payload?.order_direction,
-      page: payload?.page,
-      page_size: payload?.page_size,
-    };
-    params = params.append('q', JSON.stringify(payload));
-    if (payload === undefined) {
-      return this.http.get<any>(
-        this.apiUrl + '/api/v1/indicatorcategorymodelapi/'
-      );
-    } else {
-      return this.http.get<any>(
-        this.apiUrl + '/api/v1/indicatorcategorymodelapi/',
-        {
-          params,
-        }
-      );
-    }
+  getIndicatorCategories(
+    workspaceName?: string,
+    payload?: any
+  ): Observable<any> {
+    return this.http.get<any>(
+      this.apiUrl +
+        `/geoserver/layergroups??workspaceName=${workspaceName}&page=${payload?.page}&size=${payload?.size}&sort=${payload?.sort[0]}`
+    );
   }
 }

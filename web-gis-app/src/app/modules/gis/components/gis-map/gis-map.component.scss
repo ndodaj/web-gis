@@ -7,16 +7,234 @@
 @import "node_modules/ol-ext/control/Legend.css";
 @import "node_modules/ol-ext/dist/ol-ext.css";
 
+::ng-deep .ol-layerswitcher.ol-collapsed {
+  min-width: unset;
+}
+::ng-deep .ol-layerswitcher,
+.ol-layerswitcher.ol-forceopen {
+  min-width: 20em;
+}
+
+::ng-deep .ol-layerswitcher > ul.panel {
+  overflow-y: auto;
+  box-sizing: border-box;
+}
+
+::ng-deep .ol-layerswitcher li .li-content {
+  width: calc(100% - 3em);
+}
+
+::ng-deep .ol-layerswitcher li .li-content label {
+  width: 60%;
+  box-sizing: border-box;
+  vertical-align: middle;
+  margin: 0.6em 0;
+}
+
+::ng-deep .ol-control.ol-layerswitcher .panel-container {
+  padding-right: 0;
+}
+
+::ng-deep .ol-layerswitcher .panel li .layerswitcher-opacity {
+  width: 40%;
+  display: inline-block;
+  vertical-align: middle;
+  box-sizing: border-box;
+  vertical-align: middle;
+  margin: 0;
+}
+::ng-deep .ol-layerswitcher .layerswitcher-opacity {
+  border: 0;
+  background: none;
+  height: 1em;
+  box-shadow: none;
+}
+::ng-deep .ol-layerswitcher .layerswitcher-opacity:before {
+  content: "";
+  width: 100%;
+  height: 3px;
+  background: #017eff;
+  position: absolute;
+  top: 50%;
+  -webkit-transform: translateY(-50%);
+  transform: translateY(-50%);
+  border: 1px solid #017eff;
+  box-sizing: border-box;
+}
+::ng-deep
+  .ol-layerswitcher
+  .layerswitcher-opacity
+  .layerswitcher-opacity-cursor {
+  width: auto;
+  transform: translateY(-50%);
+  height: 3px;
+  right: 0;
+  background: #666;
+  border-radius: 0;
+}
+::ng-deep
+  .ol-touch
+  .ol-layerswitcher
+  .layerswitcher-opacity
+  .layerswitcher-opacity-cursor,
+::ng-deep
+  .ol-layerswitcher
+  .layerswitcher-opacity
+  .layerswitcher-opacity-cursor:before {
+  position: absolute;
+  transform: translate(-50%, -50%);
+  width: 6px;
+  height: 16px;
+  left: -1px;
+  border-radius: 0;
+  background: #017eff;
+}
+::ng-deep .ol-layerswitcher .layerswitcher-opacity-label {
+  display: block;
+  right: 20%;
+  bottom: 70%;
+  font-size: 0.6em;
+  user-select: none;
+  -webkit-transform: translateX(50%);
+  transform: translateX(50%);
+}
+
+::ng-deep .ol-layerswitcher .layerup {
+  width: 2em;
+  background: none;
+  position: absolute;
+  right: 0.5em;
+}
+::ng-deep .ol-layerswitcher .layerup:after {
+  content: none;
+}
+::ng-deep .ol-layerswitcher .layerup:before {
+  color: #017eff;
+  content: "\F0C9";
+  font-family: FontAwesome;
+  border: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  height: 1em;
+  left: 0.5em;
+}
+
+::ng-deep .ol-layerswitcher [type="checkbox"] + label:before,
+::ng-deep .ol-layerswitcher [type="radio"] + label:before {
+  content: "";
+  border: 2px solid #ccc;
+  background-color: transparent;
+}
+::ng-deep .ol-layerswitcher [type="checkbox"]:checked + label:before,
+::ng-deep .ol-layerswitcher [type="radio"]:checked + label:before {
+  background: #017eff;
+  border-color: #017eff;
+}
+::ng-deep .ol-layerswitcher [type="checkbox"]:checked + label:after {
+  content: "\2713";
+  color: #fff;
+  position: absolute;
+  top: -0.15em;
+  left: 0.25em;
+  cursor: pointer;
+  font-weight: 900;
+  text-shadow: 1px 1px #fff;
+  font-size: 1.2em;
+  transform: none;
+  border: 0;
+  box-shadow: unset;
+}
+
+::ng-deep .ol-layerswitcher [type="radio"]:checked + label:after {
+  content: none;
+}
+
+::ng-deep .ol-control.ol-layerswitcher {
+  background: #017eff;
+  right: 0;
+  border-radius: 0;
+}
+::ng-deep .ol-layerswitcher button,
+.ol-layerswitcher button:focus,
+.ol-layerswitcher button:hover {
+  background: #017eff;
+  border: 0;
+  user-select: none;
+  outline: none;
+}
+::ng-deep .ol-layerswitcher button:before {
+  background: #017eff;
+  -webkit-box-shadow: 0.1em 0.1em #fff;
+  box-shadow: 0.1em 0.1em #fff;
+}
+::ng-deep .ol-layerswitcher button:after {
+  background: #fff;
+  background-image: none;
+}
+
+::ng-deep .ol-layerswitcher .ol-layer-group {
+  margin-top: 1em;
+}
+::ng-deep
+  .ol-layerswitcher
+  .ol-layer-group
+  > .ol-layerswitcher-buttons
+  .layerInfo {
+  display: none;
+}
+::ng-deep .ol-layerswitcher .expend-layers:before,
+::ng-deep .ol-layerswitcher .collapse-layers:before {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 0;
+  margin-top: -2px;
+  height: 4px;
+  width: 100%;
+  background: #369;
+}
+::ng-deep .ol-layerswitcher .expend-layers,
+::ng-deep .ol-layerswitcher .collapse-layers {
+  top: -1em;
+}
+::ng-deep .ol-layerswitcher .expend-layers:before,
+::ng-deep .ol-layerswitcher .expend-layers:after,
+::ng-deep .ol-layerswitcher .collapse-layers:before,
+::ng-deep .ol-layerswitcher .collapse-layers:after {
+  background: #017eff;
+}
+::ng-deep .ol-layerswitcher .panel ul {
+  overflow: visible;
+}
+::ng-deep .ol-layerswitcher .layerInfo {
+  right: 0;
+  background: #017eff;
+}
+
+::ng-deep .ol-control.ol-layerswitcher .ol-switchertopdiv,
+.ol-control.ol-layerswitcher .ol-switcherbottomdiv {
+  display: none !important;
+}
+
 ::ng-deep .p-dialog .p-dialog-header .p-dialog-title {
   font-size: 0.98em !important;
 }
 ::ng-deep .ol-control.ol-layerswitcher {
   background: var(--primary-color);
 }
-
+// ::ng-deep .ol-switchertopdiv {
+//   display: block !important;
+// }
+// ::ng-deep .ol-graticule-toggle {
+//   display: block !important;
+//   color: black;
+// }
 ::ng-deep .ol-search {
   top: 5em;
   left: 0.5em;
+}
+::ng-deep .ol-savelegend {
+  display: none !important;
 }
 ::ng-deep .ol-search ul {
   max-width: 17.5em !important;
@@ -38,21 +256,56 @@
 ::ng-deep .ol-scale-line .ol-unselectable {
   bottom: 1rem;
 }
+::ng-deep .ol-scale-line {
+  visibility: visible !important;
+}
+// ::ng-deep .ol-zoomslider {
+//   z-index: 999 !important;
+// }
 
 #map {
   position: absolute;
-  /* width: 100%; */
-  top: 4rem;
-  /* height: calc(100vh - 57px); */
-  /* overflow-x: hidden; */
-  /* overflow: hidden; */
-  /* overflow-y: hidden; */
-  bottom: 0;
-  left: 0;
-  right: 0;
-  z-index: 1;
+  background-color: rgb(238, 238, 238);
+  overflow: hidden;
+  min-width: 1px;
+  min-height: 1px;
+  inset: 0px 0px 52px 0px; /* Ensure the map stays within its container */
+  width: 100%; /* Make width 100% of its container */
+  height: 100%; /* Make height 100% of its container */
+  padding: 0px;
+  margin: 0;
+  z-index: auto;
 }
 
+::ng-deep .accordion-style {
+  bottom: 0 !important;
+  z-index: 555 !important;
+  width: 100% !important;
+  max-height: 300px !important;
+  display: block !important;
+  position: fixed !important;
+}
+::ng-deep .ol-attribution button {
+  display: none !important;
+}
+::ng-deep .ol-control.ol-layerswitcher {
+  top: 5.5em !important;
+}
+::ng-deep .ol-zoom {
+  display: none !important;
+}
+
+::ng-deep .ol-full-screen {
+  display: none !important;
+}
+input:checked + label {
+  border-color: black;
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1),
+    0 4px 6px -2px rgba(0, 0, 0, 0.05);
+}
+.form {
+  z-index: 99 !important;
+}
 .search-wrapper {
   position: relative;
   left: 9rem;

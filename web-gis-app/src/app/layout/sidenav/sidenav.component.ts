@@ -13,7 +13,7 @@ import { AuthService } from '@core/services/auth.service';
 @Component({
   selector: 'app-sidenav',
   templateUrl: './sidenav.component.html',
-  styleUrls: ['./sidenav.component.scss']
+  styleUrls: ['./sidenav.component.scss'],
 })
 export class SidenavComponent {
   @Input() collapsed!: boolean | null;
@@ -37,14 +37,14 @@ export class SidenavComponent {
 
   userName = this.authService.getDecodedTokenClaim('username');
 
-  userRole = this.authService.getDecodedTokenClaim('UserRoles');
+  //userRole = this.authService.getDecodedTokenClaim('UserRoles');
 
   constructor(
     private navigationService: NavigationService,
     private layoutService: LayoutService,
     private themeConfigService: ThemeConfigService,
-    private readonly popoverService: PopoverService,
-    private authService: AuthService
+    private authService: AuthService,
+    private readonly popoverService: PopoverService
   ) {}
 
   collapseOpenSidenav() {
@@ -77,9 +77,9 @@ export class SidenavComponent {
             originX: 'center',
             originY: 'top',
             overlayX: 'center',
-            overlayY: 'bottom'
-          }
-        ]
+            overlayY: 'bottom',
+          },
+        ],
       })
     ).pipe(
       switchMap((popoverRef) => popoverRef.afterClosed$.pipe(map(() => false))),

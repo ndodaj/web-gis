@@ -6,12 +6,12 @@ import { fullScreen } from '@shared/ol/fullScreenControls/fullScreenControls';
 import { geo_search } from '@shared/ol/url-layers/url-layers';
 import { Feature, Map, View } from 'ol';
 import SearchNominatim, { Options } from 'ol-ext/control/SearchNominatim';
-
+import { GPX, GeoJSON, IGC, KML, TopoJSON } from 'ol/format';
 import { Control, Rotate, defaults } from 'ol/control';
 import { LayerControlService } from './layer-control/layer-control.service';
 import LayerGroup from 'ol/layer/Group';
 import ExtendedLayerSwitcher from '@shared/ol/customLayers/extendedLayerSwithcer';
-import { Draw, Select } from 'ol/interaction';
+import { DragAndDrop, Draw, Select } from 'ol/interaction';
 import ExtendedLayerGroup from '@shared/ol/customLayers/extendedLayerGroup';
 import { Icon, Style } from 'ol/style';
 import ExtendedTileLayer from '@shared/ol/customLayers/extendedTileLayer';
@@ -30,6 +30,7 @@ import { Circle } from 'ol/geom';
 import { fromCircle } from 'ol/geom/Polygon';
 import ExtendedVectorSource from '@shared/ol/customLayers/extendedVectorSource';
 import ExtendedVectorLayer from '@shared/ol/customLayers/extendedVectorLayer';
+import ExtendedKMZ from '@shared/ol/customLayers/extendedKML';
 
 @Injectable({
   providedIn: 'root',
@@ -55,6 +56,7 @@ export class MapService extends BaseService {
     collapsed: true,
     collapsible: true,
   });
+  dragAndDropInteraction!: any;
   // legend = new ExtendedLegend({
   //   title: 'Legend',
   //   items: [this.manageLegendItems()],
@@ -81,9 +83,12 @@ export class MapService extends BaseService {
       show_progress: true,
       mouseover: true,
       reordering: true,
-
+      showSymbology: true,
       trash: false,
-
+      extent: false,
+      onextent: (e: any) => {
+        console.log(e);
+      },
       oninfo: (e) => {
         alert(e['values_'].information);
       },
@@ -95,7 +100,7 @@ export class MapService extends BaseService {
 
     const treePanelHeader = document.createElement('header');
 
-    treePanelHeader.innerHTML = 'INDICATORS';
+    treePanelHeader.innerHTML = 'Layer Tree';
     this.layerSwitcher.setHeader(treePanelHeader);
     const layerSwitcherElement = this.layerSwitcher['element'];
     //const btn = layerSwitcherElement.getElementsByTagName('button');
@@ -246,6 +251,9 @@ export class MapService extends BaseService {
         maxZoom: 20,
         minZoom: 7.5,
       }),
+    });
+    window.addEventListener('resize', () => {
+      this.map?.updateSize(); // Update map size when the window is resized
     });
 
     // if (this.map.getLayers().getArray().length > 2) {
@@ -452,7 +460,6 @@ export class MapService extends BaseService {
     //const description = layerInfo.abstract;
 
     const tileWMSParams = {
-      CQL_FILTER: 'accepted = true',
       LAYERS: `${nameSpace?.name}:${layerName}`,
       VERSION: '1.1.0',
       TILED: true,
@@ -473,6 +480,10 @@ export class MapService extends BaseService {
       information: description,
       attributes: layerInfo?.featureType?.attributes,
       displayInLayerSwitcher: true,
+      symbology: {
+        color: '#ff0000', // Set a red color for this layer's symbology
+        icon: 'path/to/icon.png', // Optional icon URL
+      },
     });
   }
 
@@ -518,5 +529,26 @@ export class MapService extends BaseService {
     });
 
     this.getMap().addLayer(vectorLayer);
+  }
+
+  setInteraction() {
+    if (this.dragAndDropInteraction) {
+      this.map.removeInteraction(this.dragAndDropInteraction);
+    }
+    this.dragAndDropInteraction = new DragAndDrop({
+      formatConstructors: [ExtendedKMZ, GPX, GeoJSON, IGC, new KML(), TopoJSON],
+    });
+    this.dragAndDropInteraction.on('addfeatures', (event: any) => {
+      const vectorSource = new ExtendedVectorSource({
+        features: event.features,
+      });
+      this.map.addLayer(
+        new ExtendedVectorLayer({
+          source: vectorSource,
+        })
+      );
+      this.map.getView().fit(vectorSource.getExtent());
+    });
+    this.map.addInteraction(this.dragAndDropInteraction);
   }
 }

@@ -1,9 +1,9 @@
 <ng-container *ngIf="buttonType === 'mat-icon'; else templateName">
   <button
-    *ngIf="isUserLoggedIn"
     (click)="activate($event)"
-    class="text-sm font-medium"
-    mat-icon-button
+    class="text-sm font-medium customBtn"
+    mat-mini-fab
+    color="secondary"
     title="Save To Indicator"
   >
     <mat-icon>done_all</mat-icon>

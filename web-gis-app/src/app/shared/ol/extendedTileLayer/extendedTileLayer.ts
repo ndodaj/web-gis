@@ -242,39 +242,43 @@ export const extendedTileLayers = {
       },
       crossOrigin: 'anonymous',
     }),
-    visible: true,
+    visible: false,
     title: 'Protected Areas',
     information: 'Protected Areas',
-    displayInLayerSwitcher: true,
+    displayInLayerSwitcher: false,
+    symbology: {
+      color: '#ff0000', // Set a red color for this layer's symbology
+      icon: 'path/to/icon.png', // Optional icon URL
+    },
   }),
-  north_macedonia_border: new ExtendedTileLayer({
-    source: new TileWMS({
-      url: environmentCommon.url,
-      params: {
-        LAYERS: 'test:macedonia_border_reprojected',
-        VERSION: '1.1.0',
-      },
-      crossOrigin: 'anonymous',
-    }),
-    visible: true,
-    title: 'North Macedonia Border',
-    information: 'North Macedonia Border',
-    displayInLayerSwitcher: true,
-  }),
-  kufiri_mavrove: new ExtendedTileLayer({
-    source: new TileWMS({
-      url: environmentCommon.url,
-      params: {
-        LAYERS: 'test:kufiri_mavrove',
-        VERSION: '1.1.0',
-      },
-      crossOrigin: 'anonymous',
-    }),
-    visible: true,
-    title: 'Mavrove Border',
-    information: 'Mavrove Border',
-    displayInLayerSwitcher: true,
-  }),
+  // north_macedonia_border: new ExtendedTileLayer({
+  //   source: new TileWMS({
+  //     url: environmentCommon.url,
+  //     params: {
+  //       LAYERS: 'test:macedonia_border_reprojected',
+  //       VERSION: '1.1.0',
+  //     },
+  //     crossOrigin: 'anonymous',
+  //   }),
+  //   visible: true,
+  //   title: 'North Macedonia Border',
+  //   information: 'North Macedonia Border',
+  //   displayInLayerSwitcher: true,
+  // }),
+  // kufiri_mavrove: new ExtendedTileLayer({
+  //   source: new TileWMS({
+  //     url: environmentCommon.url,
+  //     params: {
+  //       LAYERS: 'test:kufiri_mavrove',
+  //       VERSION: '1.1.0',
+  //     },
+  //     crossOrigin: 'anonymous',
+  //   }),
+  //   visible: true,
+  //   title: 'Mavrove Border',
+  //   information: 'Mavrove Border',
+  //   displayInLayerSwitcher: true,
+  // }),
   naturalMonuments: new ExtendedTileLayer({
     source: new TileWMS({
       url: ndihma_ekonomike_url_layers.natural_monuments,
@@ -367,7 +371,7 @@ export const extendedTileLayers = {
   osmMap: new ExtendedTileLayer({
     source: new OSM(),
     title: 'OSM',
-    visible: false,
+    visible: true,
     baseLayer: true,
     displayInLayerSwitcher: true,
   }),
@@ -377,7 +381,7 @@ export const extendedTileLayers = {
       attributions: '© CARTO',
       crossOrigin: 'anonymous',
     }),
-    visible: true,
+    visible: false,
     title: 'CartoDarkAll',
     baseLayer: true,
     displayInLayerSwitcher: true,

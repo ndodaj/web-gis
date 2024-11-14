@@ -33,6 +33,7 @@ import { DialogService } from 'primeng/dynamicdialog';
 import { OverlayPanel, OverlayPanelModule } from 'primeng/overlaypanel';
 import { TableComponent } from './components/table.component';
 import { PropertiesFormDialogComponent } from './services/get-info/components/properties.components';
+import { PrimeNgModule } from './primeng.module';
 const modules = [
   CommonModule,
   TranslateModule,
@@ -65,8 +66,20 @@ export function hljsLanguages() {
 
 @NgModule({
   declarations: [...components, PasswordButtonComponent],
-  imports: [...modules, MaterialModule, DialogModule, OverlayPanelModule],
-  exports: [...modules, MaterialModule, ...components, OverlayPanelModule],
+  imports: [
+    ...modules,
+    MaterialModule,
+    PrimeNgModule,
+    DialogModule,
+    OverlayPanelModule,
+  ],
+  exports: [
+    ...modules,
+    MaterialModule,
+    PrimeNgModule,
+    ...components,
+    OverlayPanelModule,
+  ],
   providers: [
     {
       provide: MAT_DIALOG_DEFAULT_OPTIONS,

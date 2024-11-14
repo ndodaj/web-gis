@@ -10,7 +10,7 @@ export const extendedLayerGroup = {
     ],
     title: 'Base Layers',
     information: 'These base map layers which can be activated separately',
-    displayInLayerSwitcher: true,
+    displayInLayerSwitcher: false,
   }),
   additionalLayers: new ExtendedLayerGroup({
     layers: [
@@ -18,8 +18,8 @@ export const extendedLayerGroup = {
       // extendedTileLayers.albRegions,
       // extendedTileLayers.municipalities,
       extendedTileLayers.protectedAreas,
-      extendedTileLayers.north_macedonia_border,
-      extendedTileLayers.kufiri_mavrove,
+      // extendedTileLayers.north_macedonia_border,
+      // extendedTileLayers.kufiri_mavrove,
       // extendedTileLayers.naturalMonuments,
       // extendedTileLayers.roadNetwork,
     ],

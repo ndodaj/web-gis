@@ -64,7 +64,7 @@ export class CreateEditIndicatorComponent {
       ],
     });
     this.indicatorCategoryDtoService
-      .getIndicatorCategories({
+      .getIndicatorCategories('ne', {
         page_size: 5000,
       })
       .pipe(

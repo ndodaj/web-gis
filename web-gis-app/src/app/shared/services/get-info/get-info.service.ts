@@ -99,30 +99,32 @@ export class GetInfoService extends BaseService {
 
   saveFormBtn() {
     const saveForm = document.getElementById('saveForm')!;
-    saveForm.addEventListener('click', (e) => {
-      // Prevent the default form submission behavior
-      e.preventDefault();
+    console.log(saveForm);
 
-      // Get all input fields within the form
-      const inputFields = document.querySelectorAll(
-        "#popup input[type='text']"
-      );
+    // saveForm.addEventListener('click', (e) => {
+    //   // Prevent the default form submission behavior
+    //   e.preventDefault();
 
-      // Create an empty object to store the updated properties
-      const updatedProperties: any = {};
+    //   // Get all input fields within the form
+    //   const inputFields = document.querySelectorAll(
+    //     "#popup input[type='text']"
+    //   );
 
-      // Loop through each input field and add its value to the updatedProperties object
-      inputFields.forEach((inputField: any) => {
-        // Get the field name (without the "input-" prefix)
-        const fieldName: any = inputField.id.replace('input-', '')!;
+    //   // Create an empty object to store the updated properties
+    //   const updatedProperties: any = {};
 
-        // Add the field name and its value to the updatedProperties object
-        updatedProperties[fieldName] = inputField.value;
-      });
+    //   // Loop through each input field and add its value to the updatedProperties object
+    //   inputFields.forEach((inputField: any) => {
+    //     // Get the field name (without the "input-" prefix)
+    //     const fieldName: any = inputField.id.replace('input-', '')!;
 
-      // Call the saveChanges function to save the changes to the database
-      this.saveChanges(updatedProperties);
-    });
+    //     // Add the field name and its value to the updatedProperties object
+    //     updatedProperties[fieldName] = inputField.value;
+    //   });
+
+    //   // Call the saveChanges function to save the changes to the database
+    //   this.saveChanges(updatedProperties);
+    // });
   }
 
   saveChanges(properties: any) {
