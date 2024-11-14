@@ -1,40 +1,31 @@
-<mat-toolbar class="ml-4 gap-2 z-10 sm:justify-center md:justify-start">
-  <app-arrow-back
-    class="hidden sm:block md:block lg:block xl:block"
-  ></app-arrow-back>
-  <app-arrow-forward class="hidden sm:block md:block lg:block xl:block">
-  </app-arrow-forward>
+<div class="fixed right-0 top-3.5 h-full flex flex-col z-10">
+  <mat-toolbar class="gap-2 flex flex-col items-center h-full">
+    <!-- <app-arrow-back class="hidden sm:block"></app-arrow-back>
+    <app-arrow-forward class="hidden sm:block"></app-arrow-forward> -->
+    <app-zoom-extent></app-zoom-extent>
+    <app-zoom-out class="hidden sm:block"></app-zoom-out>
+    <app-zoom-in class="hidden sm:block"></app-zoom-in>
+    <!-- <app-scale-input class="hidden sm:block"></app-scale-input> -->
+    <app-identify class="sm:small-icons"></app-identify>
+    <app-coords></app-coords>
+    <!-- <app-pan class="hidden sm:block"></app-pan> -->
 
-  <app-zoom-out
-    class="hidden sm:block md:block lg:block xl:block"
-  ></app-zoom-out>
-  <app-zoom-in class="hidden sm:block md:block lg:block xl:block"></app-zoom-in>
-  <app-scale-input
-    class="hidden sm:block md:block lg:block xl:block"
-  ></app-scale-input>
-  <app-identify class="sm:small-icons"></app-identify>
-  <app-coords></app-coords>
-  <app-pan class="hidden sm:block md:block lg:block xl:block"></app-pan>
-  <app-zoom-extent></app-zoom-extent>
-  <app-grid-view
-    class="hidden sm:block md:block lg:block xl:block"
-  ></app-grid-view>
-  <app-get-location></app-get-location>
-  <app-messurement></app-messurement>
-  <app-select-control-button></app-select-control-button>
-  <app-print-content></app-print-content>
+    <app-grid-view class="hidden sm:block"></app-grid-view>
+    <app-get-location></app-get-location>
+    <app-messurement></app-messurement>
 
-  <app-layer-transaction></app-layer-transaction>
+    <app-print-content></app-print-content>
 
-  <app-edit-layer
-    [buttonType]="'mat-icon'"
-    class="hidden sm:block md:block lg:block xl:block"
-  ></app-edit-layer>
-
-  <app-save-to-layer
-    [buttonType]="'mat-icon'"
-    class="hidden sm:block md:block lg:block xl:block"
-  ></app-save-to-layer>
-  <!--
-  <app-notification-list></app-notification-list> -->
-</mat-toolbar>
+    <!-- Transaction ne sidebar te trepikshi ose te trepikishi ne featurelist -->
+    <!-- <app-layer-transaction></app-layer-transaction>
+      <app-select-control-button></app-select-control-button>
+    <app-edit-layer
+      [buttonType]="'mat-icon'"
+      class="hidden sm:block"
+    ></app-edit-layer>
+    <app-save-to-layer
+      [buttonType]="'mat-icon'"
+      class="hidden sm:block"
+    ></app-save-to-layer> -->
+  </mat-toolbar>
+</div>

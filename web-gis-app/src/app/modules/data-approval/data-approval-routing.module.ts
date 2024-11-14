@@ -3,7 +3,6 @@ import { RouterModule } from '@angular/router';
 
 import { AppRoutes } from '@core/models/app-routes';
 import { DataApprovalComponent } from './containers/data-approval/data-approval.component';
-import { AppPermissionsEnum } from '@core/models/app-permissions-enum';
 
 const routes: AppRoutes = [
   { path: '', redirectTo: 'approvals', pathMatch: 'full' },
@@ -13,7 +12,7 @@ const routes: AppRoutes = [
     data: {
       breadcrumb: 'List',
       pageTitle: 'Approvals',
-      anyPermission: AppPermissionsEnum.dataapproval_get_all_permission,
+      //anyPermission: AppPermissionsEnum.dataapproval_get_all_permission,
     },
   },
 ];

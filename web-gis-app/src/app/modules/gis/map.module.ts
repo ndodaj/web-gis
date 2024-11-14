@@ -1,4 +1,8 @@
-import { CUSTOM_ELEMENTS_SCHEMA, NgModule } from '@angular/core';
+import {
+  CUSTOM_ELEMENTS_SCHEMA,
+  NgModule,
+  NO_ERRORS_SCHEMA,
+} from '@angular/core';
 import * as fromComponents from './components';
 
 import { MapRoutingModule } from './map.routing';
@@ -37,7 +41,13 @@ import { EditAttributeFormComponent } from './components/toolbar/buttons/edit-at
 import { ViewDocumentComponent } from '../documents/components/view-document.component';
 import { DrawBufferComponent } from './components/toolbar/draw-buffer/draw-buffer.component';
 import { AddRadiusComponent } from './components/toolbar/draw-buffer/components/add-radius.component';
-
+import { FeatureListComponent } from './components/toolbar/buttons/feature-list/feature-list.component';
+import { FeaturesListComponent } from './components/feature-list/feature-list.component';
+import { AngularSplitModule } from 'angular-split';
+import { SplitterModule } from 'primeng/splitter';
+import { IgxSplitterModule } from 'igniteui-angular';
+import { MaterialModule } from '@shared/material.module';
+import { FilterDialogComponent } from './components/feature-list/filter-dialog.component';
 @NgModule({
   declarations: [
     ...fromComponents.components,
@@ -71,16 +81,23 @@ import { AddRadiusComponent } from './components/toolbar/draw-buffer/components/
     UploadFileComponent,
     ViewDocumentComponent,
     EditAttributeFormComponent,
+    FeatureListComponent,
+    FeaturesListComponent,
+    FilterDialogComponent,
   ],
   imports: [
     MapRoutingModule,
+    AngularSplitModule,
     SharedModule,
     MatIconModule,
     CommonModule,
     ColorPickerModule,
     OverlayPanelModule,
+    SplitterModule,
+    IgxSplitterModule,
+    MaterialModule,
   ],
-  schemas: [CUSTOM_ELEMENTS_SCHEMA],
+  schemas: [CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA],
   exports: [...fromComponents.components],
 })
 export class MapModule {}

@@ -2,8 +2,6 @@ import { NgModule } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { FullLayoutComponent } from './layout/full-layout/full-layout.component';
 import { AppRoutes } from './core/models/app-routes';
-import { AuthGuard, HasAnyPermissionGuard } from '@core/services/auth.service';
-import { AppPermissionsEnum } from '@core/models/app-permissions-enum';
 const routes: AppRoutes = [
   {
     path: 'map',
@@ -36,8 +34,8 @@ const routes: AppRoutes = [
   {
     path: '',
     component: FullLayoutComponent,
-    canActivate: [AuthGuard],
-    canActivateChild: [AuthGuard],
+    // canActivate: [AuthGuard],
+    // canActivateChild: [AuthGuard],
     children: [
       { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
 
@@ -56,7 +54,7 @@ const routes: AppRoutes = [
       },
       {
         path: 'data-approval',
-        canMatch: [HasAnyPermissionGuard],
+        //canMatch: [HasAnyPermissionGuard],
         loadChildren: () =>
           import('./modules/data-approval/data-approval.module').then(
             (m) => m.DataApprovalModule
@@ -64,12 +62,12 @@ const routes: AppRoutes = [
         data: {
           pageTitle: 'Approvals',
           breadcrumb: 'Data Approvals',
-          anyPermission: AppPermissionsEnum.dataapproval_get_all_permission,
+          //anyPermission: AppPermissionsEnum.dataapproval_get_all_permission,
         },
       },
       {
         path: 'indicator-management',
-        canMatch: [HasAnyPermissionGuard],
+        //canMatch: [HasAnyPermissionGuard],
         loadChildren: () =>
           import(
             './modules/indicator-management/indicator-management.module'
@@ -77,12 +75,12 @@ const routes: AppRoutes = [
         data: {
           pageTitle: 'Indicator',
           breadcrumb: 'Indicator Management',
-          anyPermission: AppPermissionsEnum.indicatorcategory_get_permission,
+          //anyPermission: AppPermissionsEnum.indicatorcategory_get_permission,
         },
       },
       {
         path: 'indicators',
-        canMatch: [HasAnyPermissionGuard],
+        //canMatch: [HasAnyPermissionGuard],
         loadChildren: () =>
           import(
             './modules/indicator-management/indicator-management.module'
@@ -90,7 +88,7 @@ const routes: AppRoutes = [
         data: {
           pageTitle: 'Indicator',
           breadcrumb: 'Indicators',
-          anyPermission: AppPermissionsEnum.indicator_get_permission,
+          //anyPermission: AppPermissionsEnum.indicator_get_permission,
         },
       },
       {
@@ -108,36 +106,36 @@ const routes: AppRoutes = [
       },
       {
         path: 'user-management',
-        canMatch: [HasAnyPermissionGuard],
+        //canMatch: [HasAnyPermissionGuard],
         loadChildren: () =>
           import('./modules/users/users.module').then((m) => m.UsersModule),
         data: {
           breadcrumb: 'System Users',
-          anyPermission: AppPermissionsEnum.user_get_permission,
+          //anyPermission: AppPermissionsEnum.user_get_permission,
         },
       },
       {
         path: 'history-management',
-        canMatch: [HasAnyPermissionGuard],
+        //canMatch: [HasAnyPermissionGuard],
         loadChildren: () =>
           import('./modules/history-management/history-management.module').then(
             (m) => m.HistoryManagementModule
           ),
         data: {
           breadcrumb: 'History',
-          anyPermission: AppPermissionsEnum.dataapproval_get_all_permission,
+          //anyPermission: AppPermissionsEnum.dataapproval_get_all_permission,
         },
       },
       {
         path: 'documents',
-        canMatch: [HasAnyPermissionGuard],
+        //canMatch: [HasAnyPermissionGuard],
         loadChildren: () =>
           import('./modules/documents/documents.module').then(
             (m) => m.DocumentsModule
           ),
         data: {
           breadcrumb: 'Documents',
-          anyPermission: AppPermissionsEnum.document_get_permission,
+          //anyPermission: AppPermissionsEnum.document_get_permission,
         },
       },
 

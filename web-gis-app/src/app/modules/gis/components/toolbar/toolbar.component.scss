@@ -121,21 +121,21 @@ button mat-icon {
   z-index: 122;
 }
 
-.ol-layerswitcher {
-  pointer-events: auto;
-  position: absolute;
-  left: 10px;
-  width: 20%;
-}
+// .ol-layerswitcher {
+//   pointer-events: auto;
+//   position: absolute;
+//   left: 10px;
+//   width: 20%;
+// }
 
-.ol-layerswitcher-image > button,
-.ol-layerswitcher > button {
-  background-color: white;
-  float: left;
-  z-index: 10;
-  position: relative;
-  font-size: 1.7em;
-}
+// .ol-layerswitcher-image > button,
+// .ol-layerswitcher > button {
+//   background-color: white;
+//   float: left;
+//   z-index: 10;
+//   position: relative;
+//   font-size: 1.7em;
+// }
 
 .form-container {
   padding: 30px;
@@ -270,44 +270,43 @@ td {
   left: 45% !important;
 }
 
-.ol-layerswitcher-image > button,
-.ol-layerswitcher > button {
-  background-color: white;
-  float: left;
-  z-index: 10;
-  position: relative;
-  font-size: 1.7em;
-}
+// .ol-layerswitcher-image > button,
+// .ol-layerswitcher > button {
+//   background-color: white;
+//   float: left;
+//   z-index: 10;
+//   position: relative;
+//   font-size: 1.7em;
+// }
 
-#map .ol-layerswitcher.ol-unselectable.ol-control.ol-forceopen.ol-collapsed {
-  pointer-events: auto;
-  position: absolute;
-  top: 50px;
-  right: 87%;
-}
+// #map .ol-layerswitcher.ol-unselectable.ol-control.ol-forceopen.ol-collapsed {
+//   pointer-events: auto;
+//   position: absolute;
+//   top: 50px;
+//   right: 87%;
+// }
 
 mat-toolbar {
   background: inherit !important;
-  padding: 0 !important;
 }
-.ol-layerswitcher-image > button .ol-layerswitcher > button {
-  background-color: white;
-  float: left !important;
-  z-index: 10;
-  position: relative;
-  font-size: 1.7em;
-}
+// .ol-layerswitcher-image > button .ol-layerswitcher > button {
+//   background-color: white;
+//   float: left !important;
+//   z-index: 10;
+//   position: relative;
+//   font-size: 1.7em;
+// }
 
-.ol-control,
-.ol-layerswitcher {
-  position: absolute;
-  right: 91em !important;
-  text-align: left;
-  top: 3em;
-  max-height: calc(100% - 6em);
-  box-sizing: border-box;
-  overflow: hidden;
-}
+// .ol-control,
+// .ol-layerswitcher {
+//   position: absolute;
+//   right: 91em !important;
+//   text-align: left;
+//   top: 3em;
+//   max-height: calc(100% - 6em);
+//   box-sizing: border-box;
+//   overflow: hidden;
+// }
 
 .custom-mouse-position {
   top: 40em !important;

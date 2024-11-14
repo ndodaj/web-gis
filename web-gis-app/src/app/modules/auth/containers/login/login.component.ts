@@ -5,8 +5,10 @@ import {
   Validators,
 } from '@angular/forms';
 import { fadeInUp400ms } from '@shared/animations/fade-in-up.animation';
+import { ActivatedRoute, Router } from '@angular/router';
 import { AccountService } from '@core/api/services/account.service';
-import { finalize, take, tap } from 'rxjs/operators';
+import { finalize, take, tap } from 'rxjs';
+import { AuthService } from '@core/services/auth.service';
 
 @Component({
   selector: 'app-login',
@@ -18,13 +20,16 @@ export class LoginComponent implements OnInit {
   loading!: boolean;
 
   constructor(
+    private router: Router,
     private fb: UntypedFormBuilder,
-    private accountService: AccountService
+    private route: ActivatedRoute,
+    private accountService: AccountService,
+    private authService: AuthService
   ) {}
 
   ngOnInit() {
     this.form = this.fb.group({
-      username: ['', Validators.required],
+      email: ['', Validators.required],
       password: ['', Validators.required],
     });
   }
@@ -34,16 +39,17 @@ export class LoginComponent implements OnInit {
       return;
     }
     this.loading = true;
-    const { username, password } = this.form.getRawValue();
-    // const redirectUrl =
-    //   this.route.snapshot.queryParams.redirectUrl || '/dashboard';
+    const { email, password } = this.form.getRawValue();
+    const redirectUrl =
+      this.route.snapshot.queryParams.redirectUrl || '/dashboard';
 
     const payload = {
-      username: username,
+      email: email,
       password: password,
     };
-
     console.log(payload);
+    //this.router.navigateByUrl(redirectUrl);
+    // console.log(payload);
 
     this.accountService
       .login(payload)
@@ -54,6 +60,8 @@ export class LoginComponent implements OnInit {
         }),
         tap((response) => {
           console.log('response', response);
+          this.authService.setUserLoggedInAccount(response);
+          this.router.navigateByUrl(redirectUrl);
         })
       )
       .subscribe();

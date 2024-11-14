@@ -1,6 +1,5 @@
 import { NgModule } from '@angular/core';
 import { RouterModule } from '@angular/router';
-import { AppPermissionsEnum } from '@core/models/app-permissions-enum';
 import { AppRoutes } from '@core/models/app-routes';
 
 const routes: AppRoutes = [
@@ -13,7 +12,7 @@ const routes: AppRoutes = [
 
     data: {
       breadcrumb: 'Categories',
-      anyPermission: AppPermissionsEnum.indicatorcategory_get_permission,
+      //anyPermission: AppPermissionsEnum.indicatorcategory_get_permission,
     },
   },
   {
@@ -23,7 +22,7 @@ const routes: AppRoutes = [
 
     data: {
       breadcrumb: 'Indicators',
-      anyPermission: AppPermissionsEnum.indicator_get_permission,
+      //anyPermission: AppPermissionsEnum.indicator_get_permission,
     },
   },
   {
@@ -33,7 +32,7 @@ const routes: AppRoutes = [
 
     data: {
       breadcrumb: 'Attributes',
-      anyPermission: AppPermissionsEnum.attributes_get_permission,
+      //anyPermission: AppPermissionsEnum.attributes_get_permission,
     },
   },
   {

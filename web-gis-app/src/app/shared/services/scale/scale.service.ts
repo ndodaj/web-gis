@@ -22,7 +22,11 @@ export class ScaleService {
     const inchesPerMeter = 39.3701;
     const scale = resolution * meterPerMapUnit * inchesPerMeter * dpi;
 
-    const scaleInput = document.getElementById('scaleInput')! as any;
-    scaleInput.value = '1:' + scale.toFixed(0);
+    console.log(scale);
+
+    // const scaleInput = document.getElementById('scaleInput')! as any;
+    // console.log(scaleInput);
+
+    // scaleInput.value = '1:' + scale.toFixed(0);
   }
 }

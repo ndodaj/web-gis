@@ -1,0 +1,55 @@
+<h2 mat-dialog-title>Filter</h2>
+<div mat-dialog-content>
+  <div>
+    <button mat-button color="primary" (click)="addExpression()">
+      + Add expression
+    </button>
+    <button mat-button color="primary" (click)="addSet()">+ Add set</button>
+  </div>
+  <p>Display features in the layer that match the following expression</p>
+
+  <ng-container *ngFor="let filter of filters">
+    <mat-form-field appearance="outline">
+      <mat-label>Field</mat-label>
+      <mat-select [(ngModel)]="filter.field">
+        <mat-option *ngFor="let field of fields" [value]="field">{{
+          field.name
+        }}</mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Condition</mat-label>
+      <mat-select [(ngModel)]="filter.condition">
+        <mat-option value="is">is</mat-option>
+        <mat-option value="is_not">is not</mat-option>
+        <mat-option value="starts_with">starts with</mat-option>
+        <mat-option value="ends_with">ends with</mat-option>
+        <mat-option value="contains">contains</mat-option>
+        <mat-option value="does_not_contain">does not contain</mat-option>
+        <mat-option value="is_any_of">is any of</mat-option>
+        <mat-option value="is_none_of">is none of</mat-option>
+        <mat-option value="is_blank">is blank</mat-option>
+        <mat-option value="is_not_blank">is not blank</mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <mat-form-field
+      appearance="outline"
+      *ngIf="
+        filter.condition !== 'is_blank' && filter.condition !== 'is_not_blank'
+      "
+    >
+      <input matInput placeholder="Value" [(ngModel)]="filter.value" />
+    </mat-form-field>
+
+    <button mat-icon-button color="warn" (click)="removeFilter(filter)">
+      <mat-icon>close</mat-icon>
+    </button>
+  </ng-container>
+</div>
+
+<div mat-dialog-actions>
+  <button mat-button (click)="onCancel()">Cancel</button>
+  <button mat-button color="primary" (click)="onApply()">OK</button>
+</div>

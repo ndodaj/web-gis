@@ -137,7 +137,6 @@ import { NgModule } from '@angular/core';
     InplaceModule,
     InputMaskModule,
     InputSwitchModule,
-    InputTextModule,
     InputTextareaModule,
     InputNumberModule,
     ImageModule,
@@ -194,6 +193,7 @@ import { NgModule } from '@angular/core';
     RippleModule,
     StyleClassModule,
     AutoFocusModule,
+    InputTextModule,
   ],
   exports: [
     AvatarModule,

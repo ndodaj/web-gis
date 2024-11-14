@@ -28,8 +28,7 @@ import { AutoUnsubscribe } from '@core/utils';
 export class IndicatorComponent implements AfterViewInit {
   displayedColumns: string[] = [
     'name',
-    'indicator_category',
-    'geometry_type',
+
     // 'created_by',
     // 'created_on',
     // 'changed_by',
@@ -61,13 +60,12 @@ export class IndicatorComponent implements AfterViewInit {
           this.isLoadingResults = true;
 
           const payload = {
-            order_column: 'created_on',
-            order_direction: this.sort.direction,
             page: this.paginator.pageIndex,
-            page_size: this.paginator.pageSize,
+            size: this.paginator.pageSize,
+            sort: [this.sort.direction],
           };
           return this.indicatorDtoService
-            .getIndicators(payload)
+            .getIndicators('ne', payload)
             .pipe(catchError(() => observableOf(null)));
         }),
         map((data) => {
@@ -78,9 +76,9 @@ export class IndicatorComponent implements AfterViewInit {
             return [];
           }
 
-          this.resultsLength = data.count;
+          this.resultsLength = data.totalElements;
 
-          return data.result;
+          return data.layers.layers;
         })
       )
       .subscribe((data) => (this.dataSource.data = data));
@@ -90,24 +88,24 @@ export class IndicatorComponent implements AfterViewInit {
     this.isLoadingResults = true;
 
     const payload = {
-      order_column: 'created_on',
-      order_direction: this.sort.direction,
       page: this.paginator.pageIndex,
-      page_size: this.paginator.pageSize,
+      size: this.paginator.pageSize,
+      sort: [this.sort.direction],
     };
 
     this.indicatorDtoService
-      .getIndicators(payload)
+      .getIndicators('ne', payload)
       .pipe(catchError(() => observableOf(null)))
       .subscribe((data) => {
+        this.isLoadingResults = false;
         this.isLoadingResults = false;
         if (data === null) {
           return;
         }
 
-        this.resultsLength = data.count;
+        this.resultsLength = data.totalElements;
 
-        this.dataSource.data = data.result;
+        this.dataSource.data = data.layers.layer;
       });
   }
 

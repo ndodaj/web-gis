@@ -39,9 +39,10 @@ export class TokenInterceptor implements HttpInterceptor {
   }
 
   private attachTokenAsHeader(request: HttpRequest<unknown>) {
-    const token = this.authService.getUserLoggedInAccount()?.access_token;
+    const token = this.authService.getUserLoggedInAccount()?.token;
     if (token) {
       return request.clone({
+        withCredentials: true,
         setHeaders: {
           Authorization: `Bearer ${token}`,
         },

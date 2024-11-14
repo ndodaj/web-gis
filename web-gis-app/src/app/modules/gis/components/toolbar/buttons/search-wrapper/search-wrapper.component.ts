@@ -24,7 +24,7 @@ export class SearchWrapperComponent implements OnInit {
   ngOnInit(): void {
     this.onGeoSearch();
 
-    const print = document.querySelector('.ol-search') as any;
+    const print = document.querySelector('.ol-search')! as any;
     print.style.background = 'transparent';
   }
   openDialogWithoutRef() {

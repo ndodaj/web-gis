@@ -8,7 +8,7 @@ const routes: AppRoutes = [
     path: '',
     component: IndicatorCategoryComponent,
     data: {
-      pageTitle: 'Indicator Categories',
+      pageTitle: 'Layer Groups',
       breadcrumb: 'List',
     },
   },

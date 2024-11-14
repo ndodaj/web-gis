@@ -20,6 +20,7 @@ import { MapModule } from './modules/gis/map.module';
 import { ColorPickerModule } from 'ngx-color-picker';
 import { SpeedDialModule } from 'primeng/speeddial';
 import { ButtonModule } from 'primeng/button';
+import { AngularSplitModule } from 'angular-split';
 export function initializeApp(appConfigService: AppConfigService) {
   return () => {
     return appConfigService.loadConfig();
@@ -31,6 +32,7 @@ export function HttpLoaderFactory(http: HttpClient) {
 @NgModule({
   declarations: [AppComponent],
   imports: [
+    AngularSplitModule,
     CommonModule,
     LayoutModule,
     AppRoutingModule,

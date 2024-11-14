@@ -51,7 +51,7 @@ export class RaportsComponent extends BaseService implements OnInit {
   }
   ngOnInit() {
     this.indicatorDtoService
-      .getIndicators({
+      .getIndicators('ne', {
         page_size: 5000,
       })
       .pipe(
