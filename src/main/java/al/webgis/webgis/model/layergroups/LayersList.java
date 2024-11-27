@@ -5,6 +5,6 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class LayerGroupsList {
+public class LayersList {
     private LayerGroups layerGroups;
 }

@@ -3,7 +3,7 @@ package al.webgis.webgis.service;
 import al.webgis.webgis.model.layergroups.CreateUpdateLayerGroupDTO;
 import al.webgis.webgis.model.layergroups.LayerDTO;
 import al.webgis.webgis.model.layergroups.LayerGroupDetailsWrapper;
-import al.webgis.webgis.model.layergroups.LayerGroupsList;
+import al.webgis.webgis.model.layergroups.LayersList;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
@@ -121,7 +121,7 @@ public class LayerGroupService {
     }
 
     public Page<LayerDTO> getAllLayerGroups(String workspaceName, Pageable pageable) {
-        LayerGroupsList layerGroupsList = null;
+        LayersList layerGroupsList = null;
         // Set up basic authentication
         HttpHeaders headers = new HttpHeaders();
         String auth = username + ":" + password;
@@ -140,7 +140,7 @@ public class LayerGroupService {
         HttpEntity<String> entity = new HttpEntity<>(headers);
         ResponseEntity<String> response = restTemplate.exchange(url, HttpMethod.GET, entity, String.class);
         try {
-            layerGroupsList = objectMapper.readValue(response.getBody(), LayerGroupsList.class);
+            layerGroupsList = objectMapper.readValue(response.getBody(), LayersList.class);
 
         } catch (JsonProcessingException e) {
             e.printStackTrace(); // @TODO handle in a controller advice
