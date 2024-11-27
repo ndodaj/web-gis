@@ -4,6 +4,7 @@ package al.webgis.webgis.controller;
 import al.webgis.webgis.model.layers.LayerDto;
 import al.webgis.webgis.model.layers.LayerRequest;
 import al.webgis.webgis.service.GeoServerClient;
+import al.webgis.webgis.service.GeoServerService;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
@@ -36,9 +37,11 @@ public class LayerController {
 
 
     private final GeoServerClient geoServerClient;
+    private final GeoServerService geoServerService;
 
-    public LayerController(GeoServerClient geoServerClient) {
+    public LayerController(GeoServerClient geoServerClient, GeoServerService geoServerService) {
         this.geoServerClient = geoServerClient;
+        this.geoServerService = geoServerService;
     }
 
     @GetMapping
@@ -48,18 +51,38 @@ public class LayerController {
     }
 
 
-    @PostMapping
+    //    @PostMapping
+//    public ResponseEntity<String> addLayer(
+//            @RequestBody LayerRequest layerRequest,
+//            @RequestParam String workspaceName,
+//            @RequestParam String datastoreName) {
+//        try {
+//            String response = geoServerClient.addLayer(layerRequest, workspaceName, datastoreName);
+//            return ResponseEntity.ok("Layer added successfully: " + response);
+//        } catch (IOException e) {
+//            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to add layer: " + e.getMessage());
+//        } catch (HttpClientErrorException e) {
+//            return ResponseEntity.status(e.getStatusCode()).body("Error adding layer: " + e.getMessage());
+//        }
+//    }
+//
+    @PostMapping("/layers")
     public ResponseEntity<String> addLayer(
-            @RequestBody LayerRequest layerRequest,
             @RequestParam String workspaceName,
-            @RequestParam String datastoreName) {
+            @RequestParam String datastoreName,
+            @RequestBody LayerRequest layerRequest) {
+
         try {
-            String response = geoServerClient.addLayer(layerRequest, workspaceName, datastoreName);
-            return ResponseEntity.ok("Layer added successfully: " + response);
-        } catch (IOException e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to add layer: " + e.getMessage());
-        } catch (HttpClientErrorException e) {
-            return ResponseEntity.status(e.getStatusCode()).body("Error adding layer: " + e.getMessage());
+            boolean success = geoServerClient.addLayerToGeoServer(layerRequest, workspaceName, datastoreName);
+            if (success) {
+                return ResponseEntity.status(HttpStatus.CREATED).body("Layer added successfully.");
+            } else {
+                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                        .body("Failed to add layer to GeoServer.");
+            }
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("An error occurred: " + e.getMessage());
         }
     }
 

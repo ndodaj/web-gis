@@ -1,9 +1,12 @@
 package al.webgis.webgis.service;
+
+import al.webgis.webgis.model.layers.Attribute;
 import al.webgis.webgis.model.layers.LayerDto;
 import al.webgis.webgis.model.layers.LayerRequest;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import io.jsonwebtoken.Jwt;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.CloseableHttpResponse;
@@ -12,6 +15,8 @@ import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.util.EntityUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
@@ -19,6 +24,10 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.*;
 
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.oauth2.client.OAuth2AuthorizeRequest;
+import org.springframework.security.oauth2.client.OAuth2AuthorizedClient;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
@@ -48,7 +57,6 @@ public class GeoServerClient {
 
     @Value("${geoserver.url}")
     private String geoServerUrl;
-
 
 
     private final ObjectMapper objectMapper;
@@ -88,7 +96,6 @@ public class GeoServerClient {
 //    }
 
 
-
 // ...
 
     public Page<Map<String, Object>> fetchAllLayers(Pageable pageable) {
@@ -100,7 +107,8 @@ public class GeoServerClient {
         ResponseEntity<String> response = restTemplate.exchange(url, HttpMethod.GET, entity, String.class);
 
         try {
-            Map<String, Object> layersResponse = objectMapper.readValue(response.getBody(), new TypeReference<Map<String, Object>>() {});
+            Map<String, Object> layersResponse = objectMapper.readValue(response.getBody(), new TypeReference<Map<String, Object>>() {
+            });
             Map<String, Object> layers = (Map<String, Object>) layersResponse.get("layers");
             allLayers = (List<Map<String, Object>>) layers.get("layer"); // Populate allLayers here
 
@@ -128,8 +136,6 @@ public class GeoServerClient {
     }
 
 
-
-
     private Map<String, String> fetchLayerGroups() {
         Map<String, String> layerToGroupMap = new HashMap<>();
         String url = String.format("%s/rest/layergroups.json", geoServerUrl);
@@ -140,7 +146,8 @@ public class GeoServerClient {
         System.out.println("Layer Groups Response: " + response.getBody()); // Log the response
 
         try {
-            Map<String, Object> layerGroupsResponse = objectMapper.readValue(response.getBody(), new TypeReference<Map<String, Object>>() {});
+            Map<String, Object> layerGroupsResponse = objectMapper.readValue(response.getBody(), new TypeReference<Map<String, Object>>() {
+            });
 
             Map<String, Object> layerGroupsMap = (Map<String, Object>) layerGroupsResponse.get("layerGroups");
             List<Map<String, Object>> layerGroups = (List<Map<String, Object>>) layerGroupsMap.get("layerGroup");
@@ -153,7 +160,8 @@ public class GeoServerClient {
                     ResponseEntity<String> groupResponse = restTemplate.exchange(groupHref, HttpMethod.GET, entity, String.class);
                     System.out.println("Group Details Response for " + groupName + ": " + groupResponse.getBody());
 
-                    Map<String, Object> groupDetails = objectMapper.readValue(groupResponse.getBody(), new TypeReference<Map<String, Object>>() {});
+                    Map<String, Object> groupDetails = objectMapper.readValue(groupResponse.getBody(), new TypeReference<Map<String, Object>>() {
+                    });
 
                     Map<String, Object> layerGroupDetails = (Map<String, Object>) groupDetails.get("layerGroup");
                     List<Map<String, Object>> layersInGroup = (List<Map<String, Object>>) ((Map<String, Object>) layerGroupDetails.get("publishables")).get("published");
@@ -210,6 +218,7 @@ public class GeoServerClient {
 
     public boolean createLayer(String workspace, String datastore, Map<String, Object> request) {
         try {
+            // Use the dynamic GeoServer URL
             String url = String.format("%s/rest/workspaces/%s/datastores/%s/featuretypes.json", geoServerUrl, workspace, datastore);
 
             HttpHeaders headers = new HttpHeaders();
@@ -229,6 +238,7 @@ public class GeoServerClient {
             return false;
         }
     }
+
     public boolean updateLayer(String workspace, String layerName, Map<String, Object> request) {
         try {
             String url = String.format("%s/rest/workspaces/%s/layers/%s.json", geoServerUrl, workspace, layerName);
@@ -251,6 +261,7 @@ public class GeoServerClient {
             return false;
         }
     }
+
     public boolean deleteLayer(String workspace, String layerName) {
         try {
             String url = String.format("%s/rest/workspaces/%s/layers/%s.json", geoServerUrl, workspace, layerName);
@@ -273,7 +284,6 @@ public class GeoServerClient {
     }
 
 
-
     private HttpHeaders createAuthHeaders() {
         HttpHeaders headers = new HttpHeaders();
         String auth = username + ":" + password;
@@ -283,37 +293,194 @@ public class GeoServerClient {
     }
 
 
+//    public boolean addLayerToGeoServer(LayerRequest layerRequest, String workspaceName, String datastoreName) {
+//        try {
+//            // Construct the URL for the request to create the feature type
+//            String url = String.format("http://localhost:8080/geoserver/rest/workspaces/%s/datastores/%s/featuretypes", workspaceName, datastoreName);
+//
+//            // Build the XML payload from the LayerRequest object
+//            String xml = buildFeatureTypeXml(layerRequest);
+//
+//            // Generate the CURL command for testing/debugging
+//            String curlCommand = String.format(
+//                    "curl -X POST 'http://localhost:8080/geoserver' \\\n" +
+//                            "  -H 'Content-Type: application/xml' \\\n" +
+//                            "  -H 'Authorization: Basic %s' \\\n" +
+//                            "  -d '%s'",
+//                    new String(Base64.getEncoder().encode((username + ":" + password).getBytes())), xml
+//            );
+//            System.out.println("Generated CURL Command:");
+//            System.out.println(curlCommand);
+//
+//            // Set up HTTP headers using the createAuthHeaders method
+//            HttpHeaders headers = createAuthHeaders();
+//            headers.setContentType(MediaType.APPLICATION_XML);
+//
+//            // Set up the HTTP entity with headers and body
+//            HttpEntity<String> entity = new HttpEntity<>(xml, headers);
+//
+//            // Make the POST request to add the layer
+//            ResponseEntity<String> response = restTemplate.exchange(url, HttpMethod.POST, entity, String.class);
+//
+//            if (response.getStatusCode().is2xxSuccessful()) {
+//                // After layer creation, grant access to all roles
+//                String layerName = layerRequest.getName();  // Get the layer name from the request
+//                grantAccessToAnyRole(workspaceName, datastoreName, layerRequest.getName());
+//
+//                // Return true if the request was successful
+//                return true;
+//            } else {
+//                System.err.println("Failed to create the layer. Response: " + response.getStatusCode());
+//                return false;
+//            }
+//        } catch (Exception e) {
+//            e.printStackTrace(); // Handle the exception appropriately
+//            return false;
+//        }
+//    }
 
-    public String addLayer(LayerRequest layerRequest, String workspaceName, String datastoreName) throws IOException {
-        try (CloseableHttpClient client = HttpClients.createDefault()) {
-            String url = String.format("%s/rest/workspaces/%s/datastores/%s/featuretypes.json",
-                    geoServerUrl, workspaceName, datastoreName); // Use the geoServerUrl from your configuration
-            HttpPost post = new HttpPost(url);
+    public boolean addLayerToGeoServer(LayerRequest layerRequest, String workspaceName, String datastoreName) {
+        try {
+            // Construct the URL for the request to create the feature type
+            String url = String.format("%s/rest/workspaces/%s/datastores/%s/featuretypes", geoServerUrl, workspaceName, datastoreName);
 
-            // Convert the LayerRequest to JSON
-            String json = objectMapper.writeValueAsString(layerRequest);
-            post.setEntity(new StringEntity(json));
-            post.setHeader("Content-Type", "application/json");
-            post.setHeader("Accept", "application/json");
+            // Build the XML payload from the LayerRequest object
+            String xml = buildFeatureTypeXml(layerRequest);
 
-            // Set up the authentication headers based on deleteLayer method
-            String auth = username + ":" + password;
-            String encodedAuth = Base64.getEncoder().encodeToString(auth.getBytes());
-            post.setHeader("Authorization", "Basic " + encodedAuth);
+            // Generate the CURL command for testing/debugging
+            String curlCommand = String.format(
+                    "curl -X POST '%s' \\\n" +
+                            "  -H 'Content-Type: application/xml' \\\n" +
+                            "  -H 'Authorization: Basic %s' \\\n" +
+                            "  -d '%s'",
+                    url,
+                    new String(Base64.getEncoder().encode((username + ":" + password).getBytes())),
+                    xml
+            );
+            System.out.println("Generated CURL Command:");
+            System.out.println(curlCommand);
 
-            try (CloseableHttpResponse response = client.execute(post)) {
-                if (response.getStatusLine().getStatusCode() == HttpStatus.SC_CREATED) {
-                    return EntityUtils.toString(response.getEntity());
-                } else {
-                    throw new IOException("Error adding layer: " + response.getStatusLine().getReasonPhrase());
-                }
+            // Set up HTTP headers using the createAuthHeaders method
+            HttpHeaders headers = createAuthHeaders();
+            headers.setContentType(MediaType.APPLICATION_XML);
+
+            // Set up the HTTP entity with headers and body
+            HttpEntity<String> entity = new HttpEntity<>(xml, headers);
+
+            // Make the POST request to add the layer
+            ResponseEntity<String> response = restTemplate.exchange(url, HttpMethod.POST, entity, String.class);
+
+            if (response.getStatusCode().is2xxSuccessful()) {
+                // After layer creation, grant access to all roles
+                grantAccessToAnyRole(workspaceName, datastoreName, layerRequest.getName());
+
+                // Return true if the request was successful
+                return true;
+            } else {
+                System.err.println("Failed to create the layer. Response: " + response.getStatusCode());
+                return false;
             }
+        } catch (Exception e) {
+            e.printStackTrace(); // Handle the exception appropriately
+            return false;
+        }
+    }
+
+    private void grantAccessToAnyRole(String workspaceName, String datastoreName, String layerName) {
+        // Check if the layer exists
+        String urlCheckLayer = String.format("%s/rest/workspaces/%s/datastores/%s/featuretypes/%s",
+                geoServerUrl, workspaceName, datastoreName, layerName);
+        try {
+            ResponseEntity<String> checkResponse = restTemplate.exchange(urlCheckLayer, HttpMethod.GET, null, String.class);
+
+            if (checkResponse.getStatusCode().is2xxSuccessful()) {
+                // Layer exists, proceed with granting access
+                String url = String.format("%s/rest/security/layers/%s.xml", geoServerUrl, layerName);
+                String payload = """
+            <security>
+                <rule>
+                    <role>*</role> <!-- Grant access to any role -->
+                    <access>READ</access>
+                </rule>
+            </security>
+            """;
+
+                HttpHeaders headers = new HttpHeaders();
+                headers.setContentType(MediaType.APPLICATION_XML);
+                headers.setBasicAuth(username, password);
+
+                HttpEntity<String> entity = new HttpEntity<>(payload, headers);
+
+                ResponseEntity<String> response = restTemplate.exchange(url, HttpMethod.PUT, entity, String.class);
+
+                if (response.getStatusCode().is2xxSuccessful()) {
+                    System.out.println("Access granted to all roles for layer: " + layerName);
+                } else {
+                    System.err.println("Failed to grant access to layer: " + layerName + ". Response: " + response.getStatusCode());
+                }
+            } else {
+                System.err.println("Layer " + layerName + " not found. Cannot grant access.");
+            }
+        } catch (Exception e) {
+            System.err.println("Error granting access to layer: " + e.getMessage());
         }
     }
 
 
 
+    private String buildFeatureTypeXml(LayerRequest layerRequest) {
+        StringBuilder attributesXml = new StringBuilder();
+        for (Attribute attribute : layerRequest.getAttributes()) {
+            attributesXml.append(String.format("""
+                        <attribute>
+                          <name>%s</name>
+                          <binding>%s</binding>
+                        </attribute>
+                    """, attribute.getName(), attribute.getBinding()));
+        }
 
+        return String.format("""
+                        <featureType>
+                          <name>%s</name>
+                          <title>%s</title>
+                          <abstract>%s</abstract>
+                          <srs>%s</srs>
+                          <nativeCRS>%s</nativeCRS>
+                          <nativeBoundingBox>
+                            <minx>-180</minx>
+                            <miny>-90</miny>
+                            <maxx>180</maxx>
+                            <maxy>90</maxy>
+                          </nativeBoundingBox>
+                          <latLonBoundingBox>
+                            <minx>-180</minx>
+                            <miny>-90</miny>
+                            <maxx>180</maxx>
+                            <maxy>90</maxy>
+                          </latLonBoundingBox>
+                          <attributes>%s</attributes>
+                        </featureType>
+                        """,
+                layerRequest.getName(),
+                layerRequest.getTitle(),
+                layerRequest.getLayerAbstract(),
+                layerRequest.getSrs(),
+                layerRequest.getNativeCrs(),
+                attributesXml
+        );
+    }
+
+
+    // Utility method to handle nulls in XML values
+    private String safeXmlValue(String value) {
+        return value == null ? "" : value;
+    }
 
 }
+
+
+
+
+
+
 

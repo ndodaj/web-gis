@@ -1,0 +1,3 @@
+
+az ssh vm --resource-group webgis-b2s_group --vm-name webgis-b2s --subscription adc67d3f-1648-452d-9734-274aacde022c
+
