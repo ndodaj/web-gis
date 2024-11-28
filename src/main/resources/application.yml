@@ -5,7 +5,7 @@ spring:
     name: webgis
   datasource:
     url: jdbc:postgresql://localhost:5432/postgis_test
-    username: root
+    username: postgres
     password: root
     driver-class-name: org.postgresql.Driver
   jpa:
