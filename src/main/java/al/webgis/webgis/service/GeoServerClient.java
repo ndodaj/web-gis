@@ -135,58 +135,58 @@ public class GeoServerClient {
         return new PageImpl<>(new ArrayList<>(), pageable, 0); // Return an empty page if there's an error
     }
 
-
-    private Map<String, String> fetchLayerGroups() {
-        Map<String, String> layerToGroupMap = new HashMap<>();
-        String url = String.format("%s/rest/layergroups.json", geoServerUrl);
-        HttpHeaders headers = createAuthHeaders();
-        HttpEntity<String> entity = new HttpEntity<>(headers);
-
-        ResponseEntity<String> response = restTemplate.exchange(url, HttpMethod.GET, entity, String.class);
-        System.out.println("Layer Groups Response: " + response.getBody()); // Log the response
-
-        try {
-            Map<String, Object> layerGroupsResponse = objectMapper.readValue(response.getBody(), new TypeReference<Map<String, Object>>() {
-            });
-
-            Map<String, Object> layerGroupsMap = (Map<String, Object>) layerGroupsResponse.get("layerGroups");
-            List<Map<String, Object>> layerGroups = (List<Map<String, Object>>) layerGroupsMap.get("layerGroup");
-
-            for (Map<String, Object> group : layerGroups) {
-                String groupName = (String) group.get("name");
-                String groupHref = (String) group.get("href");
-
-                if (groupHref != null && !groupHref.isEmpty()) {
-                    ResponseEntity<String> groupResponse = restTemplate.exchange(groupHref, HttpMethod.GET, entity, String.class);
-                    System.out.println("Group Details Response for " + groupName + ": " + groupResponse.getBody());
-
-                    Map<String, Object> groupDetails = objectMapper.readValue(groupResponse.getBody(), new TypeReference<Map<String, Object>>() {
-                    });
-
-                    Map<String, Object> layerGroupDetails = (Map<String, Object>) groupDetails.get("layerGroup");
-                    List<Map<String, Object>> layersInGroup = (List<Map<String, Object>>) ((Map<String, Object>) layerGroupDetails.get("publishables")).get("published");
-
-                    if (layersInGroup != null) {
-                        for (Map<String, Object> layer : layersInGroup) {
-                            String layerName = (String) layer.get("name");
-                            layerToGroupMap.put(layerName, groupName);
-                            System.out.println("Mapping layer " + layerName + " to group " + groupName);
-                        }
-                    } else {
-                        System.err.println("No layers found for group: " + groupName);
-                    }
-                } else {
-                    System.err.println("Invalid href for layer group: " + groupName);
-                }
-            }
-        } catch (JsonProcessingException e) {
-            e.printStackTrace();
-        }
-
-        return layerToGroupMap;
-    }
-
-
+//
+//    private Map<String, String> fetchLayerGroups() {
+//        Map<String, String> layerToGroupMap = new HashMap<>();
+//        String url = String.format("%s/rest/layergroups.json", geoServerUrl);
+//        HttpHeaders headers = createAuthHeaders();
+//        HttpEntity<String> entity = new HttpEntity<>(headers);
+//
+//        ResponseEntity<String> response = restTemplate.exchange(url, HttpMethod.GET, entity, String.class);
+//        System.out.println("Layer Groups Response: " + response.getBody()); // Log the response
+//
+//        try {
+//            Map<String, Object> layerGroupsResponse = objectMapper.readValue(response.getBody(), new TypeReference<Map<String, Object>>() {
+//            });
+//
+//            Map<String, Object> layerGroupsMap = (Map<String, Object>) layerGroupsResponse.get("layerGroups");
+//            List<Map<String, Object>> layerGroups = (List<Map<String, Object>>) layerGroupsMap.get("layerGroup");
+//
+//            for (Map<String, Object> group : layerGroups) {
+//                String groupName = (String) group.get("name");
+//                String groupHref = (String) group.get("href");
+//
+//                if (groupHref != null && !groupHref.isEmpty()) {
+//                    ResponseEntity<String> groupResponse = restTemplate.exchange(groupHref, HttpMethod.GET, entity, String.class);
+//                    System.out.println("Group Details Response for " + groupName + ": " + groupResponse.getBody());
+//
+//                    Map<String, Object> groupDetails = objectMapper.readValue(groupResponse.getBody(), new TypeReference<Map<String, Object>>() {
+//                    });
+//
+//                    Map<String, Object> layerGroupDetails = (Map<String, Object>) groupDetails.get("layerGroup");
+//                    List<Map<String, Object>> layersInGroup = (List<Map<String, Object>>) ((Map<String, Object>) layerGroupDetails.get("publishables")).get("published");
+//
+//                    if (layersInGroup != null) {
+//                        for (Map<String, Object> layer : layersInGroup) {
+//                            String layerName = (String) layer.get("name");
+//                            layerToGroupMap.put(layerName, groupName);
+//                            System.out.println("Mapping layer " + layerName + " to group " + groupName);
+//                        }
+//                    } else {
+//                        System.err.println("No layers found for group: " + groupName);
+//                    }
+//                } else {
+//                    System.err.println("Invalid href for layer group: " + groupName);
+//                }
+//            }
+//        } catch (JsonProcessingException e) {
+//            e.printStackTrace();
+//        }
+//
+//        return layerToGroupMap;
+//    }
+//
+//
     public Map<String, Object> fetchLayerByName(String layerName) {
         Map<String, Object> output = null;
         String url = String.format("%s/rest/layers/%s.json", geoServerUrl, layerName);
@@ -214,6 +214,74 @@ public class GeoServerClient {
 
         return output;
     }
+
+    private Map<String, String> fetchLayerGroups() {
+        Map<String, String> layerToGroupMap = new HashMap<>();
+
+        // Fetch global layer groups
+        String globalUrl = String.format("%s/rest/layergroups.json", geoServerUrl);
+        fetchLayerGroupsFromUrl(globalUrl, null, layerToGroupMap);
+
+        // Fetch workspace-specific layer groups
+        String workspacesUrl = String.format("%s/rest/workspaces.json", geoServerUrl);
+        HttpHeaders headers = createAuthHeaders();
+        HttpEntity<String> entity = new HttpEntity<>(headers);
+
+        try {
+            ResponseEntity<String> workspacesResponse = restTemplate.exchange(workspacesUrl, HttpMethod.GET, entity, String.class);
+            Map<String, Object> workspacesResponseMap = objectMapper.readValue(workspacesResponse.getBody(), new TypeReference<>() {});
+            Map<String, Object> workspaces = (Map<String, Object>) workspacesResponseMap.get("workspaces");
+            List<Map<String, Object>> workspaceList = (List<Map<String, Object>>) workspaces.get("workspace");
+
+            for (Map<String, Object> workspace : workspaceList) {
+                String workspaceName = (String) workspace.get("name");
+                String workspaceLayerGroupsUrl = String.format("%s/rest/workspaces/%s/layergroups.json", geoServerUrl, workspaceName);
+                fetchLayerGroupsFromUrl(workspaceLayerGroupsUrl, workspaceName, layerToGroupMap);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return layerToGroupMap;
+    }
+
+    private void fetchLayerGroupsFromUrl(String url, String workspaceName, Map<String, String> layerToGroupMap) {
+        HttpHeaders headers = createAuthHeaders();
+        HttpEntity<String> entity = new HttpEntity<>(headers);
+
+        try {
+            ResponseEntity<String> response = restTemplate.exchange(url, HttpMethod.GET, entity, String.class);
+            Map<String, Object> layerGroupsResponse = objectMapper.readValue(response.getBody(), new TypeReference<>() {});
+            Map<String, Object> layerGroupsMap = (Map<String, Object>) layerGroupsResponse.get("layerGroups");
+            List<Map<String, Object>> layerGroups = (List<Map<String, Object>>) layerGroupsMap.get("layerGroup");
+
+            for (Map<String, Object> group : layerGroups) {
+                String groupName = (String) group.get("name");
+                String groupHref = (String) group.get("href");
+
+                if (groupHref != null && !groupHref.isEmpty()) {
+                    ResponseEntity<String> groupResponse = restTemplate.exchange(groupHref, HttpMethod.GET, entity, String.class);
+                    Map<String, Object> groupDetails = objectMapper.readValue(groupResponse.getBody(), new TypeReference<>() {});
+                    Map<String, Object> layerGroupDetails = (Map<String, Object>) groupDetails.get("layerGroup");
+                    List<Map<String, Object>> layersInGroup = (List<Map<String, Object>>) ((Map<String, Object>) layerGroupDetails.get("publishables")).get("published");
+
+                    if (layersInGroup != null) {
+                        for (Map<String, Object> layer : layersInGroup) {
+                            String layerName = (String) layer.get("name");
+                            layerToGroupMap.put(layerName, workspaceName == null ? groupName : workspaceName + ":" + groupName);
+                        }
+                    } else {
+                        System.err.println("No layers found for group: " + groupName);
+                    }
+                } else {
+                    System.err.println("Invalid href for layer group: " + groupName);
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
 
 
     public boolean createLayer(String workspace, String datastore, Map<String, Object> request) {
@@ -292,52 +360,6 @@ public class GeoServerClient {
         return headers;
     }
 
-
-//    public boolean addLayerToGeoServer(LayerRequest layerRequest, String workspaceName, String datastoreName) {
-//        try {
-//            // Construct the URL for the request to create the feature type
-//            String url = String.format("http://localhost:8080/geoserver/rest/workspaces/%s/datastores/%s/featuretypes", workspaceName, datastoreName);
-//
-//            // Build the XML payload from the LayerRequest object
-//            String xml = buildFeatureTypeXml(layerRequest);
-//
-//            // Generate the CURL command for testing/debugging
-//            String curlCommand = String.format(
-//                    "curl -X POST 'http://localhost:8080/geoserver' \\\n" +
-//                            "  -H 'Content-Type: application/xml' \\\n" +
-//                            "  -H 'Authorization: Basic %s' \\\n" +
-//                            "  -d '%s'",
-//                    new String(Base64.getEncoder().encode((username + ":" + password).getBytes())), xml
-//            );
-//            System.out.println("Generated CURL Command:");
-//            System.out.println(curlCommand);
-//
-//            // Set up HTTP headers using the createAuthHeaders method
-//            HttpHeaders headers = createAuthHeaders();
-//            headers.setContentType(MediaType.APPLICATION_XML);
-//
-//            // Set up the HTTP entity with headers and body
-//            HttpEntity<String> entity = new HttpEntity<>(xml, headers);
-//
-//            // Make the POST request to add the layer
-//            ResponseEntity<String> response = restTemplate.exchange(url, HttpMethod.POST, entity, String.class);
-//
-//            if (response.getStatusCode().is2xxSuccessful()) {
-//                // After layer creation, grant access to all roles
-//                String layerName = layerRequest.getName();  // Get the layer name from the request
-//                grantAccessToAnyRole(workspaceName, datastoreName, layerRequest.getName());
-//
-//                // Return true if the request was successful
-//                return true;
-//            } else {
-//                System.err.println("Failed to create the layer. Response: " + response.getStatusCode());
-//                return false;
-//            }
-//        } catch (Exception e) {
-//            e.printStackTrace(); // Handle the exception appropriately
-//            return false;
-//        }
-//    }
 
     public boolean addLayerToGeoServer(LayerRequest layerRequest, String workspaceName, String datastoreName) {
         try {
