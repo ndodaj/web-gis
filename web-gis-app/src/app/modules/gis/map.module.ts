@@ -48,6 +48,7 @@ import { SplitterModule } from 'primeng/splitter';
 import { IgxSplitterModule } from 'igniteui-angular';
 import { MaterialModule } from '@shared/material.module';
 import { FilterDialogComponent } from './components/feature-list/filter-dialog.component';
+import { MessageService } from 'primeng/api';
 @NgModule({
   declarations: [
     ...fromComponents.components,
@@ -97,6 +98,7 @@ import { FilterDialogComponent } from './components/feature-list/filter-dialog.c
     IgxSplitterModule,
     MaterialModule,
   ],
+  providers: [MessageService],
   schemas: [CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA],
   exports: [...fromComponents.components],
 })

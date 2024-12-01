@@ -4,3 +4,21 @@
 // ::ng-deep .rounded-full-input .mat-form-field-wrapper {
 //   border-radius: 9999px; /* Full rounded */
 // }
+.ol-ext-print-dialog .ol-print-param {
+  position: absolute;
+  overflow-x: hidden;
+  top: 50px;
+  bottom: 20px;
+  left: 20px;
+  width: 18rem;
+  background-color: #fff;
+  padding: 1em;
+  box-sizing: border-box;
+}
+#printContent {
+  position: relative;
+}
+#printContent {
+  margin-left: 15px;
+  margin-top: 5px;
+}

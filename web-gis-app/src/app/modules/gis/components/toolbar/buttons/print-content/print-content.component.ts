@@ -12,6 +12,8 @@ export class PrintContentComponent implements OnInit {
     this.selectPrintButton();
 
     const print = document.querySelector('.ol-print') as any;
+    console.log('print', print);
+
     print.style.background = 'transparent';
   }
 

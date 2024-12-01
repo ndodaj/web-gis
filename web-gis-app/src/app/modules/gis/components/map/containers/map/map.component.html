@@ -1,130 +1,160 @@
 <mat-sidenav-container class="h-screen">
-  <!-- Sidebar -->
   <mat-sidenav
     #sidenav
     mode="side"
     [(opened)]="isSidebarOpen"
-    class="w-72 bg-white shadow-lg"
+    class="w-72 bg-white shadow-lg overflow-y-auto"
   >
-    <div class="p-4 space-y-6">
-      <!-- Header with Close Button -->
-      <div class="flex items-center justify-between">
+    <div class="sticky top-0 bg-white z-10 shadow p-2">
+      <div class="flex items-center justify-between mb-4">
         <div class="flex items-center space-x-2">
           <img src="assets/img/logo.svg" alt="Logo" class="h-10 w-10" />
-          <h2 class="text-lg font-semibold">GEOPORTAL</h2>
+          <h2 class="text-sm font-semibold">GEOPORTAL</h2>
         </div>
         <button mat-icon-button (click)="toggleSidebar()">
           <mat-icon>chevron_left</mat-icon>
         </button>
       </div>
-      <!-- Menu Items -->
-      <div>
-        <div class="font-semibold text-gray-700">BaseLayers</div>
-        <ul class="space-y-4">
-          <li
-            *ngFor="let layer of baselayers"
-            (click)="setBaseLayer(layer)"
-            [ngClass]="{
-              'bg-gray-300': selectedBaseLayer === layer.layerType,
-              'hover:bg-gray-100': selectedBaseLayer !== layer.layerType
-            }"
-            class="flex items-center cursor-pointer hover:bg-gray-100 p-2 rounded"
-          >
-            <img
-              [src]="layer.image"
-              alt="{{ layer.name }}"
-              class="w-10 h-10 mr-4"
-            />
-            <span>{{ layer.name }}</span>
-          </li>
-        </ul>
-      </div>
-
-      <!-- Layer Tree -->
-      <div>
-        <div class="font-semibold text-gray-700">Layer Tree</div>
-        <ul class="space-y-2">
-          <li *ngFor="let group of layerGroups">
-            <div class="font-semibold text-gray-700">
-              {{ group.get("title") }}
-            </div>
-            <ul class="space-y-1">
-              <li *ngFor="let layer of group.getLayers().getArray()">
-                <div
-                  class="flex items-center justify-between bg-white rounded hover:bg-gray-50"
-                >
-                  <div class="flex items-center space-x-2">
-                    <!-- Layer visibility checkbox -->
-                    <button
-                      mat-icon-button
-                      (click)="layer.isExpanded = !layer.isExpanded"
-                    >
-                      <mat-icon>{{
-                        layer.isExpanded ? "expand_less" : "expand_more"
-                      }}</mat-icon>
-                    </button>
-                    <input
-                      type="checkbox"
-                      [checked]="layer.getVisible()"
-                      (change)="toggleLayerVisibility(layer)"
-                      class="form-checkbox text-blue-500"
-                    />
-                    <!-- Layer title with expand toggle -->
-                    <span
-                      [ngClass]="layer.get('styleClass')"
-                      (click)="layer.isExpanded = !layer.isExpanded"
-                      class="cursor-pointer"
-                    >
-                      {{ layer.get("title") }}
-                    </span>
-                    <!-- Expand/Collapse icon -->
-                  </div>
-
-                  <!-- Three-dot menu button -->
-                  <button mat-icon-button [matMenuTriggerFor]="layerMenu">
-                    <mat-icon>more_vert</mat-icon>
-                  </button>
-                  <mat-menu #layerMenu="matMenu">
-                    <button mat-menu-item (click)="zoomToLayer(layer)">
-                      Zoom to
-                    </button>
-                    <button mat-menu-item (click)="setVisibilityRange(layer)">
-                      Set visibility range
-                    </button>
-                    <button mat-menu-item (click)="togglePopup(layer)">
-                      Disable pop-up
-                    </button>
-                    <button mat-menu-item (click)="moveLayerUp(layer)">
-                      Move up
-                    </button>
-                    <button mat-menu-item (click)="moveLayerDown(layer)">
-                      Move down
-                    </button>
-                    <button mat-menu-item (click)="viewInAttributeTable(layer)">
-                      View in Attribute Table
-                    </button>
-                  </mat-menu>
-                </div>
-
-                <!-- Legend display when expanded -->
-                <div *ngIf="layer.isExpanded" class="ml-6 mt-2">
-                  <div class="mt-2">
-                    <img
-                      *ngIf="layer.getSource().getLegendUrl()"
-                      [src]="layer.getSource().getLegendUrl()"
-                      alt="Legend"
-                      class="max-w-full border border-gray-300 rounded"
-                    />
-                  </div>
-                </div>
-              </li>
-            </ul>
-          </li>
-        </ul>
+      <!-- Tools Section -->
+      <div class="ml-4 mb-2 flex flex-row gap-2">
+        <app-grid-view></app-grid-view>
+        <app-messurement></app-messurement>
+        <app-identify class="sm:small-icons"></app-identify>
+        <app-coords></app-coords>
       </div>
     </div>
-  </mat-sidenav>
 
+    <div class="mb-4 p-2">
+      <div class="font-semibold text-sm text-gray-700">BaseLayers</div>
+      <ul class="space-y-2 mt-2">
+        <li
+          *ngFor="let layer of baselayers"
+          (click)="setBaseLayer(layer)"
+          [ngClass]="{
+            'bg-gray-300': selectedBaseLayer === layer.layerType,
+            'hover:bg-gray-100': selectedBaseLayer !== layer.layerType
+          }"
+          class="flex items-center cursor-pointer hover:bg-gray-100 p-2 rounded"
+        >
+          <img
+            [src]="layer.image"
+            alt="{{ layer.name }}"
+            class="w-10 h-10 mr-4"
+          />
+          <span class="text-sm text-gray-700">{{ layer.name }}</span>
+        </li>
+      </ul>
+    </div>
+
+    <div class="mb-4 p-2">
+      <div class="font-semibold text-sm text-gray-700">Layer Tree</div>
+      <ul class="space-y-2 mt-2">
+        <li *ngFor="let group of layerGroups">
+          <!-- Layer Group Header -->
+          <div
+            class="flex items-center justify-between text-sm text-gray-700 bg-gray-100 rounded"
+          >
+            <div class="flex items-center space-x-2">
+              <!-- Expand/Collapse Button -->
+              <button
+                mat-icon-button
+                (click)="group.isExpanded = !group.isExpanded"
+              >
+                <mat-icon>{{
+                  group.isExpanded ? "expand_less" : "expand_more"
+                }}</mat-icon>
+              </button>
+              <input
+                type="checkbox"
+                [checked]="areAllLayersVisible(group)"
+                (change)="toggleGroupVisibility(group, $event)"
+                class="form-checkbox text-blue-500"
+              />
+              <!-- Group Title -->
+              <span>{{ group.get("title") }}</span>
+            </div>
+          </div>
+          <!-- Layers List -->
+          <ul *ngIf="group.isExpanded" class="space-y-1 mt-2">
+            <li *ngFor="let layer of group.getLayers().getArray()">
+              <div
+                class="flex items-center justify-between bg-white rounded pl-1 hover:bg-gray-50"
+              >
+                <div class="flex items-center space-x-2">
+                  <!-- Expand/Collapse Layer -->
+                  <button
+                    mat-icon-button
+                    (click)="layer.isExpanded = !layer.isExpanded"
+                  >
+                    <mat-icon>{{
+                      layer.isExpanded ? "expand_less" : "expand_more"
+                    }}</mat-icon>
+                  </button>
+                  <!-- Layer Visibility -->
+                  <input
+                    type="checkbox"
+                    [checked]="layer.getVisible()"
+                    (change)="toggleLayerVisibility(layer)"
+                    class="form-checkbox text-blue-500"
+                  />
+                  <!-- Layer Title -->
+                  <span
+                    class="cursor-pointer text-sm"
+                    [ngClass]="layer.get('styleClass')"
+                    (click)="layer.isExpanded = !layer.isExpanded"
+                  >
+                    {{ layer.get("title") }}
+                  </span>
+                </div>
+                <!-- Layer Menu -->
+                <button mat-icon-button [matMenuTriggerFor]="layerMenu">
+                  <mat-icon>more_vert</mat-icon>
+                </button>
+                <mat-menu #layerMenu="matMenu">
+                  <button
+                    mat-menu-item
+                    class="text-sm"
+                    (click)="viewInAttributeTable(layer)"
+                  >
+                    View in Attribute Table
+                  </button>
+                </mat-menu>
+              </div>
+              <!-- Layer Details -->
+              <div *ngIf="layer.isExpanded" class="ml-6">
+                <div class="flex items-center space-x-4">
+                  <mat-slider
+                    min="0"
+                    max="1"
+                    step="0.01"
+                    showTickMarks
+                    [discrete]="false"
+                  >
+                    <input
+                      matSliderThumb
+                      [value]="layer.getOpacity()"
+                      (input)="setLayerOpacity(layer, $event)"
+                    />
+                  </mat-slider>
+                  <span class="text-sm"
+                    >{{ formatOpacityPercentage(layer.getOpacity()) }}%</span
+                  >
+                </div>
+                <div class="mt-2">
+                  <img
+                    *ngIf="layer.getSource().getLegendUrl()"
+                    [src]="layer.getSource().getLegendUrl()"
+                    alt="Legend"
+                    class="max-w-full border border-gray-300 rounded"
+                  />
+                </div>
+              </div>
+            </li>
+          </ul>
+        </li>
+      </ul>
+    </div>
+  </mat-sidenav>
   <!-- Main Content -->
   <mat-sidenav-content class="h-full">
     <as-split
@@ -136,7 +166,7 @@
       <as-split-area #splitArea [size]="100" class="h-full">
         <button
           mat-mini-fab
-          class="fixed top-4 left-4 z-10 text-sm font-medium customBtn"
+          class="fixed top-4 left-4 z-10 text-sm font-medium customBtn transition-all duration-300 ease-in-out"
           (click)="toggleSidebar()"
         >
           <mat-icon>menu</mat-icon>
@@ -153,7 +183,56 @@
             isSecondAreaOpen ? "expand_less" : "expand_more"
           }}</mat-icon>
         </button>
-        <div class="flex justify-between items-center p-4">
+
+        <!-- Profile dropdown -->
+        <div class="absolute top-3.5 right-4 z-10">
+          <ng-container *ngIf="isLogedIn; else elseBlock">
+            <div class="-mx-1 flex items-center">
+              <div class="px-1">
+                <div
+                  #originRef
+                  (click)="showPopover(originRef)"
+                  [class.bg-hover]="dropdownOpen"
+                  aria-hidden="true"
+                  class="flex items-center rounded-full cursor-pointer relative transition-all duration-300 ease-in-out select-none py-1 pr-1 pl-3 hover:bg-hover customBtn"
+                >
+                  <div
+                    class="body-1 font-medium leading-snug ltr:mr-3 rtl:ml-3 hidden sm:block"
+                  >
+                    {{ userName }}
+                  </div>
+                  <div
+                    class="rounded-full h-10 w-10 flex items-center justify-center text-primary bg-primary/10 customBtn"
+                  >
+                    <mat-icon svgIcon="mat:person"></mat-icon>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </ng-container>
+
+          <ng-template #elseBlock>
+            <a (click)="login()" matTooltip="Login">
+              <div class="-mx-1 flex items-center">
+                <div class="px-1">
+                  <div
+                    class="flex items-center rounded cursor-pointer relative trans-ease-out select-none py-1 pr-1 pl-3 hover:bg-hover"
+                  >
+                    <div
+                      class="rounded-full h-10 w-10 flex items-center justify-center text-primary bg-primary/10 customBtn"
+                    >
+                      <mat-icon svgIcon="mat:person"></mat-icon>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </a>
+          </ng-template>
+        </div>
+
+        <div
+          class="flex justify-between items-center p-4 transition-all duration-300 ease-in-out"
+        >
           <!-- Search Input with Button Inside -->
           <div
             [ngClass]="isSidebarOpen ? 'ml-0' : 'ml-12'"
@@ -187,7 +266,7 @@
         [size]="isSecondAreaOpen ? 30 : 0"
         class="transition-all duration-500 ease-in-out"
       >
-        <app-features-list></app-features-list>
+        <app-features-list [reloadLayer]="reloadLayer"></app-features-list>
       </as-split-area>
     </as-split>
   </mat-sidenav-content>

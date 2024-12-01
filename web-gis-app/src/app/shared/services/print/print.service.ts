@@ -126,6 +126,12 @@ export class PrintService implements OnInit {
 
   onPrint() {
     this.printControl.on(['print', 'error'] as EventTypes[], (e: any) => {
+      const margin = 10; // Increase margin for padding around map
+      const date = new Date().toLocaleDateString();
+      const logoUrl = 'assets/img/logo-gis.png'; // Path to your logo image
+      const description = 'Map description text here lorem ipsum'; // Description text
+      const redirectUrl = 'https://your-map-url.com'; // URL for the redirect link
+
       if (e.image) {
         if (e.pdf) {
           const pdf = new jsPDF({
@@ -133,24 +139,125 @@ export class PrintService implements OnInit {
             unit: e.print.unit,
             format: e.print.size,
           });
+
+          // Add the map image with margin
           pdf.addImage(
             e.image,
             'JPEG',
-            e.print.position[0],
-            e.print.position[0],
-            e.print.imageWidth,
-            e.print.imageHeight
+            e.print.position[0] + margin,
+            e.print.position[1] + margin,
+            e.print.imageWidth - 2 * margin,
+            e.print.imageHeight - 2 * margin
           );
-          pdf.save(e.print.legend ? 'legend.pdf' : 'map.pdf');
+
+          // Add date in the top-right corner
+          pdf.setFontSize(10);
+          const pageWidth = pdf.internal.pageSize.getWidth();
+          pdf.text(`Printed on Date: ${date}`, pageWidth - margin - 50, margin);
+
+          // Load the logo image and add it to the bottom left corner with description
+          const logo = new Image();
+          logo.src = logoUrl;
+          logo.onload = () => {
+            const logoWidth = 16;
+            const logoHeight = 16;
+            const pageHeight = pdf.internal.pageSize.getHeight();
+
+            // Add logo to bottom-left corner
+            pdf.addImage(
+              logo,
+              'PNG',
+              margin,
+              pageHeight - logoHeight - margin + 10,
+              logoWidth,
+              logoHeight
+            );
+
+            // Add description text next to the logo
+            pdf.setFontSize(10);
+            pdf.text(description, margin + logoWidth + 5, pageHeight - margin);
+
+            // Add link in bottom-right corner
+            pdf.setFontSize(10);
+            pdf.textWithLink(
+              'View Map',
+              pageWidth - margin - 40,
+              pageHeight - margin,
+              { url: redirectUrl }
+            );
+
+            // Save the PDF
+            pdf.save(e.print.legend ? 'legend.pdf' : 'map.pdf');
+          };
         } else {
-          e.canvas.toBlob(
-            (blob: any) => {
-              var name = 'title 1';
-              saveAs(blob, name);
-            },
-            e.imageType,
-            e.quality
-          );
+          // Handle the canvas export for non-PDF case
+          const margin = 10;
+          const date = new Date().toLocaleDateString();
+          const logoUrl = 'assets/img/logo-gis.png';
+          const description = 'Map description text here lorem ipsum';
+          const redirectText = 'View Map';
+
+          // Create a new canvas with extra space for margin
+          const canvas = document.createElement('canvas');
+          const ctx = canvas.getContext('2d');
+          if (ctx) {
+            // Set canvas dimensions larger to include margin
+            canvas.width = e.canvas.width + 2 * margin;
+            canvas.height = e.canvas.height + 2 * margin;
+
+            // Draw the map image onto the new canvas with margin
+            ctx.drawImage(e.canvas, margin, margin);
+
+            // Add date in the top-right corner
+            ctx.font = '10px Arial';
+            ctx.textAlign = 'right';
+            ctx.fillText(
+              `Printed on Date: ${date}`,
+              canvas.width - margin - 10,
+              margin + 10
+            );
+
+            // Load the logo image and add it to the bottom-left corner with description
+            const logo = new Image();
+            logo.src = logoUrl;
+            logo.onload = () => {
+              const logoWidth = 16;
+              const logoHeight = 16;
+              const logoX = margin;
+              const logoY = canvas.height - logoHeight - margin;
+
+              // Draw the logo in the bottom-left corner
+              ctx.drawImage(logo, logoX, logoY, logoWidth, logoHeight);
+
+              // Draw the description text next to the logo
+              ctx.font = '12px Arial';
+              ctx.textAlign = 'left';
+              ctx.fillText(
+                description,
+                logoX + logoWidth + 5,
+                canvas.height - margin - 5
+              );
+
+              // Add link text in the bottom-right corner
+              ctx.font = '10px Arial';
+              ctx.textAlign = 'right';
+              ctx.fillText(
+                redirectText,
+                canvas.width - margin,
+                canvas.height - margin
+              );
+
+              // Convert the canvas to a Blob and save it as an image
+              canvas.toBlob(
+                (blob: any) => {
+                  const name = 'map_with_elements';
+                  saveAs(blob, name);
+                },
+                e.imageType,
+                e.quality
+              );
+            };
+          }
         }
       } else {
         console.warn('No canvas to export');

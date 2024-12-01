@@ -3,7 +3,6 @@
     <span class="flex-1"></span>
 
     <button
-      *appHasAnyPermission="PERMISSIONS?.indicatorcategory_put_permission"
       mat-fab
       extended
       type="button"
@@ -38,10 +37,6 @@
         <th id="actions" *matHeaderCellDef mat-header-cell></th>
         <td *matCellDef="let row" class="w-10 text-secondary" mat-cell>
           <button
-            *appHasAnyPermission="[
-              PERMISSIONS.indicatorcategory_put_permission,
-              PERMISSIONS.indicatorcategory_delete_permission
-            ]"
             (click)="$event.stopPropagation()"
             [matMenuTriggerData]="{ data: row }"
             [matMenuTriggerFor]="actionsMenu"
@@ -71,19 +66,11 @@
 </div>
 <mat-menu #actionsMenu="matMenu" xPosition="before" yPosition="below">
   <ng-template let-data="data" matMenuContent>
-    <button
-      *appHasAnyPermission="PERMISSIONS?.indicatorcategory_put_permission"
-      (click)="openCreateEditModal(data)"
-      mat-menu-item
-    >
+    <button (click)="openCreateEditModal(data)" mat-menu-item>
       <mat-icon svgIcon="mat:edit"></mat-icon>
       <span>Edit</span>
     </button>
-    <button
-      *appHasAnyPermission="PERMISSIONS?.indicatorcategory_delete_permission"
-      (click)="deleteCategory(data)"
-      mat-menu-item
-    >
+    <button (click)="deleteCategory(data)" mat-menu-item>
       <mat-icon svgIcon="mat:delete"></mat-icon>
       <span>Delete</span>
     </button>

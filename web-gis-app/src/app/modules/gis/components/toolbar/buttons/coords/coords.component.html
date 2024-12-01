@@ -1,10 +1,12 @@
 <button
   class="text-sm font-medium customBtn"
-  mat-mini-fab
+  mat-icon-button
   color="secondary"
   id="coords"
-  title="Get Coordinates"
-  (click)="getXYCoords()"
+  (click)="toggleCoords()"
+  [matTooltip]="isActive ? 'Cancel' : 'Get Coordinates'"
+  matTooltipPosition="below"
 >
-  <mat-icon>push_pin</mat-icon>
+  <mat-icon *ngIf="!isActive" svgIcon="mat:push_pin"></mat-icon>
+  <mat-icon *ngIf="isActive" svgIcon="mat:cancel"></mat-icon>
 </button>

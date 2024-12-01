@@ -1,5 +1,4 @@
 import { Component, ViewChild } from '@angular/core';
-import { MatSnackBar } from '@angular/material/snack-bar';
 import { CoordinatesService } from '@shared/services/coordinates/coordinates.service';
 import { GetInfoService } from '@shared/services/get-info/get-info.service';
 import { MapService } from '@shared/services/map.service';
@@ -13,18 +12,28 @@ import { OverlayPanel } from 'primeng/overlaypanel';
 })
 export class IdentifyComponent {
   @ViewChild('op') overlayPanel!: OverlayPanel;
+  isActive: boolean = false;
   properties!: { key: string; value: any }[];
 
   constructor(
     public mapService: MapService,
     public styleService: StyleService,
     public coordsService: CoordinatesService,
-    private getInfoService: GetInfoService,
-    private snackBar: MatSnackBar
+    private getInfoService: GetInfoService
   ) {}
+  toggleIdentify() {
+    this.isActive = !this.isActive;
 
+    if (this.isActive) {
+      // Activate and show overlay panel
+      this.getInfo();
+    } else {
+      // Deactivate and hide overlay panel
+      this.overlayPanel?.hide();
+      this.mapService.getMap().un('click', this.coordsService?.getFeatureInfo);
+    }
+  }
   getInfo() {
-    this.snackBar.open('Get Information Is Activated');
     this.mapService
       .getMap()
       .getInteractions()

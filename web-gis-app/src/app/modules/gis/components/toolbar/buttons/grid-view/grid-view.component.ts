@@ -10,6 +10,8 @@ import { Graticule } from 'ol';
   templateUrl: './grid-view.component.html',
 })
 export class GridViewComponent implements OnInit {
+  isActive: boolean = false;
+  graticule: any;
   constructor(
     public mapService: MapService,
     public styleService: StyleService,
@@ -21,24 +23,35 @@ export class GridViewComponent implements OnInit {
   }
 
   showGraticule() {
-    this.mapService.getMap().removeInteraction(this.styleService.getDrawPoly());
-    this.mapService.getMap().removeInteraction(this.styleService.getDrawLine());
+    this.mapService
+      .getMap()
+      ?.removeInteraction(this.styleService.getDrawPoly());
+    this.mapService
+      .getMap()
+      ?.removeInteraction(this.styleService.getDrawLine());
     this.styleService.drawnPolygonSource.clear();
     this.styleService.drawnLineSource.clear();
-    const toggleButton = document.getElementById('graticuleButton');
-    let graticule: any;
-    toggleButton?.addEventListener('click', () => {
-      this.coordsService.clearDrawInteraction();
-      if (graticule) {
-        this.mapService.getMap().removeControl(graticule);
-        graticule = undefined;
-      } else {
-        graticule = new Graticule({
-          strokeStyle: customStyles.strokeStyle,
-          showLabels: true,
-        });
-        this.mapService.getMap().addControl(graticule);
-      }
-    });
+
+    this.coordsService.clearDrawInteraction();
+    if (this.graticule) {
+      this.mapService.getMap().removeControl(this.graticule);
+      this.graticule = undefined;
+    } else {
+      this.graticule = new Graticule({
+        strokeStyle: customStyles.strokeStyle,
+        showLabels: true,
+      });
+      this.mapService.getMap().addControl(this.graticule);
+    }
+  }
+
+  toggleGridView() {
+    this.isActive = !this.isActive;
+
+    if (this.isActive) {
+      this.showGraticule();
+    } else {
+      this.showGraticule();
+    }
   }
 }

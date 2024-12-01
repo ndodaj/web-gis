@@ -26,9 +26,6 @@ import { PrintService } from '@shared/services/print/print.service';
 
 import proj4 from 'proj4';
 import { register } from 'ol/proj/proj4';
-import { IndicatorCategoryDtoService } from '@core/api/services/indicator-category-dto.service';
-import { take, tap } from 'rxjs';
-import { IndicatorDtoService } from '@core/api/services/indicator-dto.service';
 import ExtendedPrintDialog from '@shared/ol/customLayers/extendedPrintControl';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatExpansionPanel } from '@angular/material/expansion';
@@ -122,37 +119,37 @@ export class GisMapComponent implements OnInit, OnDestroy {
     public coordsService: CoordinatesService,
     public layerControlService: LayerControlService,
     public printService: PrintService,
-    private indicatorCategoryDtoService: IndicatorCategoryDtoService,
-    private indicatorDtoService: IndicatorDtoService,
     public vcRef: ViewContainerRef
   ) {}
 
   ngOnInit() {
-    this.indicatorCategoryDtoService
-      .getIndicatorCategories('ne', undefined)
-      .pipe(
-        take(1),
-        tap((response) => {
-          console.log(response?.content);
-          response?.content.forEach((layerGroup: any) => {
-            const layerGroupInfo =
-              this.mapService.constructLayerGroup(layerGroup);
-            console.log(layerGroupInfo);
+    console.log('gis-map');
 
-            this.mapService.getMap().addLayer(layerGroupInfo);
-            this.indicatorDtoService
-              .getIndicators('ne', undefined)
-              .pipe(
-                take(1),
-                tap((response) => {
-                  console.log('layers', response?.layers);
-                })
-              )
-              .subscribe();
-          });
-        })
-      )
-      .subscribe();
+    // this.indicatorCategoryDtoService
+    //   .getIndicatorCategories('ne', undefined)
+    //   .pipe(
+    //     take(1),
+    //     tap((response) => {
+    //       console.log('response', response?.content);
+    //       response?.content.forEach((layerGroup: any) => {
+    //         const layerGroupInfo =
+    //           this.mapService.constructLayerGroup(layerGroup);
+    //         console.log('layerGroupInfo', layerGroupInfo);
+
+    //         this.mapService.getMap().addLayer(layerGroupInfo);
+    //         this.indicatorDtoService
+    //           .getIndicators('ne', undefined)
+    //           .pipe(
+    //             take(1),
+    //             tap((response) => {
+    //               console.log('layers', response?.layers);
+    //             })
+    //           )
+    //           .subscribe();
+    //       });
+    //     })
+    //   )
+    //   .subscribe();
     this.mapService
       .getLayerGroupsGeo()
       .then((response: any) => {
@@ -438,9 +435,9 @@ export class GisMapComponent implements OnInit, OnDestroy {
   onFieldSelectionChange() {
     const fieldSelect = document.getElementById(
       'fieldSelect'
-    ) as HTMLInputElement;
+    )! as HTMLInputElement;
 
-    fieldSelect.addEventListener('change', () => {
+    fieldSelect?.addEventListener('change', () => {
       this.layerControlService.updateOperatorOptions();
       this.layerControlService.getAttributeValues();
     });

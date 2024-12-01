@@ -1,4 +1,19 @@
-<div class="flex items-center space-x-2 mb-4 pt-4">
+<div class="flex items-center space-x-4 mb-1 mt-4 ml-4">
+  <!-- Layer Dropdown -->
+  <mat-form-field appearance="outline" class="w-64">
+    <mat-label>Select Layer</mat-label>
+    <mat-select
+      [(value)]="selectedLayer"
+      (selectionChange)="onLayerSelect($event.value)"
+    >
+      <mat-option *ngFor="let layer of layers" [value]="layer">
+        {{ layer.get("title") || "Unnamed Layer" }}
+      </mat-option>
+    </mat-select>
+  </mat-form-field>
+</div>
+
+<div class="flex items-center space-x-2 mb-4">
   <!-- Options Menu Button -->
   <button
     mat-button
@@ -12,15 +27,7 @@
     <mat-icon>filter_alt</mat-icon>
     <span>Filter by map extent</span>
   </button>
-  <button mat-button>
-    <mat-icon>pin_drop</mat-icon>
-    <span>Zoom to</span>
-  </button>
-  <button mat-button type="button">
-    <mat-icon>clear</mat-icon>
-    <span>Clear selection</span>
-  </button>
-  <button mat-button>
+  <button mat-button (click)="refresh()" class="flex items-center space-x-2">
     <mat-icon>refresh</mat-icon>
     <span>Refresh</span>
   </button>
@@ -28,10 +35,6 @@
 
 <!-- Options Menu -->
 <mat-menu #optionsMenu="matMenu">
-  <button mat-menu-item>
-    <mat-icon>check_box</mat-icon>
-    <span>Show selected records</span>
-  </button>
   <button mat-menu-item (click)="openFilterDialog()">
     <mat-icon>filter_list</mat-icon>
     <span>Filter</span>
@@ -53,7 +56,7 @@
 </mat-menu>
 
 <!-- Table -->
-<div class="overflow-auto max-h-96">
+<div class="overflow-y-auto max-h-96">
   <table
     @stagger
     mat-table
@@ -64,52 +67,58 @@
     <!-- Dynamic Column Definitions -->
     <ng-container *ngFor="let column of visibleColumns" [matColumnDef]="column">
       <th mat-header-cell *matHeaderCellDef class="bg-gray-100 px-4 py-2">
-        <div class="flex items-center gap-2">
-          <button
-            mat-icon-button
-            [matMenuTriggerFor]="menu"
-            aria-label="Filter"
-            class="ml-2"
-          >
-            <mat-icon>filter_alt</mat-icon>
-          </button>
-          <mat-menu #menu="matMenu" class="matMenu">
-            <ng-template matMenuContent>
-              <div
-                class="px-6 pt-4 pb-0 flex flex-col"
-                (click)="$event.stopPropagation()"
-                aria-hidden="true"
-              >
-                <mat-form-field appearance="outline" class="w-50">
-                  <input
-                    matInput
-                    placeholder="Filter {{ column }}"
-                    (keyup)="applyColumnFilter(column, $event)"
-                  />
-                </mat-form-field>
-              </div>
-            </ng-template>
-          </mat-menu>
-          <span mat-sort-header>{{ column | titlecase }}</span>
-        </div>
+        {{ column | titlecase }}
       </th>
       <td mat-cell *matCellDef="let element" class="px-4 py-2">
-        {{ element[column] }}
+        <!-- Check if row is in edit mode -->
+        <ng-container *ngIf="editingRow === element; else displayValue">
+          <input
+            [(ngModel)]="element[column]"
+            class="border rounded px-2 py-1 w-full"
+            type="text"
+          />
+        </ng-container>
+        <ng-template #displayValue>
+          {{ element[column] }}
+        </ng-template>
       </td>
     </ng-container>
 
+    <!-- Actions Column -->
     <ng-container matColumnDef="actions" stickyEnd>
-      <th *matHeaderCellDef mat-header-cell></th>
+      <th mat-header-cell *matHeaderCellDef class="bg-gray-100 px-4 py-2"></th>
       <td mat-cell *matCellDef="let row" class="px-4 py-2">
-        <button
-          (click)="$event.stopPropagation()"
-          [matMenuTriggerData]="{ data: row }"
-          [matMenuTriggerFor]="actionsMenu"
-          mat-icon-button
-          type="button"
-        >
-          <mat-icon>more_vert</mat-icon>
-        </button>
+        <!-- Show Save/Cancel if editing -->
+        <ng-container *ngIf="editingRow === row; else defaultActions">
+          <button
+            class="bg-green-500 text-white px-3 py-1 rounded mr-2"
+            (click)="saveRow(row)"
+          >
+            Save
+          </button>
+          <button
+            class="bg-gray-500 text-white px-3 py-1 rounded"
+            (click)="cancelEdit()"
+          >
+            Cancel
+          </button>
+        </ng-container>
+        <ng-template #defaultActions>
+          <button
+            mat-button
+            class="bg-blue-500 text-white px-3 py-1 rounded mr-2"
+            (click)="editRow(row)"
+          >
+            Edit
+          </button>
+          <button
+            mat-button
+            class="bg-red-500 text-white px-3 py-1 rounded"
+            (click)="deleteRow(row)"
+          >
+            Delete
+          </button>
+        </ng-template>
       </td>
     </ng-container>
 
@@ -120,19 +129,10 @@
     ></tr>
     <tr
       mat-row
+      class="hover:bg-hover trans-ease-out"
+      [class.bg-hover]="row === selectedRow"
       *matRowDef="let row; columns: visibleColumns.concat(['actions'])"
+      (dblclick)="onRowClick(row)"
     ></tr>
   </table>
 </div>
-<mat-menu #actionsMenu="matMenu" xPosition="before" yPosition="below">
-  <ng-template let-data="data" matMenuContent>
-    <button mat-menu-item (click)="reset(data)">
-      <mat-icon svgIcon="mat:edit"></mat-icon>
-      <span>Edit</span>
-    </button>
-    <button mat-menu-item>
-      <mat-icon svgIcon="mat:delete"></mat-icon>
-      <span>Delete</span>
-    </button>
-  </ng-template>
-</mat-menu>

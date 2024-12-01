@@ -18,7 +18,17 @@ export class IndicatorCategoryDtoService extends BaseService {
   ): Observable<any> {
     return this.http.get<any>(
       this.apiUrl +
-        `/geoserver/layergroups??workspaceName=${workspaceName}&page=${payload?.page}&size=${payload?.size}&sort=${payload?.sort[0]}`
+        `/geoserver/layergroups?workspaceName=${workspaceName}&page=${payload?.page}&size=${payload?.size}&sort=${payload?.sort[0]}`
+    );
+  }
+
+  getLayerGroupsByName(
+    layerGroupName?: string,
+    workspaceName?: string
+  ): Observable<any> {
+    return this.http.get<any>(
+      this.apiUrl +
+        `/geoserver/layergroups/${layerGroupName}?workspaceName=${workspaceName}`
     );
   }
 }

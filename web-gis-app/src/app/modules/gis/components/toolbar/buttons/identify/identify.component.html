@@ -1,12 +1,14 @@
 <button
-  mat-mini-fab
+  mat-icon-button
   color="secondary"
-  class="text-sm font-medium customBtn"
+  class="text-sm font-medium customBtn relative"
   id="identify"
-  title="Get Information"
-  (click)="getInfo()"
+  (click)="toggleIdentify()"
+  [matTooltip]="isActive ? 'Cancel' : 'Get Information'"
+  matTooltipPosition="below"
 >
-  <mat-icon svgIcon="mat:info"></mat-icon>
+  <mat-icon *ngIf="!isActive" svgIcon="mat:info"></mat-icon>
+  <mat-icon *ngIf="isActive" svgIcon="mat:cancel"></mat-icon>
 </button>
 
 <!-- Define the overlay panel -->

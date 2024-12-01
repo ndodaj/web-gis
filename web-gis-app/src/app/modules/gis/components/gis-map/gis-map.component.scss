@@ -240,7 +240,7 @@
   max-width: 17.5em !important;
 }
 ::ng-deep .ol-control.ol-legend {
-  bottom: 3em !important;
+  display: none !important;
 }
 ::ng-deep .ol-full-screen {
   left: 0.5em !important;
@@ -253,6 +253,15 @@
   bottom: 2.4em;
 }
 
+::ng-deep body > p-dynamicdialog > div > div > div.p-dialog-header {
+  padding: 0.5rem !important;
+}
+::ng-deep body > p-dynamicdialog > div > div > div.p-dialog-content {
+  padding: 0.5rem !important;
+}
+::ng-deep body > p-dynamicdialog > div > div {
+  max-height: 350px !important;
+}
 ::ng-deep .ol-scale-line .ol-unselectable {
   bottom: 1rem;
 }

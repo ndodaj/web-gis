@@ -13,16 +13,7 @@ export const extendedLayerGroup = {
     displayInLayerSwitcher: false,
   }),
   additionalLayers: new ExtendedLayerGroup({
-    layers: [
-      extendedTileLayers.albBorders,
-      // extendedTileLayers.albRegions,
-      // extendedTileLayers.municipalities,
-      extendedTileLayers.protectedAreas,
-      // extendedTileLayers.north_macedonia_border,
-      // extendedTileLayers.kufiri_mavrove,
-      // extendedTileLayers.naturalMonuments,
-      // extendedTileLayers.roadNetwork,
-    ],
+    layers: [extendedTileLayers.albBorders],
     title: 'Additional Layers',
     information: 'These base map layers which can be activated separately',
     displayInLayerSwitcher: true,

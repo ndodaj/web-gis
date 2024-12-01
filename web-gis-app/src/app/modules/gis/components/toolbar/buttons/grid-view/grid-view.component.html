@@ -1,9 +1,12 @@
 <button
-  class="text-sm font-medium small-icon-button customBtn"
-  mat-mini-fab
+  class="text-sm font-medium customBtn"
+  mat-icon-button
   color="secondary"
   id="graticuleButton"
-  title="Show/Hide Grid"
+  (click)="toggleGridView()"
+  [matTooltip]="isActive ? 'Hide Grid' : 'Show Grid'"
+  matTooltipPosition="below"
 >
-  <mat-icon svgIcon="mat:grid_view"></mat-icon>
+  <mat-icon *ngIf="!isActive" svgIcon="mat:grid_view"></mat-icon>
+  <mat-icon *ngIf="isActive" svgIcon="mat:cancel"></mat-icon>
 </button>

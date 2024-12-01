@@ -235,10 +235,7 @@ export class MapService extends BaseService {
     // ); // Example extent covering the whole world
     //const resolution = View.(this.map.getSize(), extent).getWidth() / 1024;
     this.map = new Map({
-      layers: [
-        extendedLayerGroup.baseLayerGroup,
-        extendedLayerGroup.additionalLayers,
-      ],
+      layers: [extendedLayerGroup.baseLayerGroup],
       target: 'map',
       controls: defaults({ attribution: false }).extend(
         mapControls as Control[]
@@ -246,7 +243,7 @@ export class MapService extends BaseService {
 
       view: new View({
         projection: 'EPSG:3857',
-        center: [2206144.619624, 5060991.189047],
+        center: [2206185.65, 5060810.15],
         zoom: 7.5,
         maxZoom: 20,
         minZoom: 7.5,
@@ -432,7 +429,7 @@ export class MapService extends BaseService {
   }
   convertToTitleCase(str: any) {
     return str
-      .split('_')
+      .split(':')
       .map((word: any) => word.charAt(0).toUpperCase() + word.slice(1))
       .join(' ');
   }
@@ -453,37 +450,34 @@ export class MapService extends BaseService {
   //   return this.http.get(url, { headers: headers });
   // }
   constructTileLayer(layerInfo?: any): ExtendedTileLayer {
-    const nameSpace = layerInfo?.featureType?.namespace;
-    const title = this.convertToTitleCase(layerInfo?.featureType?.title);
-    const layerName = layerInfo?.featureType?.name;
-    const description = layerInfo?.featureType?.description;
-    //const description = layerInfo.abstract;
+    console.log('layerInfo', layerInfo);
+
+    const [namespace, layerName] = (layerInfo?.name || '').split(':'); // Extract namespace and layer name
+    const title = this.convertToTitleCase(layerName || 'Default Layer');
+    const description = layerInfo?.description || 'No description available';
+    console.log('namespace', namespace, layerName);
 
     const tileWMSParams = {
-      LAYERS: `${nameSpace?.name}:${layerName}`,
+      LAYERS: `${namespace}:${layerName}`,
       VERSION: '1.1.0',
       TILED: true,
     };
 
     const tileWMSOptions = {
-      url: environmentCommon.url, // You may need to adjust this
+      url: environmentCommon.url,
       params: tileWMSParams,
       crossOrigin: 'anonymous',
-      buffer: 0.1, // Example buffer of 0.1 map units
+      buffer: 0.1,
       cache: true,
     };
 
     return new ExtendedTileLayer({
       source: new TileWMS(tileWMSOptions),
-      visible: false, // You may want to adjust this based on your logic
+      visible: false,
       title: title,
       information: description,
-      attributes: layerInfo?.featureType?.attributes,
+      attributes: layerInfo?.attributes || [],
       displayInLayerSwitcher: true,
-      symbology: {
-        color: '#ff0000', // Set a red color for this layer's symbology
-        icon: 'path/to/icon.png', // Optional icon URL
-      },
     });
   }
 

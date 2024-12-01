@@ -38,7 +38,16 @@ export class IndicatorDtoService extends BaseService {
 
     return this.http.get<any>(
       this.apiUrl +
-        `/geoserver/layers?workspaceName=${workspaceName}&page=${payload.page}&size=${payload.size}&sort=${payload.sort[0]}`
+        `/geoserver/layers?workspaceName=${workspaceName}&page=${payload?.page}&size=${payload?.size}&sort=${payload?.sort[0]}`
+    );
+  }
+
+  getLayers(payload?: any): Observable<any> {
+    console.log(payload);
+
+    return this.http.get<any>(
+      this.apiUrl +
+        `/geoserver/layers?page=${payload?.page}&size=${payload?.size}&sort=${payload?.sort[0]}`
     );
   }
 }

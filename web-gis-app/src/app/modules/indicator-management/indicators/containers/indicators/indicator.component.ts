@@ -28,6 +28,7 @@ import { AutoUnsubscribe } from '@core/utils';
 export class IndicatorComponent implements AfterViewInit {
   displayedColumns: string[] = [
     'name',
+    'layergroup',
 
     // 'created_by',
     // 'created_on',
@@ -65,7 +66,7 @@ export class IndicatorComponent implements AfterViewInit {
             sort: [this.sort.direction],
           };
           return this.indicatorDtoService
-            .getIndicators('ne', payload)
+            .getLayers(payload)
             .pipe(catchError(() => observableOf(null)));
         }),
         map((data) => {
@@ -78,7 +79,7 @@ export class IndicatorComponent implements AfterViewInit {
 
           this.resultsLength = data.totalElements;
 
-          return data.layers.layers;
+          return data.content;
         })
       )
       .subscribe((data) => (this.dataSource.data = data));
@@ -94,7 +95,7 @@ export class IndicatorComponent implements AfterViewInit {
     };
 
     this.indicatorDtoService
-      .getIndicators('ne', payload)
+      .getLayers(payload)
       .pipe(catchError(() => observableOf(null)))
       .subscribe((data) => {
         this.isLoadingResults = false;
@@ -105,7 +106,7 @@ export class IndicatorComponent implements AfterViewInit {
 
         this.resultsLength = data.totalElements;
 
-        this.dataSource.data = data.layers.layer;
+        this.dataSource.data = data.content;
       });
   }
 

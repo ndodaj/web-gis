@@ -8,6 +8,7 @@ import { PropertiesDialogComponent } from './components/properties.components';
 import ExtendedTileLayer from '@shared/ol/customLayers/extendedTileLayer';
 import { TileWMS } from 'ol/source';
 import ExtendedLayerGroup from '@shared/ol/customLayers/extendedLayerGroup';
+import { CoordinateInfoDialogComponent } from './components/coordinate-info-dialog.component';
 @Injectable({
   providedIn: 'root',
 })
@@ -63,6 +64,8 @@ export class CoordinatesService {
       ?.getLayers()
       ?.getArray()
       .forEach((el: any) => {
+        console.log(coordinate);
+
         const url = el
           ?.getSource()
           ?.getFeatureInfoUrl(
@@ -73,6 +76,8 @@ export class CoordinatesService {
           );
 
         if (url) {
+          console.log(url);
+
           fetch(url)
             .then((response) => {
               return response.json();
@@ -91,9 +96,8 @@ export class CoordinatesService {
                       data: properties,
                       header: layerTitleName,
                       modal: false,
-                      position: 'left',
                       width: '250px',
-
+                      draggable: true,
                       dismissableMask: false,
                       keepInViewport: false,
                     }
@@ -127,7 +131,7 @@ export class CoordinatesService {
   }
 
   getXY = (event: any) => {
-    const coordsModal = document.querySelector('#myModal')!;
+    this.ref?.destroy();
     const krgjshCoords = event.coordinate;
 
     const wgs84 = 'EPSG:4326';
@@ -144,19 +148,25 @@ export class CoordinatesService {
       this.mapService.getMap().getView().getProjection(),
       utm34N
     );
-
-    document.getElementById('easting')!.textContent =
-      krgjshCoords[0].toFixed(2);
-    document.getElementById('northing')!.textContent =
-      krgjshCoords[1].toFixed(2);
-    document.getElementById('easting1')!.textContent = latitudeDMS;
-    document.getElementById('northing1')!.textContent = longitudeDMS;
-    document.getElementById('easting2')!.textContent =
-      transformedCoordinate2[0].toFixed(2);
-    document.getElementById('northing2')!.textContent =
-      transformedCoordinate2[1].toFixed(2);
-
-    coordsModal.classList.add('myModal');
+    console.log(
+      krgjshCoords,
+      latitudeDMS,
+      longitudeDMS,
+      transformedCoordinate2
+    );
+    this.ref = this.dialogService.open(CoordinateInfoDialogComponent, {
+      data: {
+        latitudeDMS: latitudeDMS,
+        longitudeDMS: longitudeDMS,
+        transformedCoordinate: transformedCoordinate2,
+      },
+      header: 'Coordinate Information',
+      width: '250px',
+      modal: false,
+      dismissableMask: false,
+      keepInViewport: false,
+      draggable: true,
+    });
   };
 
   getInfoClickListener = (event: any) => {
@@ -171,6 +181,7 @@ export class CoordinatesService {
     this.ref?.destroy();
 
     let featureFound = false;
+    console.log(event);
 
     // Iterate through layer groups
     this.mapService
@@ -179,8 +190,7 @@ export class CoordinatesService {
       .forEach((layerGroup) => {
         if (
           layerGroup instanceof ExtendedLayerGroup &&
-          layerGroup.get('title') !== 'Base Layers' &&
-          layerGroup.get('title') !== 'Additional Layers'
+          layerGroup.get('title') !== 'Base Layers'
         ) {
           // Iterate through layers within the layer group
           layerGroup.getLayers().forEach((layer) => {
@@ -203,6 +213,7 @@ export class CoordinatesService {
                   FEATURE_COUNT: 1,
                 }
               )!;
+              console.log(url);
 
               fetch(url)
                 .then((response) => response.json())
@@ -210,6 +221,7 @@ export class CoordinatesService {
                   if (data?.features?.length > 0) {
                     featureFound = true;
                     const properties = data?.features[0]?.properties;
+                    console.log(properties);
 
                     const layerTitleName = this.getLayerTitle(layer);
                     this.ref = this.dialogService.open(
@@ -218,9 +230,8 @@ export class CoordinatesService {
                         data: properties,
                         header: layerTitleName,
                         modal: false,
-                        position: 'left',
                         width: '250px',
-
+                        draggable: true,
                         dismissableMask: false,
                         keepInViewport: false,
                       }
@@ -242,6 +253,8 @@ export class CoordinatesService {
   };
 
   getXYClickListener = (event: any) => {
+    console.log('event clicked', event);
+
     this.getXY(event);
   };
 }

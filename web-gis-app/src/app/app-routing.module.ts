@@ -73,8 +73,8 @@ const routes: AppRoutes = [
             './modules/indicator-management/indicator-management.module'
           ).then((m) => m.IndicatorManagementModule),
         data: {
-          pageTitle: 'Indicator',
-          breadcrumb: 'Indicator Management',
+          pageTitle: 'Layers',
+          breadcrumb: 'Layers Management',
           //anyPermission: AppPermissionsEnum.indicatorcategory_get_permission,
         },
       },
@@ -86,8 +86,8 @@ const routes: AppRoutes = [
             './modules/indicator-management/indicator-management.module'
           ).then((m) => m.IndicatorManagementModule),
         data: {
-          pageTitle: 'Indicator',
-          breadcrumb: 'Indicators',
+          pageTitle: 'Layers',
+          breadcrumb: 'Layers',
           //anyPermission: AppPermissionsEnum.indicator_get_permission,
         },
       },
